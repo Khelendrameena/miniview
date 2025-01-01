@@ -186,7 +186,7 @@ def home(request):
     if request.method == 'POST':
         # अगर सेशन में index उपलब्ध नहीं है तो इसे प्रारंभ करें
         if 'index' not in request.session:
-            request.session['index'] = 8
+            request.session['index'] = 6
 
         # अगले 5 व्लॉग्स लाएं
         start = request.session['index']
@@ -199,8 +199,8 @@ def home(request):
         return JsonResponse({'html': html})
     else:
         # पहला पेज लोड करने के लिए index को रीसेट करें
-        request.session['index'] = 8
-        json_data_4 = json_data["articles"][:8]
+        request.session['index'] = 6
+        json_data_4 = json_data["articles"][:6]
         json_data["articles"] = json_data_4
         return render(request, 'index.html', json_data)
 
@@ -304,7 +304,7 @@ def searchquary(request):
     if request.method == 'POST':
         # अगर सेशन में index उपलब्ध नहीं है तो इसे प्रारंभ करें
         if 'index' not in request.session:
-            request.session['index'] = 8
+            request.session['index'] = 6
 
         # अगले 5 व्लॉग्स लाएं
         start = request.session['index']
@@ -317,8 +317,8 @@ def searchquary(request):
         return JsonResponse({'html': html})
     else:
         # पहला पेज लोड करने के लिए index को रीसेट करें
-        request.session['index'] = 8
-        json_data_4 = json_data["articles"][:8]
+        request.session['index'] = 6
+        json_data_4 = json_data["articles"][:6]
         json_data["articles"] = json_data_4
         return render(request, 'index.html', json_data)
 
