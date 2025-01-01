@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vlog Editor</title>
+
+    <!-- Add the Prism CSS for syntax highlighting (tomorrow theme for dark background) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+
+  <!-- Add Prism JS for syntax highlighting -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      position: relative;
+    }
+
+    header {
+      background-color: #6c63ff;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    .editor-container {
+      max-width: 900px;
+      margin: 20px auto;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+
+    .editor-toolbar {
+      padding: 10px 15px;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .editor-toolbar button {
+      background-color: #6c63ff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      font-size: 0.9rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .editor-toolbar button:hover {
+      background-color: #574fe4;
+    }
+
+    .editor-area {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 15px;
+      min-height: 300px;
+      font-size: 1rem;
+      outline: none;
+      background-color: #fafafa;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .submit-btn {
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+      background: #6c63ff;
+      color: white;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 5px;
+      padding: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .submit-btn:hover {
+      background: #574fe4;
+    }
+
+    .preview-container {
+      max-width: 900px;
+      margin: 20px auto;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+
+    .loader {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #6c63ff;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .success-message {
+      text-align: center;
+      font-size: 1.5rem;
+      color: green;
+      margin-top: 20px;
+      display: none;
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  Vlog Editor
+</header>
+
+<div class="editor-container" id="editor-container">
+  <!-- Toolbar -->
+  <div class="editor-toolbar">
+    <button onclick="formatText('bold')">Bold</button>
+    <button onclick="formatText('italic')">Italic</button>
+    <button onclick="formatText('underline')">Underline</button>
+    <button onclick="formatText('insertOrderedList')">Numbered List</button>
+    <button onclick="formatText('insertUnorderedList')">Bulleted List</button>
+    <button onclick="addHeading()">Add Heading</button>
+    <button onclick="addText()">Add Text</button>
+    <button onclick="uploadImage()">Add Image</button>
+    <button onclick="addCode()">Add Code</button>
+    <p hidden id="username">{{ user.username }}</p>
+  </div>
+
+  <!-- Editor Area -->
+  <div id="editor" contenteditable="true" class="editor-area">
+    Start creating your vlog here...
+  </div>
+
+  <!-- Action Buttons -->
+  <button class="submit-btn" onclick="submitCode()">Submit</button>
+</div>
+
+<!-- Loader -->
+<div id="loader" class="loader"></div>
+
+<!-- Success Message -->
+<div id="success-message" class="success-message">
+  Your vlog is published!
+</div>
+
+<script>
+  // Format text using execCommand
+  function formatText(command) {
+    document.execCommand(command, false, null);
+  }
+
+  // Add heading
+  function addHeading() {
+    const text = prompt("Enter your heading text:");
+    if (text) {
+      const heading = `<h2>${text}</h2>`;
+      document.getElementById("editor").insertAdjacentHTML("beforeend", heading);
+    }
+  }
+
+  // Add text
+  function addText() {
+    const text = prompt("Enter your text:");
+    if (text) {
+      const paragraph = `<p>${text}</p>`;
+      document.getElementById("editor").insertAdjacentHTML("beforeend", paragraph);
+    }
+  }
+
+  // Upload image from local files
+  function uploadImage() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = `<img src="${reader.result}" alt="Image" style="max-width:100%;margin:10px 0;border-radius:8px;"/>`;
+          document.getElementById("editor").insertAdjacentHTML("beforeend", img);
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  }
+
+function addCode() {
+  const code = prompt("Enter your code:");
+  if (code) {
+    const sanitizedCode = code.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const codeBlock = `<pre><code class="language-javascript">${sanitizedCode}</code></pre>`;
+    document.getElementById("editor").insertAdjacentHTML("beforeend", codeBlock);
+
+    // Reinitialize Prism to apply syntax highlighting after the new code block is added
+    Prism.highlightAll();
+  }
+}
+
+  // Submit code via AJAX
+  function submitCode() {
+    const editorContent = document.getElementById("editor").innerHTML.trim();
+
+    if (!editorContent || editorContent === "Start creating your vlog here...") {
+      alert("Please create some content before submitting!");
+      return;
+    }
+
+    // Show the loader
+    document.getElementById("loader").style.display = "block";
+
+    // Create AJAX request
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `/@${document.getElementById("username").innerText}/vlog/publish`, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+    // Prepare the data
+    const data = JSON.stringify({ content: editorContent });
+
+    // Send the request
+    xhr.send(data);
+
+    // Handle the response
+    xhr.onload = function() {
+      // Hide the loader
+      document.getElementById("loader").style.display = "none";
+
+      if (xhr.status === 200) {
+        // Show success message
+        document.getElementById("success-message").style.display = "block";
+        setTimeout(() => {
+          document.getElementById("success-message").style.display = "none";
+        }, 3000); // Hide after 3 seconds
+      } else {
+        alert("There was an error submitting your vlog.");
+      }
+    };
+
+    xhr.onerror = function() {
+      // Hide the loader
+      document.getElementById("loader").style.display = "none";
+      alert("Error submitting the vlog.");
+    };
+  }
+</script>
+
+</body>
+</html>
