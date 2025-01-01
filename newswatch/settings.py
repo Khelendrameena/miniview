@@ -46,7 +46,7 @@ INSTALLED_APPS = [
 ]
 
 
-manually add
+
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Default
     'allauth.account.auth_backends.AuthenticationBackend',  # For django-allauth
