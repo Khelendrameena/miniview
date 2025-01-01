@@ -323,37 +323,36 @@ def searchquary(request):
         return render(request, 'index.html', json_data)
 
 def view(request):
-    data = json.loads(request.body)
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+
     id = data.get('id')
-    status = data.get('status')
+    status = data.get('status', [0, 0])  # Default to [0, 0] if 'status' is not provided
     views_reaction = status[0]
     like_reaction = status[1]
-    if MyModel.objects.all().filter(id=id).exists():
-         status[0] = status[0] + MyModel.objects.all().filter(id=id).first().views
-         status[1] = status[1] + MyModel.objects.all().filter(id=id).first().likes
+
+    existing_model = MyModel.objects.filter(id=id).first()
+    if existing_model:
+        status[0] += existing_model.views
+        status[1] += existing_model.likes
+
     user_reaction, created = UserReaction.objects.update_or_create(
         vlog_id=id,
         defaults={
             "views": views_reaction,
             "like": like_reaction,
             "username": request.user.username,
-        }),
-    model = MyModel(id=id,views=status[0],likes=status[1])
-    model.save()
-    return HttpResponse("hay")
+        }
+    )
 
-def coment(request):
-    if request.method == 'POST':
-        id = request.POST.get("mainid")
-        main_id.append(id)
-        data = comentconfig.objects.filter(mainid=id)
-        # Serialize the queryset to JSON
-        serialized_data = serialize('json', data)
-        print(main_id[len(main_id)-1],id)
-        # Pass the serialized data to the template
-        return render(request, 'coment.html', {'data': serialized_data})
-    else:
-        return HttpResponse("this is wrong")
+    MyModel.objects.update_or_create(
+        id=id,
+        defaults={"views": status[0], "likes": status[1]}
+    )
+
+    return HttpResponse("something wrong")
 
 def comentadd(request):
     if request.method == 'POST':
