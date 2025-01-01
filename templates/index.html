@@ -363,7 +363,7 @@
 
         <div class="p-4 md:w-1/3">
           <div class="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
-            <a class="views" href="{{ data.url|default:'#' }}">
+            <a class="views" href="{{ data.url|default:'#' }}" onclick="main_1('{{ data.publishedAt }}')">
               {% if data.urlToImage %}
               <img class="lg:h-48 md:h-36 w-full object-cover object-center" src="{{ data.urlToImage }}" alt="{{ data.title }}">
               </a>
@@ -377,7 +377,7 @@
                 <button class="follow-btn" id="follow_button_2">Follow</button>
               </div>
              {% endif %}
-            <a class="views" href="{{ data.url|default:'#' }}">
+            <a class="views" href="{{ data.url|default:'#' }}" onclick="main_1('{{ data.publishedAt }}')">
               <div class="p-6">
                 <div style="display: flex; gap: 12vh;">
                   <h2 class="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">TITLE</h2>
@@ -630,13 +630,9 @@ if(window.innerWidth <= 500){
     })
 
 
-    const views = document.querySelectorAll('.views');
-    views.forEach((view, index) => {
-      view.addEventListener('click', () => {
-        data(`${document.querySelectorAll(".uid")[Math.floor(index/2)].innerText}`, 1, 0, '/view')
-        document.querySelectorAll(".uid")[Math.floor(index / 2)].innerText
-      });
-    });
+    function main_1(id) {
+        data(id, 1, 0, '/view')
+    }
 
     document.querySelectorAll('.like').forEach((like, index) => {
       like.addEventListener('click', () => {
