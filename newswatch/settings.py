@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ofougw3*&wg)j4g=90j&-++(y++a159i7$y!8rolz$u+(047wy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['miniview-1ajl.onrender.com','miniview.com','localhost','127.0.0.1']
 
