@@ -354,6 +354,19 @@ def view(request):
 
     return HttpResponse("something wrong")
 
+def coment(request):
+    if request.method == 'POST':
+        id = request.POST.get("mainid")
+        main_id.append(id)
+        data = comentconfig.objects.filter(mainid=id)
+        # Serialize the queryset to JSON
+        serialized_data = serialize('json', data)
+        print(main_id[len(main_id)-1],id)
+        # Pass the serialized data to the template
+        return render(request, 'coment.html', {'data': serialized_data})
+    else:
+        return HttpResponse("this is wrong")
+        
 def comentadd(request):
     if request.method == 'POST':
         try:
