@@ -40,13 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'allauth',
-#   'allauth.account',
- #   'allauth.socialaccount',
-  #  'allauth.socialaccount.providers.google'
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google'
 ]
 
-'''
-#manually add
+
+manually add
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Default
     'allauth.account.auth_backends.AuthenticationBackend',  # For django-allauth
@@ -77,7 +77,7 @@ SOCIALACCOUNT_PROVIDERS['google']['APP'] = {
     'client_id': '778234252177-rbpto449o70e5217q87du31o1mqa0vl7.apps.googleusercontent.com',
     'secret': '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',
     'key': '',
-}'''
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -87,7 +87,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-#    'allauth.account.middleware.AccountMiddleware',  # Add this line
+    'allauth.account.middleware.AccountMiddleware',  # Add this line
 ]
 
 
