@@ -323,21 +323,14 @@ def searchquary(request):
         return render(request, 'index.html', json_data)
 
 def view(request):
-    try:
-        data = json.loads(request.body)
-    except json.JSONDecodeError:
-        return JsonResponse({"error": "Invalid JSON"}, status=400)
-
+    data = json.loads(request.body)
     id = data.get('id')
-    status = data.get('status', [0, 0])  # Default to [0, 0] if 'status' is not provided
+    status = data.get('status')
     views_reaction = status[0]
     like_reaction = status[1]
-
-    existing_model = MyModel.objects.filter(id=id).first()
-    if existing_model:
-        status[0] += existing_model.views
-        status[1] += existing_model.likes
-
+    if MyModel.objects.all().filter(id=id).exists():
+         status[0] = status[0] + MyModel.objects.all().filter(id=id).first().views
+         status[1] = status[1] + MyModel.objects.all().filter(id=id).first().likes
     user_reaction, created = UserReaction.objects.update_or_create(
         vlog_id=id,
         defaults={
@@ -346,12 +339,8 @@ def view(request):
             "username": request.user.username,
         }
     )
-
-    MyModel.objects.update_or_create(
-        id=id,
-        defaults={"views": status[0], "likes": status[1]}
-    )
-
+    model = MyModel(id=id,views=status[0],likes=status[1])
+    model.save()
     return HttpResponse("something wrong")
 
 def coment(request):
