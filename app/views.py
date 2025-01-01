@@ -469,7 +469,7 @@ def login_view(request):
                 login(request, user)
                 return redirect('/')  # Replace '/' with your desired redirect page
             else:
-                return render(request, 'login.html', {'error': "Invalid email or password."})
+                return render(request, 'login.html')
         except User.DoesNotExist:
             return render(request, 'login.html', {'error': "Invalid email or password."})
 
