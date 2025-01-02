@@ -4,7 +4,6 @@ from .import views
 urlpatterns = [
 path('', views.home, name='home_page'),
 path('view',views.view,name='views'),
-path('accounts/', include('allauth.urls')),
 path('app/@<str:username_2>/follow',views.follow,name='follow'),
 path('@<str:username>/edit',views.profilebin,name='profile'),
 path('profile/edited',views.profiledit,name='profile edit'),
