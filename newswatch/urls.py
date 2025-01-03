@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from django.contrib.auth import views as auth_views
+from .views import google_login, google_callback
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,7 +27,9 @@ urlpatterns = [
     path('@<str:username>/vlog/publish', include('app.urls')),
     path('accounts/', include('allauth.urls')),
     path('view', include('app.urls')),
-    path("login/", auth_views.LoginView.as_view(template_name="login.html"), name="login"),
+    path('auth/login/', google_login, name='google_login'),
+    path('auth/callback/', google_callback, name='google_callback'),
+    path("login/", include('app.urls')),
     path('app/@<str:username_2>/follow', include('app.urls')),
     path('vlog/show/<str:vlog_id>', include('app.urls')),
     path('vlog/<str:vlog_id>', include('app.urls')),
