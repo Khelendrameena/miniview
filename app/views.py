@@ -410,6 +410,7 @@ def google_login(request):
     return redirect(google_auth_url)
 
 def google_callback(request):
+    print("first")
     code = request.GET.get('code')
 
     # Exchange code for access token
@@ -422,7 +423,7 @@ def google_callback(request):
         "grant_type": "authorization_code",
     }
     token_response = requests.post(token_url, data=token_data).json()
-
+    print("mid")
     # Get user info
     user_info_url = "https://www.googleapis.com/oauth2/v2/userinfo"
     user_info_response = requests.get(
