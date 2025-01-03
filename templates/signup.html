@@ -1,4 +1,4 @@
-{% load socialaccount %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,7 +52,7 @@
 {% if error %} <p>{{ error }}</p> {% endif %}
       </form>
       <div class="flex items-center justify-center space-x-4 mt-6">
-        <a href="{% provider_login_url 'google' %}" class="btn btn-primary">
+        <a href="{% url 'google_login' %}" class="btn btn-primary">
     Sign Up with Google
         </a>
       </div>
