@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 # settings.py
-ACCOUNT_LOGIN_ON_GET = True
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-ofougw3*&wg)j4g=90j&-++(y++a159i7$y!8rolz$u+(047wy'
@@ -66,27 +66,11 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-SOCIALACCOUNT_ADAPTER = 'app.adapters.MySocialAccountAdapter'
-
-# Social Account Providers (Google in this case)
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        },
-    }
-}
+GOOGLE_CLIENT_ID = '778234252177-rbpto449o70e5217q87du31o1mqa0vl7.apps.googleusercontent.com'
+GOOGLE_CLIENT_SECRET = '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'
+GOOGLE_REDIRECT_URI = 'https://miniview-1ajl.onrender.com/auth/callback/'
 
 
-SOCIALACCOUNT_PROVIDERS['google']['APP'] = {
-    'client_id': '778234252177-rbpto449o70e5217q87du31o1mqa0vl7.apps.googleusercontent.com',
-    'secret': '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',
-    'key': '',
-}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -95,8 +79,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',  # Add this line
+    'django.middleware.clickjacking.XFrameOptionsMiddleware
 ]
 
 
