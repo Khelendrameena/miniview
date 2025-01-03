@@ -52,7 +52,7 @@
 {% if error %} <p>{{ error }}</p> {% endif %}
       </form>
       <div class="flex items-center justify-center space-x-4 mt-6">
-        <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-primary">
+        <a href="{% url 'account_login' %}" class="btn btn-primary">
     Sign Up with Google
         </a>
       </div>
