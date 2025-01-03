@@ -62,7 +62,7 @@ SITE_ID = 1
 
 # Redirect URLs after login/logout
 # settings.py
-LOGIN_URL = '/login/'
+
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
