@@ -459,7 +459,10 @@ def usernameedit(request):
 	    	profile = Profile(profile_id=id_4
 	    	,profile_picture=f'https://ui-avatars.com/api/?name={name}',name=name,username=username,followers=0,following=0,country="in")
 	    	profile.save()
-	    	return redirect('/login')
+		user_obj = User.objects.get(email=email)
+		user_obj.username = username
+                user = authenticate(username=user_obj.username, password=password)
+	    	return redirect('/')
 	    else:
 	    	  return  HttpResponse("something wrong")	    	  
 	else:
