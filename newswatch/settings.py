@@ -45,7 +45,10 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google'
 ]
 
-
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # or 'optional' or 'none'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'  # or 'username' or 'username_email'
+ACCOUNT_USERNAME_REQUIRED = False 
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Default
