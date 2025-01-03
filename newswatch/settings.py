@@ -62,6 +62,8 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
+SOCIALACCOUNT_ADAPTER = 'app.adapters.MySocialAccountAdapter'
+
 # Social Account Providers (Google in this case)
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
