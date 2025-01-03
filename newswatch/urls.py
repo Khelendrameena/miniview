@@ -25,7 +25,6 @@ urlpatterns = [
     path('@<str:username>/', include('app.urls')),
     path('@<str:username>/vlog', include('app.urls')),
     path('@<str:username>/vlog/publish', include('app.urls')),
-    path('accounts/', include('allauth.urls')),
     path('view', include('app.urls')),
     path('auth/login/', google_login, name='google_login'),
     path('auth/callback/', google_callback, name='google_callback'),
