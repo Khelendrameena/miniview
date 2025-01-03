@@ -408,7 +408,7 @@ def google_login(request):
         "&scope=email profile"
     )
     return redirect(google_auth_url)
-
+    
 def google_callback(request):
     print("first")
     code = request.GET.get('code')
@@ -424,6 +424,7 @@ def google_callback(request):
     }
     token_response = requests.post(token_url, data=token_data).json()
     print("mid")
+    
     # Get user info
     user_info_url = "https://www.googleapis.com/oauth2/v2/userinfo"
     user_info_response = requests.get(
@@ -437,9 +438,15 @@ def google_callback(request):
 
     # Check if user exists, else create a new user
     user, _ = User.objects.get_or_create(username=email, defaults={'first_name': name})
+
+    # Set the backend explicitly
+    user.backend = 'django.contrib.auth.backends.ModelBackend'
+
+    # Log the user in
     login(request, user)
 
     return redirect('/')
+
 
 # Signup View
 def signup_view(request):
