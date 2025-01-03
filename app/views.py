@@ -10,6 +10,9 @@ from django.template.loader import render_to_string
 from django.contrib.auth.models import User
 from django.core.serializers import serialize
 from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.contrib.auth import login
 #from sklearn.feature_extraction.text import TfidfVectorizer
 #from sklearn.metrics.pairwise import cosine_similarity
 #import numpy as np
@@ -394,6 +397,48 @@ def comentlikeadd(request):
 
 def search(request):
    return render(request, 'search.html', {"search":search_2}) 
+
+
+def google_login(request):
+    google_auth_url = (
+        "https://accounts.google.com/o/oauth2/auth"
+        "?response_type=code"
+        f"&client_id={settings.GOOGLE_CLIENT_ID}"
+        f"&redirect_uri={settings.GOOGLE_REDIRECT_URI}"
+        "&scope=email profile"
+    )
+    return redirect(google_auth_url)
+
+def google_callback(request):
+    code = request.GET.get('code')
+
+    # Exchange code for access token
+    token_url = "https://oauth2.googleapis.com/token"
+    token_data = {
+        "code": code,
+        "client_id": settings.GOOGLE_CLIENT_ID,
+        "client_secret": settings.GOOGLE_CLIENT_SECRET,
+        "redirect_uri": settings.GOOGLE_REDIRECT_URI,
+        "grant_type": "authorization_code",
+    }
+    token_response = requests.post(token_url, data=token_data).json()
+
+    # Get user info
+    user_info_url = "https://www.googleapis.com/oauth2/v2/userinfo"
+    user_info_response = requests.get(
+        user_info_url,
+        headers={"Authorization": f"Bearer {token_response['access_token']}"},
+    ).json()
+
+    # Authenticate user in Django
+    email = user_info_response['email']
+    name = user_info_response.get('name', 'Google User')
+
+    # Check if user exists, else create a new user
+    user, _ = User.objects.get_or_create(username=email, defaults={'first_name': name})
+    login(request, user)
+
+    return redirect('/')
 
 # Signup View
 def signup_view(request):
