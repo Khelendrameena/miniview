@@ -448,7 +448,7 @@ def google_callback(request):
     login(request, user)
 
     return render(request, 'username_edit.html')
-    
+	
 def usernameedit(request):
 	if request.user.username is not None:
 	    if user_d[-2].split('@')[0] == request.user.username:
@@ -459,14 +459,15 @@ def usernameedit(request):
 	    	profile = Profile(profile_id=id_4
 	    	,profile_picture=f'https://ui-avatars.com/api/?name={name}',name=name,username=username,followers=0,following=0,country="in")
 	    	profile.save()
-		user_obj = User.objects.get(email=email)
-		user_obj.username = username
-                user = authenticate(username=user_obj.username, password=password)
+	    	user_obj = User.objects.get(email=email)
+	    	user_obj.username = username
+	    	user = authenticate(username=user_obj.username, password=password)
 	    	return redirect('/')
 	    else:
 	    	  return  HttpResponse("something wrong")	    	  
 	else:
 	 	   return HttpResponse("something wrong")
+	
 	
 	
 
