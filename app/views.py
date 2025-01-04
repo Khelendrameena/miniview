@@ -25,6 +25,8 @@ import requests
 import json
 import os
 import random
+from django.db.models import F, FloatField, ExpressionWrapper, Case, When, Value
+from django.db.models.functions import Now
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -68,9 +70,67 @@ labels_list = [
     "Data Visualization", "Big Data", "Data Mining", "Data Engineering", "Predictive Modeling"
 ]
 
+# Define weights
+LIKE_WEIGHT = 0.5
+VIEW_WEIGHT = 0.3
+COMMENT_WEIGHT = 0.2
+RECENCY_WEIGHT = 0.4  # Recency score weight
+
+def average_labels(input_array):
+    # Dictionary to store the total score and count for each label
+    label_data = {}
+
+    for label, score in input_array:
+        if label in label_data:
+            label_data[label]['total'] += score
+            label_data[label]['count'] += 1
+        else:
+            label_data[label] = {'total': score, 'count': 1}
+
+    # Calculate average for each label and prepare the result
+    result = [[label, round(data['total'] / data['count'], 2)] for label, data in label_data.items()]
+    return result
+    
+def get_top_vlogs(username):
+    # Check if user_interest is provided
+    if UserReaction.objects.filter(username=request.user.username).exists():
+        user_interest = average_labels([[label.user_interest, label.interest_rate] 
+                                        for label in UserReaction.objects.filter(username=request.user.username)])
+        
+        # Convert user_interest to a dictionary for easier lookup
+        interest_dict = {category: weight for category, weight in user_interest}
+
+        # Create a dynamic Case statement for category weight
+        category_weight_case = Case(
+            *[When(vlog_category=category, then=Value(weight)) for category, weight in interest_dict.items()],
+            default=Value(0.0),
+            output_field=FloatField()
+        )
+    else:
+        # If no user_interest is provided, set category weight to a default value
+        category_weight_case = Value(1.0, output_field=FloatField())
+
+    # Fetch top vlogs
+    top_vlogs = Vlog.objects.annotate(
+        category_weight=category_weight_case,
+        recency_score=ExpressionWrapper(
+            1 / (F('posted_date') - Now()).days,
+            output_field=FloatField()
+        ),
+        engagement_score=ExpressionWrapper(
+            ((F('likes') * LIKE_WEIGHT) +
+             (F('views') * VIEW_WEIGHT) +
+             (F('comments') * COMMENT_WEIGHT)) * F('category_weight') +
+            (F('recency_score') * RECENCY_WEIGHT),
+            output_field=FloatField()
+        )
+    ).order_by('-engagement_score')[:100]
+
+    return top_vlogs
+
 def content_data(user_2):
     if user_2 == 'all':
-        vlogs = Vlog.objects.all()
+        vlogs = get_top_vlogs(request.user.username)
         vlog_data = [{
             "title": vlog.title,
             "description": vlog.description,
@@ -159,19 +219,8 @@ def sort_vlogs_by_engagement(request,vlogs, user_interests):
 
 search_2 = []
 def home(request):
-    labels = [
-    "technology", "sports", "food", "travel", "health", "science", "politics", "entertainment", "music", 
-    "movies", "education", "business", "art", "fashion", "finance", "history", "literature", "gaming", 
-    "news", "lifestyle", "sports news", "tech news", "cooking", "recipes", "photography", "travel blog"]
-    quary = labels[random.randint(0,len(labels)-1)]
-    url = f"https://newsapi.org/v2/everything?q={quary}&apiKey=1388989202ef4521a5452bb1214daba7"
-    response = requests.get(url)
     model_data = MyModel.objects.all()
-    
-    # Convert the response to JSON
-    json_data = response.json()
-    json_data["articles"] = [article for article in json_data["articles"] if article["title"] != "[Removed]"]
-    json_data["articles"] = json_data["articles"]+content_data('all')["articles"]
+    json_data = content_data('all')
     if request.user.username is not None:
         try:
             print("hay",request.user.username)
@@ -282,8 +331,7 @@ def searchquary(request):
     else:
         quary = request.GET.get('quary')
         quary_2.append(quary)
-    url = f"https://newsapi.org/v2/everything?q={quary}&apiKey=1388989202ef4521a5452bb1214daba7"
-    response = requests.get(url)
+    json_data = content_data('all')
     model_data = MyModel.objects.all()
 
     # Convert the response to JSON
