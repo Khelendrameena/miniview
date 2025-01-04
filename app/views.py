@@ -436,18 +436,19 @@ def google_callback(request):
     # Authenticate user in Django
     email = user_info_response['email']
     name = user_info_response.get('name', 'Google User')
-
-    # Check if user exists, else create a new user
-    user, _ = User.objects.get_or_create(username=email.split('@')[0], defaults={'first_name': name})
-    email
-    user_d.append(name)
-    # Set the backend explicitly
-    user.backend = 'django.contrib.auth.backends.ModelBackend'
-    request.session['name'] = name
-    request.session['emailp'] = email
-    # Log the user in
-
-    return render(request, 'username_edit.html')
+    if not User.objects.filter(email=email).exists():
+	    # Check if user exists, else create a new user
+	    user, _ = User.objects.get_or_create(username=email.split('@')[0], defaults={'first_name': name})
+	    user.backend = 'django.contrib.auth.backends.ModelBackend'
+            request.session['name'] = name
+            request.session['emailp'] = email
+	    return render(request, 'username_edit.html')	    
+    else:
+	    user_obj = User.objects.get(email=email)
+	    user = authenticate(username=user_obj.username, password=password)
+	    login(request, user)
+	    return redirect('/')
+	    
 	
 def usernameedit(request):
 	if request.user.username is not None:
