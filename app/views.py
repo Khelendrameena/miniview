@@ -443,8 +443,7 @@ def google_callback(request):
 	    return render(request, 'username_edit.html')	    
     else:
 	    user_obj = User.objects.get(email=email)
-	    user = authenticate(username=user_obj.username, password=password)
-	    login(request, user)
+	    login(request, user_obj)
 	    return redirect('/')
 	    
 	    
@@ -461,8 +460,8 @@ def usernameedit(request):
 	    	profile.save()
 	    	user_obj = User.objects.get(email=email)
 	    	user_obj.username = username
-	    	user = authenticate(username=user_obj.username, password=password)
-	    	login(request, user)
+		user_obj.save()
+	    	login(request, user_obj)
 	    	return redirect('/')
 	    else:
 	    	  return  HttpResponse("something wrong")	    	  
