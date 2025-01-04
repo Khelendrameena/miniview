@@ -127,7 +127,7 @@ def get_top_vlogs(username):
 
     return top_vlogs
 
-def content_data(user_2):
+def content_data(request,user_2):
     if user_2 == 'all':
         vlogs = get_top_vlogs(request.user.username)
         vlog_data = [{
@@ -165,7 +165,7 @@ def content_data(user_2):
 search_2 = []
 def home(request):
     model_data = MyModel.objects.all()
-    json_data = content_data('all')
+    json_data = content_data(request,'all')
     if request.user.username is not None:
         try:
             print("hay",request.user.username)
@@ -270,7 +270,7 @@ def searchquary(request):
     else:
         quary = request.GET.get('quary')
         quary_2.append(quary)
-    json_data = content_data('all')
+    json_data = content_data(request,'all')
     model_data = MyModel.objects.all()
 
     # Convert the response to JSON
@@ -620,14 +620,13 @@ def login_view(request):
 
 id_profile = []
 def profile(request, username):
-    print(content_data(f'@{username}'))
     if Profile.objects.filter(username=username).exists():
         data = Profile.objects.filter(username=username).first()  # Get a single profile
         id = Profile.objects.filter(username=username).first().profile_id
         id_profile.append(id)
         model_data = MyModel.objects.all()
         # Convert the response to JSON
-        json_data = content_data(f'@{username}')
+        json_data = content_data(request,f'@{username}')
         json_data["data"] = data
         
         if request.user.username is not None:
@@ -678,14 +677,7 @@ def profile(request, username):
                arti["coment"] = len(coment_data)
            else:
                arti["coment"] = 0
-       # Pass the data as context to the template
-        user_interests = [
-          ["travel", 0.9],
-          ["sports", 0.7],
-          ["technology", 0.8],
-          ["food", 0.6]
-               ]
-        json_data["articles"] = sort_vlogs_by_engagement(request,json_data["articles"],user_interests)
+               
         json_data["path"] = f'/@{username}'
         if request.method == 'POST':
         # अगर सेशन में index उपलब्ध नहीं है तो इसे प्रारंभ करें
