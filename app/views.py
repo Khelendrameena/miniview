@@ -334,12 +334,6 @@ def searchquary(request):
         else:
             arti["coment"] = 0
     # Pass the data as context to the template
-    user_interests = [
-    ["travel", 0.9],
-    ["sports", 0.7],
-    ["technology", 0.8],
-    ["food", 0.6]
-    ]
     inverted_index = build_inverted_index(json_data["articles"])
     json_data["articles"] = fuzzy_search(quary,inverted_index,json_data["articles"])
     json_data["articles"][-1]["end"] = 1
@@ -380,7 +374,8 @@ def view(request):
             "views": views_reaction,
             "like": like_reaction,
             "username": request.user.username,
-        }
+        },
+       
     )
     model = MyModel(id=id,views=status[0],likes=status[1])
     model.save()
