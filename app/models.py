@@ -74,7 +74,7 @@ class UserReaction(models.Model):
         return f"Reaction by {self.username} on vlog {self.vlog_id}"
 
 class param(models.Model):
-    id = models.CharField(max_length=255,unique=true)
+    id = models.CharField(max_length=255,unique=True)
     LIKE_WEIGHT = models.FloatField(default=0.5)
     VIEW_WEIGHT = models.FloatField(default=0.3)
     COMMENT_WEIGHT = models.FloatField(default=0.2)
