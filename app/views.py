@@ -411,7 +411,6 @@ def google_login(request):
 
 
 def google_callback(request):
-    print("first")
     code = request.GET.get('code')
 
     # Exchange code for access token
@@ -424,7 +423,6 @@ def google_callback(request):
         "grant_type": "authorization_code",
     }
     token_response = requests.post(token_url, data=token_data).json()
-    print("mid")
     
     # Get user info
     user_info_url = "https://www.googleapis.com/oauth2/v2/userinfo"
@@ -440,14 +438,15 @@ def google_callback(request):
 	    # Check if user exists, else create a new user
 	    user, _ = User.objects.get_or_create(username=email.split('@')[0], defaults={'first_name': name})
 	    user.backend = 'django.contrib.auth.backends.ModelBackend'
-            request.session['name'] = name
-            request.session['emailp'] = email
+	    request.session['name'] = name
+	    request.session['emailp'] = email
 	    return render(request, 'username_edit.html')	    
     else:
 	    user_obj = User.objects.get(email=email)
 	    user = authenticate(username=user_obj.username, password=password)
 	    login(request, user)
 	    return redirect('/')
+	    
 	    
 	
 def usernameedit(request):
