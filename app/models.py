@@ -52,7 +52,7 @@ class Vlog(models.Model):
     description = models.TextField()
     content_html = models.TextField()
     user = models.CharField(max_length=100)
-    vlog_labels = models.CharField(max_length=100,default="None")
+    vlog_labels = models.CharField(max_length=100,default="null")
     vlog_rate = models.DecimalField(max_digits=3, decimal_places=2, default=0.0)
     date_posted = models.DateTimeField(auto_now_add=True)
 
