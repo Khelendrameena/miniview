@@ -448,6 +448,7 @@ def google_callback(request):
 	    
 	    
 	
+	
 def usernameedit(request):
 	if request.user.username is not None:
 	    if request.session['emailp'] is not None:
@@ -460,13 +461,14 @@ def usernameedit(request):
 	    	profile.save()
 	    	user_obj = User.objects.get(email=email)
 	    	user_obj.username = username
-		user_obj.save()
+	    	user_obj.save()
 	    	login(request, user_obj)
 	    	return redirect('/')
 	    else:
 	    	  return  HttpResponse("something wrong")	    	  
 	else:
 	 	   return HttpResponse("something wrong")
+	
 	
 	
 	
