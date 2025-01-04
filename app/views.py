@@ -460,7 +460,7 @@ def google_callback(request):
     return redirect('/')
 
 def usernameedit(request):
-    if request.session.get('email') is not None:
+    if request.session.get('emailp') is not None:
         username = request.POST.get('username')
         email = request.session.get('emailp')
         name = request.session.get('name')
