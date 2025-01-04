@@ -409,7 +409,6 @@ def google_login(request):
     )
     return redirect(google_auth_url)
 
-
 def google_callback(request):
     code = request.GET.get('code')
 
@@ -423,7 +422,7 @@ def google_callback(request):
         "grant_type": "authorization_code",
     }
     token_response = requests.post(token_url, data=token_data).json()
-    
+
     # Get user info
     user_info_url = "https://www.googleapis.com/oauth2/v2/userinfo"
     user_info_response = requests.get(
@@ -434,40 +433,60 @@ def google_callback(request):
     # Authenticate user in Django
     email = user_info_response['email']
     name = user_info_response.get('name', 'Google User')
-    if not User.objects.filter(email=email).exists():
-	    # Check if user exists, else create a new user
-	    user, _ = User.objects.get_or_create(username=email.split('@')[0], defaults={'first_name': name})
-	    user.backend = 'django.contrib.auth.backends.ModelBackend'
-	    request.session['name'] = name
-	    request.session['emailp'] = email
-	    return render(request, 'username_edit.html')	    
-    else:
-	    user_obj = User.objects.get(email=email)
-	    login(request, user_obj)
-	    return redirect('/')
-	    
-	    
-	
-	
+
+    # Check if the user exists
+    user, created = User.objects.get_or_create(
+        email=email,
+        defaults={
+            'username': email.split('@')[0],
+            'first_name': name,
+        }
+    )
+
+    # If user is newly created, make the password unusable
+    if created:
+        user.set_unusable_password()
+        user.save()
+
+        # Store additional info in the session
+        request.session['name'] = name
+        request.session['emailp'] = email
+        return render(request, 'username_edit.html')  # Redirect to username edit page
+
+    # If user exists, log them in
+    login(request, user)  # No need for a password
+    return redirect('/')
+
 def usernameedit(request):
-	if request.user.username is not None:
-	    if request.session['emailp'] is not None:
-	    	username = request.POST.get('username')
-	    	email = request.session['emailp']
-	    	name = request.session['name']
-	    	id_4 = uuid.uuid1()
-	    	profile = Profile(profile_id=id_4
-	    	,profile_picture=f'https://ui-avatars.com/api/?name={name}',name=name,username=username,followers=0,following=0,country="in")
-	    	profile.save()
-	    	user_obj = User.objects.get(email=email)
-	    	user_obj.username = username
-	    	user_obj.save()
-	    	login(request, user_obj)
-	    	return redirect('/')
-	    else:
-	    	  return  HttpResponse("something wrong")	    	  
-	else:
-	 	   return HttpResponse("something wrong")
+    if request.user.is_authenticated:
+        username = request.POST.get('username')
+        email = request.session.get('emailp')
+        name = request.session.get('name')
+
+        if email and username:
+            id_4 = uuid.uuid1()
+            profile = Profile(
+                profile_id=id_4,
+                profile_picture=f'https://ui-avatars.com/api/?name={name}',
+                name=name,
+                username=username,
+                followers=0,
+                following=0,
+                country="in"
+            )
+            profile.save()
+
+            user_obj = User.objects.get(email=email)
+            user_obj.username = username
+            user_obj.save()
+
+            login(request, user_obj)  # Log in the user
+            return redirect('/')
+        else:
+            return HttpResponse("Something went wrong")
+    else:
+        return HttpResponse("User not authenticated")
+
 	
 	
 	
