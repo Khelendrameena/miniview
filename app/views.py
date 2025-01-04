@@ -27,6 +27,44 @@ import os
 import random
 main_id = []
 
+labels_list = [
+    "Artificial Intelligence", "Machine Learning", "Blockchain", "Robotics", "Software Development", 
+    "Cybersecurity", "Cloud Computing", "Internet of Things (IoT)", "Data Science", "Virtual Reality",
+    "Football", "Cricket", "Basketball", "Tennis", "Badminton", "Athletics", "Swimming", "Baseball", 
+    "Hockey", "Golf", "Fitness", "Nutrition", "Mental Health", "Yoga", "Meditation", "Healthcare Technology", 
+    "Disease Prevention", "Medical Research", "Healthy Eating", "Physical Therapy", "Stock Market", "Entrepreneurship", 
+    "Marketing", "E-commerce", "Venture Capital", "Cryptocurrency", "Personal Finance", "Banking", "Real Estate", 
+    "Startups", "Movies", "Music", "TV Shows", "Streaming Platforms", "Celebrity News", "Video Games", "Podcasts", 
+    "Animation", "Theater", "Comedy", "Online Learning", "Study Tips", "STEM Education", "Language Learning", 
+    "Career Guidance", "Scholarship Opportunities", "EdTech", "Research Papers", "Public Speaking", "Writing Skills", 
+    "Food", "Travel", "Fashion", "Lifestyle", "Parenting", "Art", "Photography", "Design", "Architecture", 
+    "Cooking", "Gardening", "Home Improvement", "DIY", "Sports Science", "Psychology", "Sociology", "Philosophy", 
+    "Literature", "History", "Politics", "Economics", "Law", "Social Media", "Technology News", "Gaming", 
+    "Mobile Apps", "Entrepreneurship Tips", "Productivity", "Self-Improvement", "Leadership", "Public Relations", 
+    "Digital Marketing", "Influencer Marketing", "Advertising", "Event Planning", "Human Resources", "Workplace Culture", 
+    "Customer Service", "Retail", "Food Industry", "Manufacturing", "Automotive", "Transportation", "Logistics", 
+    "Supply Chain", "Sustainability", "Renewable Energy", "Climate Change", "Environmentalism", "Wildlife", "Oceanography", 
+    "Astronomy", "Space Exploration", "Physics", "Chemistry", "Biology", "Genetics", "Medicine", "Healthcare Innovation", 
+    "Medical Devices", "Drug Development", "Healthcare Policy", "Public Health", "Social Justice", "Human Rights", 
+    "Diversity", "Equality", "Immigration", "International Relations", "Globalization", "UN", "NGOs", "Peacekeeping", 
+    "Conflict Resolution", "Cyberbullying", "Mental Health Awareness", "Addiction", "Recovery", "Grief", "Trauma", 
+    "Coping Mechanisms", "Therapy", "Coaching", "Life Coaching", "Nutrition Science", "Fitness Plans", "Well-being", 
+    "Chronic Illness", "Public Speaking Tips", "Career Development", "Job Search", "Interview Skills", "Resume Writing", 
+    "Entrepreneurship Courses", "Coding", "Web Development", "App Development", "UI/UX Design", "Data Analytics", 
+    "Cloud Services", "Game Development", "Artificial Neural Networks", "Speech Recognition", "Natural Language Processing", 
+    "Computer Vision", "Automation", "Robotic Process Automation", "Autonomous Vehicles", "Smart Cities", "Electric Vehicles", 
+    "Renewable Resources", "Smart Grid", "Cybersecurity Threats", "Identity Protection", "Privacy", "Digital Footprint", 
+    "Online Privacy", "Data Protection", "Blockchain Security", "Ethical Hacking", "Cryptography", "IoT Security", 
+    "Digital Transformation", "SaaS", "PaaS", "Cloud Migration", "Edge Computing", "AI Ethics", "AI Regulation", 
+    "Tech Startups", "FinTech", "HealthTech", "EdTech", "E-learning", "GreenTech", "AgTech", "LegalTech", 
+    "IoT Devices", "Wearable Tech", "Smart Home", "AI in Healthcare", "AI in Education", "AI in Finance", 
+    "AI in Business", "AI in Marketing", "AI in Transportation", "AI in Manufacturing", "Machine Vision", "Speech Synthesis", 
+    "Image Recognition", "Natural Language Generation", "Deep Learning", "Reinforcement Learning", "Supervised Learning", 
+    "Unsupervised Learning", "Neural Networks", "Support Vector Machines", "Decision Trees", "Random Forests", 
+    "K-means Clustering", "Logistic Regression", "Regression Analysis", "Bayesian Inference", "Time Series Analysis", 
+    "Data Visualization", "Big Data", "Data Mining", "Data Engineering", "Predictive Modeling"
+]
+
 def content_data(user_2):
     if user_2 == 'all':
         vlogs = Vlog.objects.all()
