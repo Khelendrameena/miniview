@@ -451,7 +451,7 @@ def google_callback(request):
 	
 def usernameedit(request):
 	if request.user.username is not None:
-	    if request.session['emailp'] is not None;
+	    if request.session['emailp'] is not None:
 	    	username = request.POST.get('username')
 	    	email = request.session['emailp']
 	    	name = request.session['name']
