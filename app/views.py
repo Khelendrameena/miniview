@@ -453,8 +453,8 @@ def google_callback(request):
         request.session['emailp'] = email
         return render(request, 'username_edit.html')  # Redirect to username edit page
 
-    # If user exists, log them in
-    login(request, user)  # No need for a password
+    # If user exists, log them in directly
+    login(request, user, backend='django.contrib.auth.backends.ModelBackend')  # Specify backend
     return redirect('/')
 
 def usernameedit(request):
@@ -480,18 +480,12 @@ def usernameedit(request):
             user_obj.username = username
             user_obj.save()
 
-            login(request, user_obj)  # Log in the user
+            login(request, user_obj, backend='django.contrib.auth.backends.ModelBackend')  # Specify backend
             return redirect('/')
         else:
             return HttpResponse("Something went wrong")
     else:
         return HttpResponse("User not authenticated")
-
-	
-	
-	
-	
-
 
 # Signup View
 def signup_view(request):
