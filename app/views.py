@@ -133,7 +133,7 @@ def home(request):
     json_data["articles"] = json_data["articles"]+content_data('all')["articles"]
     if request.user.username is not None:
         try:
-            print("hay",username=request.user.username)
+            print("hay",request.user.username)
             profile = Profile.objects.get(username=request.user.username)
             json_data["name"] = profile.name
             json_data["image_url"] = profile.profile_picture
