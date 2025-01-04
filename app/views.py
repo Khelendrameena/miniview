@@ -25,10 +25,9 @@ import requests
 import json
 import os
 import random
-from transformers import pipeline
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
-# Load Pretrained Hugging Face Text Classification Pipeline
-classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
 main_id = []
 
 labels_list = [
@@ -363,12 +362,29 @@ def searchquary(request):
         json_data["articles"] = json_data_4
         return render(request, 'index.html', json_data)
 
-def extract_contextual_keyword(title, candidate_labels):
-    result = classifier(title, candidate_labels)
-    # Return the top keyword with its score
-    top_keyword = result["labels"][0]
-    score = result["scores"][0]
-    return [top_keyword,score]
+def extract_contextual_keyword(text, labels):
+    # Generate keywords from labels (basic assumption: labels as keywords)
+    label_keywords = {label: [label] for label in labels}
+    
+    # Create corpus from generated label keywords
+    corpus = [" ".join(keywords) for keywords in label_keywords.values()]
+    
+    # Initialize vectorizer and fit corpus
+    vectorizer = TfidfVectorizer()
+    tfidf_matrix = vectorizer.fit_transform(corpus)
+    
+    # Vectorize the input text
+    query_vec = vectorizer.transform([text])
+    
+    # Compute cosine similarity between query and label keywords
+    similarities = cosine_similarity(query_vec, tfidf_matrix).flatten()
+    
+    # Find the label with the highest similarity score
+    max_index = similarities.argmax()
+    most_related_label = labels[max_index]
+    highest_similarity_score = similarities[max_index]
+    
+    return [most_related_label, highest_similarity_score]
     
 def view(request):
     data = json.loads(request.body)
