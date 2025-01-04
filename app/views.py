@@ -71,12 +71,11 @@ labels_list = [
     "Data Visualization", "Big Data", "Data Mining", "Data Engineering", "Predictive Modeling"
 ]
 
-# Define weights
-LIKE_WEIGHT = param.objects.get(id="8656khelendra").LIKE_WEIGHT
-VIEW_WEIGHT = param.objects.get(id="8656khelendra").VIEW_WEIGHT
-COMMENT_WEIGHT = param.objects.get(id="8656khelendra").COMMENT_WEIGHT
-RECENCY_WEIGHT = param.objects.get(id="8656khelendra").RECENCY_WEIGHT  # Recency score weight
-no_vlog = param.objects.get(id="8656khelendra").NO_VLOG
+LIKE_WEIGHT = 0.5
+VIEW_WEIGHT = 0.3
+COMMENT_WEIGHT = 0.2
+RECENCY_WEIGHT = 0.4  
+
 def average_labels(input_array):
     # Dictionary to store the total score and count for each label
     label_data = {}
@@ -125,7 +124,7 @@ def get_top_vlogs(username):
             (F('recency_score') * RECENCY_WEIGHT),
             output_field=FloatField()
         )
-    ).order_by('-engagement_score')[:no_vlog]
+    ).order_by('-engagement_score')[:1]
 
     return top_vlogs
 
