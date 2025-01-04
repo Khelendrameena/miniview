@@ -462,7 +462,7 @@ def usernameedit(request):
 	    	user_obj = User.objects.get(email=email)
 	    	user_obj.username = username
 	    	user = authenticate(username=user_obj.username, password=password)
-		login(request, user)
+	    	login(request, user)
 	    	return redirect('/')
 	    else:
 	    	  return  HttpResponse("something wrong")	    	  
