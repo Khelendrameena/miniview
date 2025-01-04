@@ -25,6 +25,10 @@ import requests
 import json
 import os
 import random
+from transformers import pipeline
+
+# Load Pretrained Hugging Face Text Classification Pipeline
+classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
 main_id = []
 
 labels_list = [
@@ -359,6 +363,13 @@ def searchquary(request):
         json_data["articles"] = json_data_4
         return render(request, 'index.html', json_data)
 
+def extract_contextual_keyword(title, candidate_labels):
+    result = classifier(title, candidate_labels)
+    # Return the top keyword with its score
+    top_keyword = result["labels"][0]
+    score = result["scores"][0]
+    return [top_keyword,score]
+    
 def view(request):
     data = json.loads(request.body)
     id = data.get('id')
@@ -374,7 +385,9 @@ def view(request):
             "views": views_reaction,
             "like": like_reaction,
             "username": request.user.username,
-        },
+            "user_interest":extract_contextual_keyword(Vlog.objects.get(vlog_id=id).title,labels_list)[0],
+            "interest_rate":extract_contextual_keyword(Vlog.objects.get(vlog_id=id).title,labels_list)[1]
+        }
        
     )
     model = MyModel(id=id,views=status[0],likes=status[1])
@@ -752,7 +765,9 @@ def vlogpost(request,username):
            data = json.loads(request.body)
            content_html = data.get('content')
            user = f'@{username}'
-           vlog = Vlog(vlog_id=vlog_id,thumbnail=thumbnail,title=title,description=description,content_html=content_html,user=user)
+           vlog_labels = extract_contextual_keyword(title,lables_list)[0]
+           vlog_rate = extract_contextual_keyword(title,lables_list)[1]
+           vlog = Vlog(vlog_id=vlog_id,thumbnail=thumbnail,title=title,description=description,content_html=content_html,user=user,vlog_labels=vlog_labels,vlog_rate=vlog_rate)
            vlog.save()
            return render(request, 'posted.html')
        else:
