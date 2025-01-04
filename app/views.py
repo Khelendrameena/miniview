@@ -5,6 +5,7 @@ from app.models import Profile
 from app.models import Vlog
 from app.models import UserReaction
 from app.models import comentconfig
+from app.models import param
 from django.contrib.auth import authenticate, login
 from django.template.loader import render_to_string
 from django.contrib.auth.models import User
@@ -71,11 +72,11 @@ labels_list = [
 ]
 
 # Define weights
-LIKE_WEIGHT = 0.5
-VIEW_WEIGHT = 0.3
-COMMENT_WEIGHT = 0.2
-RECENCY_WEIGHT = 0.4  # Recency score weight
-
+LIKE_WEIGHT = param.object.get(id="8656khelendra").LIKE_WEIGHT
+VIEW_WEIGHT = param.object.get(id="8656khelendra").VIEW_WEIGHT
+COMMENT_WEIGHT = param.object.get(id="8656khelendra").COMMENT_WEIGHT
+RECENCY_WEIGHT = param.object.get(id="8656khelendra").RECENCY_WEIGHT  # Recency score weight
+no_vlog = param.object.get(id="8656khelendra").NO_VLOG
 def average_labels(input_array):
     # Dictionary to store the total score and count for each label
     label_data = {}
@@ -124,7 +125,7 @@ def get_top_vlogs(username):
             (F('recency_score') * RECENCY_WEIGHT),
             output_field=FloatField()
         )
-    ).order_by('-engagement_score')[:100]
+    ).order_by('-engagement_score')[:no_vlog]
 
     return top_vlogs
 
@@ -162,60 +163,6 @@ def content_data(user_2):
         } for vlog in vlogs]
         json_data = {"articles": vlog_data}
         return json_data
-
-def suggest_vlogs(vlog_titles, user_liked_vlogs):    
-    # Vectorize the vlog titles using TF-IDF
-    vectorizer = TfidfVectorizer(stop_words='english')
-    vlog_vectors = vectorizer.fit_transform(vlog_titles)
-    
-    # Vectorize the liked vlog titles
-    liked_vectors = vectorizer.transform(user_liked_vlogs)
-    
-    # Calculate the average of the liked vlog vectors
-    average_liked_vector = liked_vectors.mean(axis=0)
-    
-    # Calculate similarity between the average liked vector and all vlogs
-    similarity_scores = cosine_similarity(average_liked_vector, vlog_vectors)
-    
-    return similarity_scores[0]
-
-def sort_vlogs_by_engagement(request,vlogs, user_interests):
-    if not isinstance(vlogs, list):
-        raise ValueError("Input must be a list of dictionaries representing vlogs.")
-    
-    if not isinstance(user_interests, list):
-        raise ValueError("User interests must be a list of [interest, weight].")
-    
-    # Process user interests into a dictionary for easier lookup
-    interest_weights = {interest.lower(): weight for interest, weight in user_interests}
-    follow_boost = 50
-    index = 0
-    for vlog in vlogs:
-        if not all(key in vlog for key in ["likes", "views","coment", "title"]):
-            raise ValueError("Each vlog must have 'likes', 'comments', 'views', and 'title' keys.")
-        current_date = datetime.now()        
-        # Calculate engagement score
-        vlog['engagement_score'] = (vlog['likes'] * 2) + (vlog['coment'] * 3) + (vlog['views'] * 1)
-        if "s" in vlog:
-           date_str = vlog["publishedAt"].split('-')[0][:8]
-           posted_date = datetime.strptime(f"{date_str[:4]}-{date_str[4:6]}-{date_str[6:]}",'%Y-%m-%d')
-        else:        
-           posted_date = posted_date = datetime.strptime(vlog["publishedAt"].split('T')[0], '%Y-%m-%d')
-        days_since_posted = (current_date - posted_date).days
-        time_decay_factor = max(0, 30 - days_since_posted)  # Decay reduces with days since posted
-        vlog['time_decay_score'] = time_decay_factor  # Add time decay factor
-        vlog['follow_boost'] = follow_boost if vlog['follow_status'] == 1 else 0
-        # Calculate relevance score based on user interests
-        if request.user.is_authenticated and 1 == 2:
-        	vlog['relevance_score'] = suggest_vlogs([vlog["title"] for vlog in vlogs],[like_rect.title for like_rect in UserReaction.objects.filter(username=request.user1.username)])[index]*100
-        	index = index + 1
-        	vlog['combined_score'] = vlog['engagement_score'] + vlog['relevance_score'] + vlog['time_decay_score'] + vlog['follow_boost']
-        else:
-       	  vlog['combined_score'] = vlog['engagement_score'] + vlog['time_decay_score']
-   
-    # Sort vlogs by combined score in descending order
-    sorted_vlogs = sorted(vlogs, key=lambda x: x['combined_score'], reverse=True)    
-    return sorted_vlogs
 
 search_2 = []
 def home(request):
@@ -267,13 +214,7 @@ def home(request):
             arti["coment"] = len(coment_data)
         else: 
             arti["coment"] = 0
-    user_interests = [
-    ["travel", 0.9],
-    ["sports", 0.7],
-    ["technology", 0.8],
-    ["food", 0.6]
-    ]
-    json_data["articles"] = sort_vlogs_by_engagement(request,json_data["articles"],user_interests)
+    
     # Pass the data as context to the template
     json_data["articles"][-1]["end"] = 1
     json_data["path"] = '/'
