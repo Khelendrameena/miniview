@@ -409,7 +409,7 @@ def google_login(request):
     )
     return redirect(google_auth_url)
 
-user_d = []
+
 def google_callback(request):
     print("first")
     code = request.GET.get('code')
@@ -439,22 +439,22 @@ def google_callback(request):
 
     # Check if user exists, else create a new user
     user, _ = User.objects.get_or_create(username=email.split('@')[0], defaults={'first_name': name})
-    user_d.append(email)
+    email
     user_d.append(name)
     # Set the backend explicitly
     user.backend = 'django.contrib.auth.backends.ModelBackend'
-
+    request.session['name'] = name
+    request.session['emailp'] = email
     # Log the user in
-    login(request, user)
 
     return render(request, 'username_edit.html')
 	
 def usernameedit(request):
 	if request.user.username is not None:
-	    if user_d[-2].split('@')[0] == request.user.username:
+	    if request.session['emailp'] is not None;
 	    	username = request.POST.get('username')
-	    	email = user_d[-2]
-	    	name = user_d[-1]
+	    	email = request.session['emailp']
+	    	name = request.session['name']
 	    	id_4 = uuid.uuid1()
 	    	profile = Profile(profile_id=id_4
 	    	,profile_picture=f'https://ui-avatars.com/api/?name={name}',name=name,username=username,followers=0,following=0,country="in")
@@ -462,6 +462,7 @@ def usernameedit(request):
 	    	user_obj = User.objects.get(email=email)
 	    	user_obj.username = username
 	    	user = authenticate(username=user_obj.username, password=password)
+		login(request, user)
 	    	return redirect('/')
 	    else:
 	    	  return  HttpResponse("something wrong")	    	  
