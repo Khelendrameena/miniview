@@ -14,5 +14,6 @@ sqlparse==0.5.2
 urllib3==2.2.3
 gunicorn
 cryptography
+keras==2.12.0
 tensorflow
 transformers
