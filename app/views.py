@@ -72,11 +72,11 @@ labels_list = [
 ]
 
 # Define weights
-LIKE_WEIGHT = param.object.get(id="8656khelendra").LIKE_WEIGHT
-VIEW_WEIGHT = param.object.get(id="8656khelendra").VIEW_WEIGHT
-COMMENT_WEIGHT = param.object.get(id="8656khelendra").COMMENT_WEIGHT
-RECENCY_WEIGHT = param.object.get(id="8656khelendra").RECENCY_WEIGHT  # Recency score weight
-no_vlog = param.object.get(id="8656khelendra").NO_VLOG
+LIKE_WEIGHT = param.objects.get(id="8656khelendra").LIKE_WEIGHT
+VIEW_WEIGHT = param.objects.get(id="8656khelendra").VIEW_WEIGHT
+COMMENT_WEIGHT = param.objects.get(id="8656khelendra").COMMENT_WEIGHT
+RECENCY_WEIGHT = param.objects.get(id="8656khelendra").RECENCY_WEIGHT  # Recency score weight
+no_vlog = param.objects.get(id="8656khelendra").NO_VLOG
 def average_labels(input_array):
     # Dictionary to store the total score and count for each label
     label_data = {}
