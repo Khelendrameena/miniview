@@ -113,7 +113,7 @@ def get_top_vlogs(request,username):
     top_vlogs = Vlog.objects.annotate(
         category_weight=category_weight_case,
         recency_score=ExpressionWrapper(
-            1 / (F('posted_date') - Now()).days,
+            1 / (F('posted_date') - Now()),
             output_field=FloatField()
         ),
         engagement_score=ExpressionWrapper(
