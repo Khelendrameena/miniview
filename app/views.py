@@ -27,7 +27,7 @@ import json
 import os
 import random
 from django.db.models import F, FloatField, ExpressionWrapper, Case, When, Value
-from django.db.models.functions import Now
+from django.db.models.functions import Now, ExtractSecond, ExtractDay
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
