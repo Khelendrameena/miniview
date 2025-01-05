@@ -101,7 +101,7 @@ def get_top_vlogs(request,username):
 
         # Create a dynamic Case statement for category weight
         category_weight_case = Case(
-            *[When(vlog_category=category, then=Value(weight)) for category, weight in interest_dict.items()],
+            *[When(vlog_labels=category, then=Value(weight)) for category, weight in interest_dict.items()],
             default=Value(0.0),
             output_field=FloatField()
         )
