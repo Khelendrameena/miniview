@@ -150,9 +150,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
-
-STATIC_URL = 'static/'
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -172,12 +169,14 @@ STATICFILE_DIRS = [
 ]
 
 # settings.py
-
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
-    BASE_DIR / "static",  # यह static directory का path है
+    BASE_DIR / "static",  # Path to your static files in development
 ]
-STATIC_ROOT = BASE_DIR / "staticfiles"  # Production में उपयोग होता है
+
+STATIC_ROOT = BASE_DIR / "staticfiles"  # Path where static files will be collected in production
+ # Production में उपयोग होता है
 
 # Session settings
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default: Store sessions in the database
