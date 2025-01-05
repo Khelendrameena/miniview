@@ -393,6 +393,10 @@ def view(request):
         }
        
     )
+    vlog = Vlog.objects.get(vlog_id=id)
+    vlog.likes = status[0]
+    vlog.views = status[1]
+    vlog.save()
     model = MyModel(id=id,views=status[0],likes=status[1])
     model.save()
     return HttpResponse("something wrong")
@@ -403,8 +407,11 @@ def coment(request):
         main_id.append(id)
         data = comentconfig.objects.filter(mainid=id)
         # Serialize the queryset to JSON
+        vlog = Vlog.objects.get(vlog_id=id)
+        vlog.comments = len([a for a in data])
+        vlog.save()
         serialized_data = serialize('json', data)
-        print(main_id[len(main_id)-1],id)
+        
         # Pass the serialized data to the template
         return render(request, 'coment.html', {'data': serialized_data})
     else:
@@ -419,7 +426,7 @@ def comentadd(request):
             mess = data.get('mess')
             like = data.get('like')
             id = uuid.uuid1()
-
+            
             # Save the comment to the database
             #user_reaction = UserReaction(vlog_id=main_id[-1],coment=1,username=request.user.username)
             coment = comentconfig(mainid=mainid, id=id, name=name, mess=mess, like=like)
