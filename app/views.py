@@ -791,7 +791,7 @@ def vlogpost(request,username):
            vlog_rate = extract_contextual_keyword(title,labels_list)[1]
            vlog = Vlog(vlog_id=vlog_id,thumbnail=thumbnail,title=title,description=description,content_html=content_html,user=user,vlog_labels=vlog_labels,vlog_rate=vlog_rate)
            vlog.save()
-           return render(request, 'posted.html')
+           return HttpResponse("Published")
        else:
            return HttpResponse("something wrong")
     else:
