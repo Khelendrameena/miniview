@@ -114,11 +114,15 @@ def get_top_vlogs(request, username):
     top_vlogs = Vlog.objects.annotate(
         category_weight=category_weight_case,
         recency_seconds=ExpressionWrapper(
-            Now() - F('date_posted'),
+            (Now() - F('date_posted')),
             output_field=models.DurationField()
         ),
+        recency_days=ExpressionWrapper(
+            ExtractSecond(F('recency_seconds')) / 86400,
+            output_field=FloatField()
+        ),
         recency_score=ExpressionWrapper(
-            1.0 / ((F('recency_seconds').total_seconds() / 86400) + 1),  # Convert seconds to days
+            1.0 / (F('recency_days') + 1),  # Add 1 to avoid division by zero
             output_field=FloatField()
         ),
         engagement_score=ExpressionWrapper(
@@ -131,6 +135,7 @@ def get_top_vlogs(request, username):
     ).order_by('-engagement_score')[:1]
 
     return top_vlogs
+
 
 def content_data(request,user_2):
     if user_2 == 'all':
