@@ -90,7 +90,7 @@ def average_labels(input_array):
     # Calculate average for each label and prepare the result
     result = [[label, round(data['total'] / data['count'], 2)] for label, data in label_data.items()]
     return result
-    
+
 def get_top_vlogs(request, username):
     # Check if user_interest is provided
     if UserReaction.objects.filter(username=request.user.username).exists():
@@ -113,12 +113,12 @@ def get_top_vlogs(request, username):
     # Fetch top vlogs
     top_vlogs = Vlog.objects.annotate(
         category_weight=category_weight_case,
-        recency_days=ExpressionWrapper(
-            Now() - F('date_posted'),  # Corrected field name
+        recency_seconds=ExpressionWrapper(
+            Now() - F('date_posted'),
             output_field=models.DurationField()
         ),
         recency_score=ExpressionWrapper(
-            1.0 / (F('recency_days').days + 1),  # Prevent division by zero
+            1.0 / ((F('recency_seconds').total_seconds() / 86400) + 1),  # Convert seconds to days
             output_field=FloatField()
         ),
         engagement_score=ExpressionWrapper(
