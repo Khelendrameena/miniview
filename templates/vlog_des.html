@@ -257,7 +257,99 @@ function addCode() {
 
       if (xhr.status === 200) {
         // Show success message
-        document.body.innerHtml = ``;
+            document.documentElement.innerHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vlog Upload Confirmation</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .confirmation-box {
+      background-color: white;
+      border-radius: 8px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .checkmark {
+      font-size: 50px;
+      color: #4caf50;
+    }
+
+    h2 {
+      margin: 20px 0;
+      font-size: 24px;
+      color: #333;
+    }
+
+    p {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #0078ff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #005bb5;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="confirmation-box">
+      <div class="checkmark">
+        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0,0,256,256">
+<g fill="#339af0" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(4,4)"><path d="M32,6c-14.359,0 -26,11.641 -26,26c0,14.359 11.641,26 26,26c14.359,0 26,-11.641 26,-26c0,-14.359 -11.641,-26 -26,-26zM29,42l-11,-11l2,-3l9,6l13.957,-12l3.043,3z"></path></g></g>
+</svg>
+      </div>
+      <h2>Your Vlog was uploaded successfully!</h2>
+      <p>Your vlog has been uploaded to the platform. You can now share it with your audience.</p>
+      <button onclick="goToHomePage()">Go to Home</button>
+    </div>
+  </div>
+
+  <script>
+    function goToHomePage() {
+      window.location.href = 'index.html';  // Redirect to your home page or dashboard
+    }
+  </script>
+</body>
+</html>`;
         
       } else {
         alert("There was an error submitting your vlog.");
