@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import JsonResponse,HttpResponse
 from app.models import MyModel
+from django.db import models
 from app.models import Profile
 from app.models import Vlog
 from app.models import UserReaction
