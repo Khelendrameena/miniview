@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ['miniview-uzfa.onrender.com','miniview.com','localhost','127.0.
 # Application definition
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
     'app.apps.AppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -73,6 +74,7 @@ GOOGLE_REDIRECT_URI = 'https://miniview-1ajl.onrender.com/auth/callback/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
