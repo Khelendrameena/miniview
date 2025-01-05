@@ -133,6 +133,7 @@
     }
 
   </style>
+
 </head>
 <body>
 
@@ -257,13 +258,7 @@ function addCode() {
 
       if (xhr.status === 200) {
         // Show success message
-            document.documentElement.innerHTML = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vlog Upload Confirmation</title>
-  <style>
+        document.body.head.innerHTML = `  <style>
     * {
       margin: 0;
       padding: 0;
@@ -327,30 +322,21 @@ function addCode() {
     button:hover {
       background-color: #005bb5;
     }
-  </style>
-</head>
-<body>
+  </style>`;
+            document.body.innerHTML = `
   <div class="container">
     <div class="confirmation-box">
       <div class="checkmark">
-        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0,0,256,256">
-<g fill="#339af0" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(4,4)"><path d="M32,6c-14.359,0 -26,11.641 -26,26c0,14.359 11.641,26 26,26c14.359,0 26,-11.641 26,-26c0,-14.359 -11.641,-26 -26,-26zM29,42l-11,-11l2,-3l9,6l13.957,-12l3.043,3z"></path></g></g>
-</svg>
+        ✔
       </div>
       <h2>Your Vlog was uploaded successfully!</h2>
       <p>Your vlog has been uploaded to the platform. You can now share it with your audience.</p>
       <button onclick="goToHomePage()">Go to Home</button>
     </div>
-  </div>
-
-  <script>
-    function goToHomePage() {
-      window.location.href = 'index.html';  // Redirect to your home page or dashboard
-    }
-  </script>
-</body>
-</html>`;
-        
+  </div>`;
+        document.body.script.innerHTML = `  function goToHomePage() {
+    window.location.href = 'index.html'; // Redirect to your home page or dashboard
+  }`;
       } else {
         alert("There was an error submitting your vlog.");
       }
@@ -363,6 +349,5 @@ function addCode() {
     };
   }
 </script>
-
 </body>
 </html>
