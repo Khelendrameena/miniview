@@ -257,10 +257,8 @@ function addCode() {
 
       if (xhr.status === 200) {
         // Show success message
-        document.getElementById("success-message").style.display = "block";
-        setTimeout(() => {
-          document.getElementById("success-message").style.display = "none";
-        }, 3000); // Hide after 3 seconds
+        document.body.innerHtml = ``;
+        
       } else {
         alert("There was an error submitting your vlog.");
       }
