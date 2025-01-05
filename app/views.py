@@ -92,8 +92,6 @@ def average_labels(input_array):
     result = [[label, round(data['total'] / data['count'], 2)] for label, data in label_data.items()]
     return result
 
-
-
 def get_top_vlogs(request, username):
     # Check if user_interest is provided
     if UserReaction.objects.filter(username=request.user.username).exists():
@@ -145,6 +143,7 @@ def get_top_vlogs(request, username):
     top_vlogs = sorted(top_vlogs, key=lambda x: x.engagement_score, reverse=True)
 
     return top_vlogs
+
 
 
 
