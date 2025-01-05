@@ -110,31 +110,34 @@ def get_top_vlogs(request, username):
         # If no user_interest is provided, set category weight to a default value
         category_weight_case = Value(1.0, output_field=FloatField())
 
-    # Fetch top vlogs
-    top_vlogs = Vlog.objects.annotate(
+    # Fetch vlogs from the database
+    vlogs = Vlog.objects.annotate(
         category_weight=category_weight_case,
-        recency_seconds=ExpressionWrapper(
-            (Now() - F('date_posted')),
-            output_field=models.DurationField()
-        ),
-        recency_days=ExpressionWrapper(
-            ExtractSecond(F('recency_seconds')) / 86400,
-            output_field=FloatField()
-        ),
-        recency_score=ExpressionWrapper(
-            1.0 / (F('recency_days') + 1),  # Add 1 to avoid division by zero
-            output_field=FloatField()
-        ),
-        engagement_score=ExpressionWrapper(
+        base_engagement_score=ExpressionWrapper(
             ((F('likes') * LIKE_WEIGHT) +
              (F('views') * VIEW_WEIGHT) +
-             (F('comment') * COMMENT_WEIGHT)) * F('category_weight') +
-            (F('recency_score') * RECENCY_WEIGHT),
+             (F('comment') * COMMENT_WEIGHT)) * F('category_weight'),
             output_field=FloatField()
         )
-    ).order_by('-engagement_score')[:1]
+    )
+
+    # Calculate recency and engagement score in Python
+    top_vlogs = []
+    for vlog in vlogs:
+        # Calculate recency in seconds
+        recency_seconds = (datetime.now() - vlog.date_posted).total_seconds()
+        recency_days = recency_seconds / 86400  # Convert seconds to days
+        recency_score = 1.0 / (recency_days + 1)  # Add 1 to avoid division by zero
+
+        # Calculate final engagement score
+        vlog.engagement_score = vlog.base_engagement_score + (recency_score * RECENCY_WEIGHT)
+        top_vlogs.append(vlog)
+
+    # Sort vlogs by engagement score in descending order
+    top_vlogs = sorted(top_vlogs, key=lambda x: x.engagement_score, reverse=True)[:1]
 
     return top_vlogs
+
 
 
 def content_data(request,user_2):
