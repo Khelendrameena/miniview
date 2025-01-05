@@ -129,7 +129,7 @@ def get_top_vlogs(username):
 
 def content_data(request,user_2):
     if user_2 == 'all':
-        vlogs = get_top_vlogs(request.user.username)
+        vlogs = get_top_vlogs(request,request.user.username)
         vlog_data = [{
             "title": vlog.title,
             "description": vlog.description,
