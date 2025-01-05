@@ -26,8 +26,9 @@ import requests
 import json
 import os
 import random
-from django.db.models import F, FloatField, ExpressionWrapper, Case, When, Value
-from django.db.models.functions import Now, ExtractSecond, ExtractDay
+from datetime import timedelta
+from django.utils.timezone import now
+from django.db.models import F, FloatField, ExpressionWrapper, Value, Case, When
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -91,6 +92,8 @@ def average_labels(input_array):
     result = [[label, round(data['total'] / data['count'], 2)] for label, data in label_data.items()]
     return result
 
+
+
 def get_top_vlogs(request, username):
     # Check if user_interest is provided
     if UserReaction.objects.filter(username=request.user.username).exists():
@@ -124,9 +127,14 @@ def get_top_vlogs(request, username):
     # Calculate recency and engagement score in Python
     top_vlogs = []
     for vlog in vlogs:
-        # Calculate recency in seconds
-        recency_seconds = (datetime.now() - vlog.date_posted).total_seconds()
+        # Ensure vlog date is timezone-aware
+        vlog_date_posted = vlog.date_posted if vlog.date_posted.tzinfo else vlog.date_posted.replace(tzinfo=now().tzinfo)
+
+        # Calculate recency in seconds (now() is timezone-aware)
+        recency_seconds = (now() - vlog_date_posted).total_seconds()
         recency_days = recency_seconds / 86400  # Convert seconds to days
+
+        # Recency score - More recent vlogs get higher weight
         recency_score = 1.0 / (recency_days + 1)  # Add 1 to avoid division by zero
 
         # Calculate final engagement score
@@ -134,7 +142,7 @@ def get_top_vlogs(request, username):
         top_vlogs.append(vlog)
 
     # Sort vlogs by engagement score in descending order
-    top_vlogs = sorted(top_vlogs, key=lambda x: x.engagement_score, reverse=True)[:1]
+    top_vlogs = sorted(top_vlogs, key=lambda x: x.engagement_score, reverse=True)
 
     return top_vlogs
 
