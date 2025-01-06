@@ -786,6 +786,37 @@ def vlog(request, username):
     else:
         return HttpResponse("something wrong")
 
+def media(request,num):
+    if request.method == 'POST' and request.FILES.get('file'):
+        uploaded_file = request.FILES['file']  # Corrected key for the file
+        static_path = os.path.join(settings.BASE_DIR, 'media')  # Path to media/
+        
+        # Create the directory if it doesn't exist
+        if not os.path.exists(static_path):
+            os.makedirs(static_path)
+
+        # Generate a unique filename to prevent overwriting
+        file_name = f"vlog_{cont_4[1]}_{num}"  # Added file extension (.jpg)
+        
+        # Check and delete the file if it exists
+        check_and_delete(file_name, '/media')
+
+        # Define the file path
+        file_path = os.path.join(static_path, file_name)
+
+        # Save the file
+        with open(file_path, 'wb+') as destination:
+            for chunk in uploaded_file.chunks():
+                destination.write(chunk)
+
+        # Generate the URL for the uploaded file
+        thumbnail_url = f"/media/{file_name}"
+
+        return JsonResponse({"thumbnail_url": thumbnail_url}, status=200)
+
+    return JsonResponse({"error": "No file found"}, status=400)
+
+    
 def vlogpost(request,username):
     if username == request.user.username:
        if request.method == "POST":
