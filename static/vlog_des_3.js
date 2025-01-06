@@ -186,7 +186,7 @@ function submitImages() {
 
     // AJAX request for each image
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/vlog/internal", true);
+    xhr.open("POST", "/vlog/internal/${index}", true);
     xhr.onload = function () {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
