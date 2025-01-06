@@ -152,118 +152,56 @@ function addCode() {
     };
   }
   
-  function uploadImage() {
+  let uploadedImages = []; // Array to store files temporarily
+
+function uploadImage() {
   const input = document.createElement("input");
   input.type = "file";
   input.accept = "image/*";
   input.onchange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      // Add the image to the temporary storage array
+      uploadedImages.push(file);
+
+      // Display the image preview
       const img = `<img src="${URL.createObjectURL(file)}" alt="Image" style="max-width:100%;margin:10px 0;border-radius:8px;"/>`;
       document.getElementById("editor").insertAdjacentHTML("beforeend", img);
-
-      // Now send the image to the server via AJAX using FormData
-      const formData = new FormData();
-      formData.append("image", file);
-      formData.append("csrfmiddlewaretoken", '{{ csrf_token }}');  // Add CSRF token if you're using Django
-      
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", "/vlog/internal", true);
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          const response = JSON.parse(xhr.responseText);
-          const imageUrl = response.image_url;  // Assuming backend returns image URL
-          // You can then replace the image source with the actual uploaded image URL
-          const imgElement = document.querySelector("img[src='" + URL.createObjectURL(file) + "']");
-          imgElement.src = imageUrl;
-        } else {
-          alert("Error uploading the image.");
-        }
-      };
-      xhr.send(formData);
     }
   };
   input.click();
 }
+
+function submitImages() {
+  if (uploadedImages.length === 0) {
+    alert("No images to upload.");
+    return;
+  }
+
+  const formData = new FormData();
+  uploadedImages.forEach((file, index) => {
+    formData.append(`image_${index}`, file); // Append each file with a unique key
+  });
+  formData.append("csrfmiddlewaretoken", '{{ csrf_token }}'); // CSRF token for Django
+
+  // AJAX request to upload the images
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "/vlog/internal", true);
+  xhr.onload = function () {
+    if (xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+      alert("Images uploaded successfully!");
+      console.log("Response:", response);
+    } else {
+      alert("Error uploading the images.");
+    }
+  };
+  xhr.send(formData);
+
+  // Clear the uploadedImages array and editor after successful upload
+  uploadedImages = [];
+  document.getElementById("editor").innerHTML = "";
+}
+
  // Function to upload a file
- function uploadFile() {
-   const input = document.createElement("input");
-   input.type = "file";
-   input.accept = "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*";
-   input.onchange = (event) => {
-     const file = event.target.files[0];
-     if (file) {
-       // Handle file upload and preview
-       handleFilePreview(file);
-     }
-   };
-   input.click();
- }
-
- // Function to display file preview in the editor
- function handleFilePreview(file) {
-   const fileName = file.name;
-   const fileType = file.type;
-   const fileUrl = URL.createObjectURL(file);
-
-   let filePreviewHtml = '';
-
-   // Check for file type and show appropriate preview
-   if (fileType.startsWith('image/')) {
-     filePreviewHtml = `<div class="file-preview">
-                          <img src="${fileUrl}" alt="${fileName}" style="max-width: 100px; max-height: 100px; margin: 10px 0;"/>
-                          <span>${fileName}</span>
-                        </div>`;
-   } else if (fileType === 'application/pdf') {
-     // Generate thumbnail for PDF using PDF.js
-     filePreviewHtml = `<div class="file-preview" id="pdf-preview-${fileName}">
-                          <canvas id="canvas-${fileName}" style="max-width: 100px; max-height: 100px; margin: 10px 0;"></canvas>
-                          <span>${fileName}</span>
-                          <button onclick="viewFile('${fileUrl}')">View</button>
-                        </div>`;
-     generatePdfThumbnail(file, fileName);
-   } else {
-     filePreviewHtml = `<div class="file-preview">
-                          <img src="file-icon.png" alt="File" style="max-width: 100px; margin: 10px 0;"/>
-                          <span>${fileName}</span>
-                        </div>`;
-   }
-
-   // Insert the preview HTML in the editor
-   document.getElementById("editor").insertAdjacentHTML("beforeend", filePreviewHtml);
- }
-
- // Function to generate PDF thumbnail using PDF.js
- function generatePdfThumbnail(file, fileName) {
-   const reader = new FileReader();
-   reader.onload = function(e) {
-     const loadingTask = pdfjsLib.getDocument(e.target.result);
-     loadingTask.promise.then(function(pdf) {
-       // Get the first page
-       pdf.getPage(1).then(function(page) {
-         const scale = 0.5;
-         const viewport = page.getViewport({ scale: scale });
-
-         const canvas = document.getElementById(`canvas-${fileName}`);
-         const context = canvas.getContext("2d");
-
-         // Set canvas dimensions
-         canvas.width = viewport.width;
-         canvas.height = viewport.height;
-
-         // Render the page into the canvas
-         page.render({
-           canvasContext: context,
-           viewport: viewport
-         });
-       });
-     });
-   };
-   reader.readAsArrayBuffer(file);
- }
-
- // Function to view PDF (or other files) when clicked
- function viewFile(fileUrl) {
-   // Open the file URL (e.g., open PDF in a new window)
-   window.open(fileUrl, '_blank');
- }
+ 
