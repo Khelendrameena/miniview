@@ -170,6 +170,10 @@ STATICFILE_DIRS = [
   os.path.join(BASE_DIR, 'static')
 ]
 
+
+MEDIA_URL = '/media/'  # URL to access media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Local directory where media files are saved
+
 # settings.py
 STATIC_URL = '/static/'
 
