@@ -165,7 +165,7 @@ function uploadImage() {
       uploadedImages.push(file);
 
       // Display the image preview
-      const img = `<img src="${URL.createObjectURL(file)}" alt="Image" style="max-width:100%;margin:10px 0;border-radius:8px;"/>`;
+      const img = `<img src="${URL.createObjectURL(file)}" alt="Image" class="image" style="max-width:100%;margin:10px 0;border-radius:8px;"/>`;
       document.getElementById("editor").insertAdjacentHTML("beforeend", img);
     }
   };
@@ -175,8 +175,9 @@ function uploadImage() {
 function submitImages() {
   if (uploadedImages.length === 0) {
     alert("No images to upload.");
-    return;
   }
+  else{
+   uploadedImages = uploadedImages.slice(-document.querySelectorAll('.image').length)
 
   uploadedImages.forEach((file, index) => {
     const formData = new FormData();
@@ -204,4 +205,5 @@ function submitImages() {
   uploadedImages = [];
   document.getElementById("editor").innerHTML = "";
   alert("All images have been submitted!");
+  }
 }
