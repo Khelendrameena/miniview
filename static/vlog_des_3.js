@@ -178,30 +178,30 @@ function submitImages() {
     return;
   }
 
-  const formData = new FormData();
   uploadedImages.forEach((file, index) => {
-    formData.append(`image_${index}`, file); // Append each file with a unique key
+    const formData = new FormData();
+    formData.append('image', file); // Append the current file
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}'); // CSRF token for Django
+
+    // AJAX request for each image
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/vlog/internal", true);
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        console.log(`Image ${index + 1} uploaded successfully!`, response);
+      } else {
+        console.error(`Error uploading image ${index + 1}`);
+      }
+    };
+    xhr.onerror = function () {
+      console.error(`Error occurred while uploading image ${index + 1}`);
+    };
+    xhr.send(formData);
   });
-  formData.append("csrfmiddlewaretoken", '{{ csrf_token }}'); // CSRF token for Django
 
-  // AJAX request to upload the images
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "/vlog/internal", true);
-  xhr.onload = function () {
-    if (xhr.status === 200) {
-      const response = JSON.parse(xhr.responseText);
-      alert("Images uploaded successfully!");
-      console.log("Response:", response);
-    } else {
-      alert("Error uploading the images.");
-    }
-  };
-  xhr.send(formData);
-
-  // Clear the uploadedImages array and editor after successful upload
+  // Clear the uploadedImages array and editor after all uploads
   uploadedImages = [];
   document.getElementById("editor").innerHTML = "";
+  alert("All images have been submitted!");
 }
-
- // Function to upload a file
- 
