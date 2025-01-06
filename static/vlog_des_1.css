@@ -1,0 +1,24 @@
+  .file-preview {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .file-preview img {
+    margin-right: 10px;
+  }
+
+  .file-preview button {
+    margin-left: 10px;
+    background-color: #6c63ff;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .file-preview button:hover {
+    background-color: #574fe4;
+  }
