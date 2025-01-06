@@ -764,7 +764,8 @@ def vlog(request, username):
                     os.makedirs(static_path)
 
                 # Generate a unique filename to prevent overwriting
-                file_name = f"{vlog_id}_{uploaded_file.name}"
+                file_name = f"thumbnail_{vlog_id}"
+                check_and_delete(file_name,'/static')
                 file_path = os.path.join(static_path, file_name)
 
                 # Save the file
@@ -930,7 +931,8 @@ def profiledit(request):
                 os.makedirs(static_path)
 
             # Generate a unique filename to prevent overwriting
-            file_name = f"{profile_id}_{uploaded_file.name}"
+            file_name = f"profile_{profile_id}"
+            check_and_delete(file_name,'/static')
             file_path = os.path.join(static_path, file_name)
 
             # Save the file
