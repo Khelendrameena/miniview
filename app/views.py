@@ -757,7 +757,7 @@ def vlog(request, username):
             vlog_id = generate_unique_datetime_string()            
             if 'thumbnail' in request.FILES:
                 uploaded_file = request.FILES['thumbnail']
-                static_path = os.path.join(settings.BASE_DIR, 'static')  # Path to static/
+                static_path = os.path.join(settings.BASE_DIR, 'media')  # Path to static/
                 
                 # Create the directory if it doesn't exist
                 if not os.path.exists(static_path):
@@ -765,7 +765,7 @@ def vlog(request, username):
 
                 # Generate a unique filename to prevent overwriting
                 file_name = f"thumbnail_{vlog_id}"
-                check_and_delete(file_name,'/static')
+                check_and_delete(file_name,'/media')
                 file_path = os.path.join(static_path, file_name)
 
                 # Save the file
@@ -774,7 +774,7 @@ def vlog(request, username):
                         destination.write(chunk)
 
                 # Generate the URL for the uploaded file
-                thumbnail = f"/static/{file_name}"
+                thumbnail = f"/media/{file_name}"
                 cont_4.append(thumbnail)
             
             cont_4.append(vlog_id)
@@ -924,7 +924,7 @@ def profiledit(request):
         # Handle file upload
         if 'pic' in request.FILES:
             uploaded_file = request.FILES['pic']
-            static_path = os.path.join(settings.BASE_DIR, 'static')  # Path to static/uploads
+            static_path = os.path.join(settings.BASE_DIR, 'media')  # Path to static/uploads
 
             # Create the directory if it doesn't exist
             if not os.path.exists(static_path):
@@ -932,7 +932,7 @@ def profiledit(request):
 
             # Generate a unique filename to prevent overwriting
             file_name = f"profile_{profile_id}"
-            check_and_delete(file_name,'/static')
+            check_and_delete(file_name,'/media')
             file_path = os.path.join(static_path, file_name)
 
             # Save the file
@@ -941,7 +941,7 @@ def profiledit(request):
                     destination.write(chunk)
 
             # Generate the URL for the uploaded file
-            file_url = f"/static/{file_name}"
+            file_url = f"/media/{file_name}"
 
             # Update profile picture URL
             profile.profile_picture = file_url
