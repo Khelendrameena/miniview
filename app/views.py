@@ -786,7 +786,7 @@ def vlog(request, username):
     else:
         return HttpResponse("something wrong")
 
-def media(request,num):
+def media(request,index):
     if request.method == 'POST' and request.FILES.get('file'):
         uploaded_file = request.FILES['file']  # Corrected key for the file
         static_path = os.path.join(settings.BASE_DIR, 'media')  # Path to media/
@@ -796,7 +796,7 @@ def media(request,num):
             os.makedirs(static_path)
 
         # Generate a unique filename to prevent overwriting
-        file_name = f"vlog_{cont_4[1]}_{num}"  # Added file extension (.jpg)
+        file_name = f"vlog_{cont_4[1]}_{index}"  # Added file extension (.jpg)
         
         # Check and delete the file if it exists
         check_and_delete(file_name, '/media')
