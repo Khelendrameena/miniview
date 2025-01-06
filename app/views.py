@@ -77,6 +77,14 @@ VIEW_WEIGHT = 0.3
 COMMENT_WEIGHT = 0.2
 RECENCY_WEIGHT = 0.4  
 
+def check_and_delete(file_name, dir_path):
+    file_path = os.path.join(dir_path, file_name)
+    
+    # Check if file exists
+    if os.path.exists(file_path):
+        print(f"File '{file_name}' found. Deleting it...")
+        os.remove(file_path)  # Delete the file
+        
 def average_labels(input_array):
     # Dictionary to store the total score and count for each label
     label_data = {}
