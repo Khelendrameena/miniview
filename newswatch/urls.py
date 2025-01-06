@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.urls import path,include
 from django.contrib.auth import views as auth_views
 from app.views import google_login, google_callback
+from django.conf.urls import handler500
+
+handler500 = 'myapp.views.custom_500_error'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -46,3 +49,4 @@ urlpatterns = [
     path('coment/add', include('app.urls')),
     path('coment/count', include('app.urls'))
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
