@@ -61,7 +61,7 @@ function addCode() {
       // Hide the loader
       document.getElementById("loader").style.display = "none";
 
-      if (200 == 200) {
+      if (xhr.status == 200) {
         // Show success message
         document.head.innerHTML = `  <style>
     * {
