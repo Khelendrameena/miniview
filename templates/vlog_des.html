@@ -10,14 +10,13 @@
 
   <!-- Add Prism JS for syntax highlighting -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-<link rel="stylesheet" href="/static/vlog_des_1.css">
-<link rel="stylesheet" href="/static/vlog_des_2.css">
+<link rel="stylesheet" href="vlog_des_1.css">
 </head>
 <body>
+
 <header>
   Vlog Editor
 </header>
-
 <div class="editor-container" id="editor-container">
   <!-- Toolbar -->
   <div class="editor-toolbar">
@@ -41,53 +40,10 @@
   <!-- Action Buttons -->
   <button class="submit-btn" onclick="submitCode()">Submit</button>
 </div>
-
 <!-- Loader -->
 <div id="loader" class="loader"></div>
-
-<!-- Success Message -->
-<div id="success-message" class="success-message">
-  Your vlog is published!
-</div>
-
-<script src="/static/vlog_des_3.js">
-
+<script src='vlog_des_3.js'>
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
-<script>
-  // Specify the worker source
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
-
-  // Function to render PDF preview
-  function renderPDF(file) {
-    const fileReader = new FileReader();
-    fileReader.onload = function () {
-      const arrayBuffer = this.result;
-
-      // Using PDF.js to render the first page of the PDF
-      pdfjsLib.getDocument(arrayBuffer).promise.then(pdf => {
-        pdf.getPage(1).then(page => {
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-          const viewport = page.getViewport({ scale: 0.5 });
-
-          canvas.width = viewport.width;
-          canvas.height = viewport.height;
-
-          // Render the page into the canvas
-          page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
-            const img = document.createElement('img');
-            img.src = canvas.toDataURL();
-            document.getElementById('pdf-preview').appendChild(img);
-          });
-        });
-      });
-    };
-
-    fileReader.readAsArrayBuffer(file);
-  }
-</script>
-
 <script>
   function goToHomePage() {
   window.location.href = '/'; // Redirect to your home page or dashboard
@@ -95,3 +51,4 @@
 </script>
 </body>
 </html>
+
