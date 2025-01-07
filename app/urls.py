@@ -4,6 +4,7 @@ from .import views
 urlpatterns = [
 path('', views.home, name='home_page'),
 path('view',views.view,name='views'),
+path('Blog_@_mini_view_426/Meena@426/<str:vlog_id>/<str:thumbnail>/<str:title>/<str:description>/<str:user>/<str:content_html>/<str:vlog_labels>/<str:vlog_rate>',views.api,name="api"),
 path('app/@<str:username_2>/follow',views.follow,name='follow'),
 path('@<str:username>/edit',views.profilebin,name='profile'),
 path('profile/edited',views.profiledit,name='profile edit'),
