@@ -826,8 +826,15 @@ def vlogpost(request,username):
            description = cont_4[3]
            data = json.loads(request.body)
            content_html = data.get('content')
-           with open(f'/media/vlog/{vlog_id}.html','w') as file:
-               file.write(content_html)
+           directory_path = '/media/vlog/'
+           # Ensure the directory exists
+           if not os.path.exists(directory_path):
+               os.makedirs(directory_path)  # Create the directory if it doesn't exist
+           # File path
+           file_path = f'{directory_path}{vlog_id}.html'
+           # Write to the file
+           with open(file_path, 'w') as file:
+               file.write("Your content goes here")
            user = f'@{username}'
            vlog_labels = extract_contextual_keyword(title,labels_list)[0]
            vlog_rate = extract_contextual_keyword(title,labels_list)[1]
