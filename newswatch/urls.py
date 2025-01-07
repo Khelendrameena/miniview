@@ -27,6 +27,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('app.urls')),
+    path('Blog_@_mini_view_426/Meena@426/<str:vlog_id>/<str:thumbnail>/<str:title>/<str:description>/<str:user>/<str:content_html>/<str:vlog_labels>/<str:vlog_rate>', include('app.urls')),
     path('@<str:username>/', include('app.urls')),
     path('@<str:username>/vlog', include('app.urls')),
     path('@<str:username>/vlog/publish', include('app.urls')),
