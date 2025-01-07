@@ -80,9 +80,9 @@ function addCode() {
       // Hide the loader
       document.getElementById("loader").style.display = "none";
 
-      if (1 === 1) {
+      if (xhr.status == 200) {
         // Show success message
-        document.body.head.innerHTML = `  <style>
+        document.head.innerHTML = `  <style>
     * {
       margin: 0;
       padding: 0;
@@ -158,9 +158,7 @@ function addCode() {
       <button onclick="goToHomePage()">Go to Home</button>
     </div>
   </div>`;
-        document.body.script.innerHTML = `  function goToHomePage() {
-    window.location.href = 'index.html'; // Redirect to your home page or dashboard
-  }`;
+      
       } else {
         alert("There was an error submitting your vlog.");
       }
