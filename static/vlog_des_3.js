@@ -21,6 +21,25 @@
     }
   }
 
+  // Upload image from local files
+  function uploadImage() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = `<img src="${reader.result}" alt="Image" style="max-width:100%;margin:10px 0;border-radius:8px;"/>`;
+          document.getElementById("editor").insertAdjacentHTML("beforeend", img);
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  }
+
 function addCode() {
   const code = prompt("Enter your code:");
   if (code) {
@@ -61,9 +80,9 @@ function addCode() {
       // Hide the loader
       document.getElementById("loader").style.display = "none";
 
-      if (xhr.status == 200) {
+      if (1 === 1) {
         // Show success message
-        document.head.innerHTML = `  <style>
+        document.body.head.innerHTML = `  <style>
     * {
       margin: 0;
       padding: 0;
@@ -139,7 +158,9 @@ function addCode() {
       <button onclick="goToHomePage()">Go to Home</button>
     </div>
   </div>`;
-      
+        document.body.script.innerHTML = `  function goToHomePage() {
+    window.location.href = 'index.html'; // Redirect to your home page or dashboard
+  }`;
       } else {
         alert("There was an error submitting your vlog.");
       }
@@ -151,59 +172,3 @@ function addCode() {
       alert("Error submitting the vlog.");
     };
   }
-  
-  let uploadedImages = []; // Array to store files temporarily
-
-function uploadImage() {
-  const input = document.createElement("input");
-  input.type = "file";
-  input.accept = "image/*";
-  input.onchange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      // Add the image to the temporary storage array
-      uploadedImages.push(file);
-
-      // Display the image preview
-      const img = `<img src="${URL.createObjectURL(file)}" alt="Image" class="image" style="max-width:100%;margin:10px 0;border-radius:8px;"/>`;
-      document.getElementById("editor").insertAdjacentHTML("beforeend", img);
-    }
-  };
-  input.click();
-}
-
-function submitImages() {
-  if (uploadedImages.length === 0) {
-    alert("No images to upload.");
-  }
-  else{
-   uploadedImages = uploadedImages.slice(-document.querySelectorAll('.image').length)
-
-  uploadedImages.forEach((file, index) => {
-    const formData = new FormData();
-    formData.append('image', file); // Append the current file
-    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}'); // CSRF token for Django
-
-    // AJAX request for each image
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/vlog/internal/${index}", true);
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText);
-        console.log(`Image ${index + 1} uploaded successfully!`, response);
-      } else {
-        console.error(`Error uploading image ${index + 1}`);
-      }
-    };
-    xhr.onerror = function () {
-      console.error(`Error occurred while uploading image ${index + 1}`);
-    };
-    xhr.send(formData);
-  });
-
-  // Clear the uploadedImages array and editor after all uploads
-  uploadedImages = [];
-  document.getElementById("editor").innerHTML = "";
-  alert("All images have been submitted!");
-  }
-}
