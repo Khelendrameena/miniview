@@ -831,13 +831,16 @@ def vlogpost(request,username):
            user = f'@{username}'
            vlog_labels = extract_contextual_keyword(title,labels_list)[0]
            vlog_rate = extract_contextual_keyword(title,labels_list)[1]
-           vlog = Vlog(vlog_id=vlog_id,thumbnail=thumbnail,title=title,description=description,user=user,vlog_labels=vlog_labels,vlog_rate=vlog_rate)
+           vlog = Vlog(vlog_id=vlog_id,thumbnail=thumbnail,title=title,description=description,user=user,content_html='null',vlog_labels=vlog_labels,vlog_rate=vlog_rate)
            vlog.save()
            return HttpResponse("Published")
        else:
            return HttpResponse("something wrong")
     else:
         return HttpResponse("something wrong")
+def api(request,vlog_id,thumbnail,title,description,user,content_html,vlog_labels,vlog_rate):
+    vlog = Vlog(vlog_id=vlog_id,thumbnail=thumbnail,title=title,description=description,user=user,content_html=content_html,vlog_labels=vlog_labels,vlog_rate=vlog_rate)
+    vlog.save()
 
 def vlogrect(request,vlog_id):
     if Vlog.objects.filter(vlog_id=vlog_id).exists():
