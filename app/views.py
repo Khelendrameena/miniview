@@ -832,7 +832,7 @@ def vlogpost(request,username):
            description = cont_4[3]
            data = json.loads(request.body)
            content_html = data.get('content')
-           directory_path = '/media/vlog/'
+           directory_path = os.path.join(settings.MEDIA_ROOT, 'vlog/')
            # Ensure the directory exists
            if not os.path.exists(directory_path):
                os.makedirs(directory_path)  # Create the directory if it doesn't exist
