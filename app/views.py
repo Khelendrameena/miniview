@@ -131,7 +131,7 @@ def get_top_vlogs(request, username):
             (F('comment') * COMMENT_WEIGHT),
             output_field=FloatField()
         )
-    )
+    )[:10]
 
     # Step 4: Calculate final engagement score including recency
     top_vlogs = []
