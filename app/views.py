@@ -14,9 +14,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import login
-#from sklearn.feature_extraction.text import TfidfVectorizer
-#from sklearn.metrics.pairwise import cosine_similarity
-#import numpy as np
+from django.core.cache import cache
 from django.conf import settings
 from datetime import datetime
 from collections import defaultdict
@@ -167,7 +165,7 @@ def content_data(request,user_2):
         vlog_data = [{
             "title": vlog.title,
             "description": vlog.description,
-            "url": f"media/vlog/{vlog.vlog_id}.html",
+            "url": f"vlog/show/{vlog.vlog_id}",
             "urlToImage": vlog.thumbnail,
             "publishedAt": vlog.vlog_id,
             "date": vlog.date_posted,
@@ -922,9 +920,20 @@ def vlogrect(request,vlog_id):
     else:
         return HttpResponse("Vlog not found")
 
-def vlogshow(request,vlog_id):
-    vlog_content = Vlog.objects.get(vlog_id=vlog_id).content_html
-    return render(request,'vlog_content.html',{"vlog_content":vlog_content})
+def vlogshow(request, vlog_id):
+    cache_key = f"vlog_content_{vlog_id}"
+    vlog_content = cache.get(cache_key)  # Cache se content retrieve karna
+
+    if not vlog_content:  # Agar cache mein content na ho
+        file_path = os.path.join(settings.MEDIA_ROOT, f"vlog/{vlog_id}.html")
+        try:
+            with open(file_path, 'r', encoding='utf-8') as file:
+                vlog_content = file.read()
+                cache.set(cache_key, vlog_content, timeout=300)  # Cache mein store karna (5 minutes timeout)
+        except FileNotFoundError:
+            vlog_content = "<h1>Content not found</h1>"
+
+    return render(request, 'vlog_content.html', {"vlog_content": vlog_content})
 
 def generate_unique_datetime_string():
     # Get current date and time in a specific format
