@@ -1,54 +1,86 @@
-    const followButton = document.getElementById("follow_button_2");
+document.addEventListener('DOMContentLoaded', () => {
+    let currentPage = 1; // शुरुआत में पेज 1 सेट करें
+    let lastObservedDiv = null; // पहले से observe किए गए डिव को ट्रैक करें
 
-    function follow_8() {
-      if (followButton.innerText === "Follow") {
-        data_8(document.getElementById("follow_id").innerText, 1); // Pass profile ID
-        followButton.innerText = "Followed";
-      } else {
-        data_8(document.getElementById("follow_id").innerText, -1); // Pass profile ID
-        followButton.innerText = "Follow";
-      }
-    }
+    // Observer सेट करें
+    const observer = new IntersectionObserver(async (entries, observerInstance) => {
+        const lastEntry = entries[0];
 
-    function data_8(id, follow) {
-      var xhr = new XMLHttpRequest();
-      var path = document.getElementById("name_profile").innerText;
-      xhr.open('POST', `/app/${path}/follow`, true);
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
-      xhr.send(JSON.stringify({ "id": id, "follow": follow }));
-
-      // Handle the response from the server
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-          if (xhr.status === 200) {
-            try {
-              const response = JSON.parse(xhr.responseText);
-              if (response.success) {                                                                                                                                   console.log(response.message); // Success message
-              } else {
-                alert(response.error || "An error occurred.");
-              }
-            } catch (error) {
-              console.error("something wrong");
+        if (lastEntry.isIntersecting) {
+            // पिछले div को unobserve करें
+            if (lastObservedDiv) {
+                observerInstance.unobserve(lastObservedDiv);
             }
-          } else {
-          alert("something wrong");
-          }
+
+            // जब यूजर पेज के अंत तक पहुंचे
+            try {
+                // लोडर दिखाएं
+                showLoader();
+                // Check if the current path is /search
+             path = "{{ path }}"
+                const response = await fetch(path, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken(),
+                    },
+                    body: JSON.stringify({ currentPage: currentPage }),
+                });
+
+                const data = await response.json();
+
+                if (data.html) {
+                    const articlesContainer = document.getElementById('articles-container');
+                    articlesContainer.insertAdjacentHTML('beforeend', data.html);
+                    if (window.innerWidth >= 480) {
+      document.querySelectorAll('.p-4.md\\:w-1\\/3').forEach((div_4) => {
+        div_4.className = 'lg:w-1/2 w-full mb-6 lg:mb-0';
+      })
+    }
+                    // पेज नंबर बढ़ाएं
+                    currentPage++;
+
+                    // DOM में नए ब्लॉग्स लोड होने के बाद lastDiv को अपडेट करें
+                    observeLastDiv(observerInstance);
+                } else {
+                    console.error('No HTML data received');
+                }
+            } catch (error) {
+                console.error('Error loading articles:', error);
+            } finally {
+                // लोडर को छुपाएं
+                hideLoader();
+            }
         }
-      };
+    });
+
+    // CSRF Token प्राप्त करने का फंक्शन
+    function getCSRFToken() {
+        return document.querySelector('[name=csrfmiddlewaretoken]').value;
     }
 
-    // Show the modal for unauthenticated users
-    function showCustomAlert() {
-      const modal = document.getElementById('customAlert');
-      modal.style.display = 'flex'; // Show modal
-      document.body.classList.add('modal-active'); // Disable page scroll
+    // lastDiv को observe करने का फंक्शन
+    function observeLastDiv(observerInstance) {
+        const lastDiv = document.querySelectorAll('.coment');
+        const loadMoreTarget = lastDiv[lastDiv.length - 1]; // सबसे आखिरी डिव को observe करें
+        if (loadMoreTarget) {
+            observerInstance.observe(loadMoreTarget); // Observer को फिर से नए lastDiv पर लागू करें
+            lastObservedDiv = loadMoreTarget; // नए lastDiv को ट्रैक करें
+        } else {
+            console.error("Element with the required class not found.");
+        }
     }
 
-    // Close the modal
-    function closeCustomAlert() {
-      const modal = document.getElementById('customAlert');
-      modal.style.display = 'none'; // Hide modal
-      document.body.classList.remove('modal-active'); // Enable page scroll
+    // पहली बार observer शुरू करने के लिए lastDiv को observe करें
+    observeLastDiv(observer);
+
+    // लोडर दिखाने का फंक्शन
+    function showLoader() {
+        document.getElementById('loader').style.display = 'block';
     }
-  
+
+    // लोडर छुपाने का फंक्शन
+    function hideLoader() {
+        document.getElementById('loader').style.display = 'none';
+    }
+});
