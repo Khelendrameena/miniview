@@ -923,6 +923,19 @@ def vlogrect(request,vlog_id):
 def vlogshow(request, vlog_id):
     cache_key = f"vlog_content_{vlog_id}"
     vlog_content = cache.get(cache_key)  # Cache se content retrieve karna
+    user = Vlog.objects.get(vlog_id=vlog_id).user.split('@')[1]
+    profile = Profile.objects.get(username=user)
+    userrection = UserReaction.objects.filter(username=request.user.username, follow_to=f'@{user}').first()
+    action1 = Bookmark1.objects.filter(vlog_id=vlog_id,username=request.user.username)
+    if action1.exists():
+       action = 1
+    else:
+       action = 0
+
+    if userrection:
+       follow_status = userrection.follow
+    else:
+       follow_status = -1
 
     if not vlog_content:  # Agar cache mein content na ho
         file_path = os.path.join(settings.MEDIA_ROOT, f"vlog/{vlog_id}.html")
@@ -932,7 +945,6 @@ def vlogshow(request, vlog_id):
                 cache.set(cache_key, vlog_content, timeout=300)  # Cache mein store karna (5 minutes timeout)
         except FileNotFoundError:
             vlog_content = "<h1>Content not found</h1>"
-
     return render(request, 'vlog_content.html', {"vlog_content": vlog_content,"name":profile.name,"username":profile.username,"pic":profile.profile_picture,"title":Vlog.objects.get(vlog_id=vlog_id).title,"id":profile.profile_id,"follow":follow_status,"owner":owner,"vlog_id":vlog_id,"action":action})
 def generate_unique_datetime_string():
     # Get current date and time in a specific format
