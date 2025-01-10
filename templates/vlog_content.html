@@ -12,6 +12,130 @@
   <!-- Add Prism JS for syntax highlighting -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <body>
+ <h1>{{ title|safe }}</h1>
+<style>
+  .author-profile {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin: 20px 0;
+  }
+
+  .profile-pic {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-right: 12px;
+    object-fit: cover;
+  }
+
+  .author-info {
+    flex-grow: 1;
+  }
+
+  .author-name {                                                                                                                                            font-weight: 600;
+    margin: 0;
+    color: #1a1a1a;
+    font-size: 16px;
+  }
+
+  .username {
+    color: #666;
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .profile-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .follow-btn {
+    background-color: #1a73e8;
+    color: white;
+  }
+
+  .follow-btn:hover {
+    background-color: #1557b0;
+  }
+
+  .action-btn {
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    color: #666;
+  }
+
+  .action-btn:hover {
+    color: #1a73e8;
+  }
+
+  .bookmark-btn {
+    transition: all 0.2s;
+  }
+
+  .bookmark-btn.active {
+    color: #1a73e8;
+  }
+
+  .bookmark-btn.active svg {
+    fill: currentColor;
+  }
+</style>
+
+
+<div class="author-profile">
+  <img src="{{ pic|safe }}" alt="Author Profile Picture" class="profile-pic">
+
+  <div class="author-info">
+    <h3 class="author-name">{{ name|safe }}</h3>
+    <p class="username">@{{ username|safe }}</p>
+  </div>
+
+<div class="profile-actions">
+    {% if user.username != username  %}
+        {% if follow == 1 %}
+            <button class="btn follow-btn" id="follow">Followed</button>
+        {% else %}
+            {% if user.is_authenticated %}
+                <button class="btn follow-btn" id="follow">Follow</button>
+            {% else %}
+               <button class="btn follow-btn" id="follow" hidden>Follow</button>
+                <a class="btn follow-btn" href="/login">Follow</a>
+            {% endif %}
+        {% endif %}
+{% else %}
+<button class="btn follow-btn" id="follow" hidden>Follow</button>
+    {% endif %}
+</div>
+
+    <button class="action-btn" title="Share">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+        <polyline points="16 6 12 2 8 6"></polyline>
+        <line x1="12" y1="2" x2="12" y2="15"></line>
+      </svg>
+    </button>
+<button  class="action-btn bookmark-btn" title="Bookmark">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="bookmark">
+    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+  </svg>
+</button>
+{% endif %}
+  </div>
+</div>
   {{ vlog_content|safe }}
-</body>
-</html>
+<script>
