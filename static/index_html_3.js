@@ -61,4 +61,3 @@ if(window.innerWidth <= 500){
         div_4.className = 'lg:w-1/2 w-full mb-6 lg:mb-0';
       })
     }
-  </script>
