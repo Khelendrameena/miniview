@@ -794,7 +794,7 @@ def profile(request, username):
         id_profile.append(id)
         model_data = MyModel.objects.all()
         # Convert the response to JSON
-        json_data = content_data(request,f'@{username}')
+        json_data = content_data(request,f'@{username}',[])
         json_data["data"] = data
         
         if request.user.username is not None:
