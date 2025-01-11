@@ -35,7 +35,8 @@ main_id = []
 
 def robots_txt(request):
     content = """User-agent: *
-Allow: /
+Disallow:
+
 Sitemap: https://miniview-uzfa.onrender.com/6302a139-d03a-11ef-8903-5d0b6fd2483d.xml
 """
     return HttpResponse(content, content_type="text/plain")
