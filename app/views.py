@@ -70,10 +70,6 @@ labels_list = [
     "Data Visualization", "Big Data", "Data Mining", "Data Engineering", "Predictive Modeling"
 ]
 
-LIKE_WEIGHT = 0.5
-VIEW_WEIGHT = 0.3
-COMMENT_WEIGHT = 0.2
-RECENCY_WEIGHT = 0.4  
 
 def check_and_delete(file_name, dir_path):
     file_path = os.path.join(dir_path, file_name)
@@ -98,7 +94,7 @@ def average_labels(input_array):
     result = [[label, round(data['total'] / data['count'], 2)] for label, data in label_data.items()]
     return result
 
-def get_top_vlogs(request, username):
+def get_top_vlogs(request, username,LIKE_WEIGHT,VIEW_WEIGHT,COMMENT_WEIGHT,RECENCY_WEIGHT,num):
     # Step 1: Fetch user's interest labels and weights
     user_interest = []
     if UserReaction.objects.filter(username=request.user.username).exists():
@@ -129,7 +125,7 @@ def get_top_vlogs(request, username):
             (F('comment') * COMMENT_WEIGHT),
             output_field=FloatField()
         )
-    )[:10]
+    )[:num]
 
     # Step 4: Calculate final engagement score including recency
     top_vlogs = []
@@ -159,9 +155,9 @@ def get_top_vlogs(request, username):
 
     return top_vlogs
 
-def content_data(request,user_2):
+def content_data(request,user_2,arr):
     if user_2 == 'all':
-        vlogs = get_top_vlogs(request,request.user.username)
+        vlogs = get_top_vlogs(request,request.user.username,arr[0],arr[1],arr[2],arr[3],arr[4])
         vlog_data = [{
             "title": vlog.title,
             "description": vlog.description,
@@ -197,7 +193,7 @@ def content_data(request,user_2):
 search_2 = []
 def home(request):
     model_data = MyModel.objects.all()
-    json_data = content_data(request,'all')
+    json_data = content_data(request,'all',[0.3,0.2,0.6,0.4,10])
     if request.user.username is not None:
         try:
             print("hay",request.user.username)
@@ -269,6 +265,79 @@ def home(request):
         json_data["articles"] = json_data_4
         return render(request, 'index.html', json_data)
 
+def most(request,para):
+    if para = "topblog":
+        arr = [0.4,0.3,0.7,0.3,10]
+    elif para = "trending"
+        arr = [0.3,0.5,0.7,0.5,10]
+    else:
+        return redirect('/')
+    model_data = MyModel.objects.all()
+    json_data = content_data(request,'all')
+    if request.user.username is not None:
+        try:
+            profile = Profile.objects.get(username=request.user.username)
+            json_data["name"] = profile.name
+            json_data["image_url"] = profile.profile_picture
+        except Profile.DoesNotExist:
+            json_data["name"] = 'none'
+            json_data["image_url"] = 'none'
+    else:
+        json_data["name"] = 'none'
+        json_data["image_url"] = 'none'
+
+    for arti in json_data["articles"]:
+        # Check if any matching id is found
+        if "s" not in arti:
+            arti["date"] = arti["publishedAt"]
+            arti["name"] = Profile.objects.get(username='justwatch').name
+            arti["profile_url"] = "@justwatch"
+            arti["profile_pic"] = Profile.objects.filter(username='justwatch').first().profile_picture
+        search_2.append(arti["title"])
+        if UserReaction.objects.filter(vlog_id=arti["publishedAt"]).exists():
+            arti["like_status"] = UserReaction.objects.get(vlog_id=arti["publishedAt"]).like
+        else:
+            arti["like_status"] = 0
+
+        if UserReaction.objects.filter(username=request.user.username,follow_to=arti["profile_pic"].replace("@",'')).exists():
+            arti["follow_status"] = UserReaction.objects.filter(username=request.user.username,follow_to=arti["profile_pic"].replace("@",'')).first().follow
+        else:
+            arti["follow_status"] = -1
+        matching_model = model_data.filter(id=arti["publishedAt"])
+        if matching_model.exists():
+            # If it exists, safely fetch the 'views' and 'likes'
+            arti["views"] = matching_model.values('views')[0]['views']
+            arti["likes"] = matching_model.values('likes')[0]['likes']
+        else:
+            arti["views"] = 0
+            arti["likes"] = 0
+        if comentconfig.objects.all().exists():
+            # If it exists, safely fetch the 'views' and 'likes'
+            data = comentconfig.objects.all().filter(mainid=arti["publishedAt"])            
+            serialized_data = serialize('json', data)
+            coment_data = json.loads(serialized_data)
+            arti["coment"] = len(coment_data)
+        else: 
+            arti["coment"] = 0
+    
+    # Pass the data as context to the template
+    json_data["articles"][-1]["end"] = 1
+    json_data["path"] = '/'
+    if request.method == 'POST':
+        if 'index' not in request.session:
+            request.session['index'] = 6
+        start = request.session['index']
+        end = start + 5
+        json_data_2 = json_data["articles"][start:end]
+        request.session['index'] = end  
+        json_data["articles"] = json_data_2
+        html = render_to_string('vlog_html.html', json_data, request=request)
+        return JsonResponse({'html': html})
+    else:
+        request.session['index'] = 6
+        json_data_4 = json_data["articles"][:6]
+        json_data["articles"] = json_data_4
+        return render(request, 'index.html', json_data)
 
 # Step 1: Build the Inverted Index
 def build_inverted_index(vlogs):
@@ -302,7 +371,7 @@ def searchquary(request):
     else:
         quary = request.GET.get('quary')
         quary_2.append(quary)
-    json_data = content_data(request,'all')
+    json_data = content_data(request,'all',[0.3,0.2,0.6,0.4,10])
     model_data = MyModel.objects.all()
 
     # Convert the response to JSON
