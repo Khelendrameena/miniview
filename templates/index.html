@@ -49,10 +49,12 @@
     <label for="active" class="menu-btn"><i class="fas fa-bars"></i></label>
     <div class="wrapper">
 {% if name != 'none' %}
+      <a href="/{{ data.profile_url }}">
       <div class="user-profile">
       <img src="{{ image_url }}" alt="User Profile" />
       <span class="user-name">{{ name }}</span>
       </div>
+      </a>
 {% else %}
 <div></div>
 {% endif %}
@@ -68,9 +70,9 @@
 </a>
       <ul>
         <li><a href="/">Home</a></li>
-        <li><a href="/news">news</a></li>
-        <li><a href="/sport">Sport</a></li>
-        <li><a href="/india">India</a></li>
+        <li><a href="/topblog">TOP Articles</a></li>
+        <li><a href="/trending">Trending</a></li>
+        <li><a href="/about">About</a></li>
          {% if name != 'none' %}
         <li><a href="/@{{ user.username }}">profile</a></li>
          {% else %}
