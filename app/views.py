@@ -926,12 +926,6 @@ def vlogshow(request, vlog_id):
     user = Vlog.objects.get(vlog_id=vlog_id).user.split('@')[1]
     profile = Profile.objects.get(username=user)
     userrection = UserReaction.objects.filter(username=request.user.username, follow_to=f'@{user}').first()
-    action1 = Bookmark1.objects.filter(vlog_id=vlog_id,username=request.user.username)
-    if action1.exists():
-       action = 1
-    else:
-       action = 0
-
     if userrection:
        follow_status = userrection.follow
     else:
@@ -945,7 +939,7 @@ def vlogshow(request, vlog_id):
                 cache.set(cache_key, vlog_content, timeout=300)  # Cache mein store karna (5 minutes timeout)
         except FileNotFoundError:
             vlog_content = "<h1>Content not found</h1>"
-    return render(request, 'vlog_content.html', {"vlog_content": vlog_content,"name":profile.name,"username":profile.username,"pic":profile.profile_picture,"title":Vlog.objects.get(vlog_id=vlog_id).title,"id":profile.profile_id,"follow":follow_status,"owner":owner,"vlog_id":vlog_id,"action":action})
+    return render(request, 'vlog_content.html', {"vlog_content": vlog_content,"name":profile.name,"username":profile.username,"pic":profile.profile_picture,"title":Vlog.objects.get(vlog_id=vlog_id).title,"id":profile.profile_id,"follow":follow_status,"vlog_id":vlog_id})
 def generate_unique_datetime_string():
     # Get current date and time in a specific format
     datetime_part = datetime.now().strftime("%Y%m%d%H%M%S%f")
