@@ -15,6 +15,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.core.cache import cache
+import xml.etree.ElementTree as ET
 from django.conf import settings
 from datetime import datetime
 from collections import defaultdict
@@ -70,6 +71,60 @@ labels_list = [
     "Data Visualization", "Big Data", "Data Mining", "Data Engineering", "Predictive Modeling"
 ]
 
+def custom_sitemap(request):
+    urlset = ET.Element('urlset', xmlns="http://www.sitemaps.org/schemas/sitemap/0.9")
+
+    # Static URLs
+    urls = [
+    {'loc': '/', 'lastmod': '2025-01-11', 'changefreq': 'daily', 'priority': '1.0'},  # Home page
+    {'loc': '/view', 'lastmod': '2025-01-11', 'changefreq': 'weekly', 'priority': '0.8'},  # View page
+    {'loc': '/about', 'lastmod': '2025-01-11', 'changefreq': 'monthly', 'priority': '0.7'},  # About page
+    {'loc': '/login', 'lastmod': '2025-01-11', 'changefreq': 'monthly', 'priority': '0.6'},  # Login page
+    {'loc': '/signup', 'lastmod': '2025-01-11', 'changefreq': 'monthly', 'priority': '0.6'},  # Signup page
+    {'loc': '/search', 'lastmod': '2025-01-11', 'changefreq': 'weekly', 'priority': '0.7'},  # Search page
+    {'loc': '/coment', 'lastmod': '2025-01-11', 'changefreq': 'daily', 'priority': '0.8'},  # Comment page
+    {'loc': '/coment/add', 'lastmod': '2025-01-11', 'changefreq': 'daily', 'priority': '0.8'},  # Add comment page
+    {'loc': '/coment/count', 'lastmod': '2025-01-11', 'changefreq': 'weekly', 'priority': '0.7'},  # Comment count page
+]
+
+    # Dynamic URLs from database (for example, users and vlogs)
+    users = User.objects.all()
+    vlogs = Vlog.objects.all()
+
+    # Add dynamic URLs to the sitemap
+    for user in users:
+        urls.append({
+            'loc': f'https://yourwebsite.com/@{user.username}/',
+            'lastmod': '2025-01-11',
+            'changefreq': 'daily',
+            'priority': '0.7'
+        })
+
+    for vlog in vlogs:
+        urls.append({
+            'loc': f'https://yourwebsite.com/vlog/show/{vlog.vlog_id}/',
+            'lastmod': '2025-01-11',
+            'changefreq': 'weekly',
+            'priority': '0.6'
+        })
+
+    # Create XML for each URL
+    for url in urls:
+        url_elem = ET.SubElement(urlset, 'url')
+        loc_elem = ET.SubElement(url_elem, 'loc')
+        loc_elem.text = url['loc']
+        lastmod_elem = ET.SubElement(url_elem, 'lastmod')
+        lastmod_elem.text = url['lastmod']
+        changefreq_elem = ET.SubElement(url_elem, 'changefreq')
+        changefreq_elem.text = url['changefreq']
+        priority_elem = ET.SubElement(url_elem, 'priority')
+        priority_elem.text = url['priority']
+
+    # Convert the tree to a string and return as an XML response
+    tree = ET.ElementTree(urlset)
+    response = HttpResponse(content=ET.tostring(urlset), content_type='application/xml')
+    response['Content-Disposition'] = 'attachment; filename="sitemap.xml"'
+    return response
 
 def check_and_delete(file_name, dir_path):
     file_path = os.path.join(dir_path, file_name)
