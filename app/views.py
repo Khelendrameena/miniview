@@ -557,7 +557,9 @@ def comentlikeadd(request):
 def search(request):
    return render(request, 'search.html', {"search":search_2}) 
 
-
+def about(request):
+   return render(request, 'about.html') 
+    
 def google_login(request):
     google_auth_url = (
         "https://accounts.google.com/o/oauth2/auth"
