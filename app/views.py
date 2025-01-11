@@ -72,59 +72,55 @@ labels_list = [
 ]
 
 def custom_sitemap(request):
+    # Root XML element
     urlset = ET.Element('urlset', xmlns="http://www.sitemaps.org/schemas/sitemap/0.9")
 
-    # Static URLs
-    urls = [
-    {'loc': '/', 'lastmod': '2025-01-11', 'changefreq': 'daily', 'priority': '1.0'},  # Home page
-    {'loc': '/view', 'lastmod': '2025-01-11', 'changefreq': 'weekly', 'priority': '0.8'},  # View page
-    {'loc': '/about', 'lastmod': '2025-01-11', 'changefreq': 'monthly', 'priority': '0.7'},  # About page
-    {'loc': '/login', 'lastmod': '2025-01-11', 'changefreq': 'monthly', 'priority': '0.6'},  # Login page
-    {'loc': '/signup', 'lastmod': '2025-01-11', 'changefreq': 'monthly', 'priority': '0.6'},  # Signup page
-    {'loc': '/search', 'lastmod': '2025-01-11', 'changefreq': 'weekly', 'priority': '0.7'},  # Search page
-    {'loc': '/coment', 'lastmod': '2025-01-11', 'changefreq': 'daily', 'priority': '0.8'},  # Comment page
-    {'loc': '/coment/add', 'lastmod': '2025-01-11', 'changefreq': 'daily', 'priority': '0.8'},  # Add comment page
-    {'loc': '/coment/count', 'lastmod': '2025-01-11', 'changefreq': 'weekly', 'priority': '0.7'},  # Comment count page
+    static_urls = [
+    {'loc': 'https://miniview-uzfa.onrender.com/', 'lastmod': '2025-01-11', 'changefreq': 'daily', 'priority': '1.0'},  # Home page
+    {'loc': 'https://miniview-uzfa.onrender.com/view', 'lastmod': '2025-01-11', 'changefreq': 'weekly', 'priority': '0.8'},  # View page
+    {'loc': 'https://miniview-uzfa.onrender.com/about', 'lastmod': '2025-01-11', 'changefreq': 'monthly', 'priority': '0.7'},  # About page
+    {'loc': 'https://miniview-uzfa.onrender.com/login', 'lastmod': '2025-01-11', 'changefreq': 'monthly', 'priority': '0.6'},  # Login page
+    {'loc': 'https://miniview-uzfa.onrender.com/signup', 'lastmod': '2025-01-11', 'changefreq': 'monthly', 'priority': '0.6'},  # Signup page
+    {'loc': 'https://miniview-uzfa.onrender.com/search', 'lastmod': '2025-01-11', 'changefreq': 'weekly', 'priority': '0.7'},  # Search page
+    {'loc': 'https://miniview-uzfa.onrender.com/coment', 'lastmod': '2025-01-11', 'changefreq': 'daily', 'priority': '0.8'},  # Comment page
+    {'loc': 'https://miniview-uzfa.onrender.com/coment/add', 'lastmod': '2025-01-11', 'changefreq': 'daily', 'priority': '0.8'},  # Add comment page
+    {'loc': 'https://miniview-uzfa.onrender.com/coment/count', 'lastmod': '2025-01-11', 'changefreq': 'weekly', 'priority': '0.7'},  # Comment count page
 ]
 
-    # Dynamic URLs from database (for example, users and vlogs)
+    # Add static URLs to the sitemap
+    for url in static_urls:
+        url_elem = ET.SubElement(urlset, 'url')
+        ET.SubElement(url_elem, 'loc').text = url['loc']
+        ET.SubElement(url_elem, 'lastmod').text = url['lastmod']
+        ET.SubElement(url_elem, 'changefreq').text = url['changefreq']
+        ET.SubElement(url_elem, 'priority').text = url['priority']
+
+    # Dynamic URLs from database (users and vlogs)
     users = User.objects.all()
     vlogs = Vlog.objects.all()
 
-    # Add dynamic URLs to the sitemap
+    # Add dynamic user profile URLs
     for user in users:
-        urls.append({
-            'loc': f'https://yourwebsite.com/@{user.username}/',
-            'lastmod': '2025-01-11',
-            'changefreq': 'daily',
-            'priority': '0.7'
-        })
-
-    for vlog in vlogs:
-        urls.append({
-            'loc': f'https://yourwebsite.com/vlog/show/{vlog.vlog_id}/',
-            'lastmod': '2025-01-11',
-            'changefreq': 'weekly',
-            'priority': '0.6'
-        })
-
-    # Create XML for each URL
-    for url in urls:
         url_elem = ET.SubElement(urlset, 'url')
-        loc_elem = ET.SubElement(url_elem, 'loc')
-        loc_elem.text = url['loc']
-        lastmod_elem = ET.SubElement(url_elem, 'lastmod')
-        lastmod_elem.text = url['lastmod']
-        changefreq_elem = ET.SubElement(url_elem, 'changefreq')
-        changefreq_elem.text = url['changefreq']
-        priority_elem = ET.SubElement(url_elem, 'priority')
-        priority_elem.text = url['priority']
+        ET.SubElement(url_elem, 'loc').text = f'https://yourwebsite.com/@{user.username}/'
+        ET.SubElement(url_elem, 'lastmod').text = '2025-01-11'
+        ET.SubElement(url_elem, 'changefreq').text = 'daily'
+        ET.SubElement(url_elem, 'priority').text = '0.7'
 
-    # Convert the tree to a string and return as an XML response
-    tree = ET.ElementTree(urlset)
-    response = HttpResponse(content=ET.tostring(urlset), content_type='application/xml')
-    response['Content-Disposition'] = 'attachment; filename="sitemap.xml"'
-    return response
+    # Add dynamic vlog URLs
+    for vlog in vlogs:
+        url_elem = ET.SubElement(urlset, 'url')
+        ET.SubElement(url_elem, 'loc').text = f'https://yourwebsite.com/vlog/show/{vlog.vlog_id}/'
+        ET.SubElement(url_elem, 'lastmod').text = '2025-01-11'
+        ET.SubElement(url_elem, 'changefreq').text = 'weekly'
+        ET.SubElement(url_elem, 'priority').text = '0.6'
+
+    # Convert XML to string
+    xml_content = ET.tostring(urlset, encoding='utf-8', method='xml')
+
+    # Serve the XML directly as the response
+    return HttpResponse(xml_content, content_type='application/xml')
+
 
 def check_and_delete(file_name, dir_path):
     file_path = os.path.join(dir_path, file_name)
