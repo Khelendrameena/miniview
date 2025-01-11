@@ -266,9 +266,9 @@ def home(request):
         return render(request, 'index.html', json_data)
 
 def most(request,para):
-    if para = "topblog":
+    if para == "topblog":
         arr = [0.4,0.3,0.7,0.3,10]
-    elif para = "trending"
+    elif para == "trending":
         arr = [0.3,0.5,0.7,0.5,10]
     else:
         return redirect('/')
