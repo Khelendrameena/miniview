@@ -118,7 +118,7 @@ def custom_sitemap(request):
     # Add dynamic vlog URLs
     for vlog in vlogs:
         url_elem = ET.SubElement(urlset, 'url')
-        ET.SubElement(url_elem, 'loc').text = f'https://yourwebsite.com/vlog/show/{vlog.vlog_id}/'
+        ET.SubElement(url_elem, 'loc').text = f'https://miniview-uzfa.onrender.com/vlog/show/{vlog.vlog_id}/'
         ET.SubElement(url_elem, 'lastmod').text = '2025-01-11'
         ET.SubElement(url_elem, 'changefreq').text = 'weekly'
         ET.SubElement(url_elem, 'priority').text = '0.6'
