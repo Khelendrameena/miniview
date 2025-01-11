@@ -33,6 +33,13 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 main_id = []
 
+def robots_txt(request):
+    content = """User-agent: *
+Allow: /
+Sitemap: https://miniview-uzfa.onrender.com/6302a139-d03a-11ef-8903-5d0b6fd2483d.xml
+"""
+    return HttpResponse(content, content_type="text/plain")
+    
 labels_list = [
     "Artificial Intelligence", "Machine Learning", "Blockchain", "Robotics", "Software Development", 
     "Cybersecurity", "Cloud Computing", "Internet of Things (IoT)", "Data Science", "Virtual Reality",
@@ -120,7 +127,6 @@ def custom_sitemap(request):
 
     # Serve the XML directly as the response
     return HttpResponse(xml_content, content_type='application/xml')
-
 
 def check_and_delete(file_name, dir_path):
     file_path = os.path.join(dir_path, file_name)
