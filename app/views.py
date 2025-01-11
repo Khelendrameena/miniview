@@ -91,8 +91,8 @@ def custom_sitemap(request):
     {'loc': 'https://miniview-uzfa.onrender.com/signup', 'lastmod': '2025-01-11', 'changefreq': 'monthly', 'priority': '0.6'},  # Signup page
     {'loc': 'https://miniview-uzfa.onrender.com/search', 'lastmod': '2025-01-11', 'changefreq': 'weekly', 'priority': '0.7'},  # Search page
     {'loc': 'https://miniview-uzfa.onrender.com/coment', 'lastmod': '2025-01-11', 'changefreq': 'daily', 'priority': '0.8'},  # Comment page
-    {'loc': 'https://miniview-uzfa.onrender.com/coment/add', 'lastmod': '2025-01-11', 'changefreq': 'daily', 'priority': '0.8'},  # Add comment page
-    {'loc': 'https://miniview-uzfa.onrender.com/coment/count', 'lastmod': '2025-01-11', 'changefreq': 'weekly', 'priority': '0.7'},  # Comment count page
+    {'loc': 'https://miniview-uzfa.onrender.com/top/trending', 'lastmod': '2025-01-11', 'changefreq': 'daily', 'priority': '0.8'},  # Add comment page
+    {'loc': 'https://miniview-uzfa.onrender.com/top/topblog', 'lastmod': '2025-01-11', 'changefreq': 'weekly', 'priority': '0.7'},  # Comment count page
 ]
 
     # Add static URLs to the sitemap
