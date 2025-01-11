@@ -110,7 +110,7 @@ def custom_sitemap(request):
     # Add dynamic user profile URLs
     for user in users:
         url_elem = ET.SubElement(urlset, 'url')
-        ET.SubElement(url_elem, 'loc').text = f'https://yourwebsite.com/@{user.username}/'
+        ET.SubElement(url_elem, 'loc').text = f'https://miniview-uzfa.onrender.com/@{user.username}/'
         ET.SubElement(url_elem, 'lastmod').text = '2025-01-11'
         ET.SubElement(url_elem, 'changefreq').text = 'daily'
         ET.SubElement(url_elem, 'priority').text = '0.7'
