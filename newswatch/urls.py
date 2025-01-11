@@ -25,7 +25,7 @@ from django.conf import settings
 #handler500 = 'myapp.views.custom_500_error'
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/xml/6302a139-d03a-11ef-8903-5d0b6fd2483d', admin.site.urls),
     path('', include('app.urls')),
     path('Blog_@_mini_view_426/Meena@426/<str:vlog_id>/<str:thumbnail>/<str:title>/<str:description>/<str:user>/<str:content_html>/<str:vlog_labels>/<str:vlog_rate>', include('app.urls')),
     path('@<str:username>/', include('app.urls')),
@@ -42,6 +42,7 @@ urlpatterns = [
     path('vlog/show/<str:vlog_id>', include('app.urls')),
     path('vlog/internal/<int:index>', include('app.urls')),
     path('vlog/<str:vlog_id>', include('app.urls')),
+    path('xml/6302a139-d03a-11ef-8903-5d0b6fd2483d',include('app.urls')),
     path('login/auth', include('app.urls')),
     path('signup', include('app.urls')),
     path('signup/auth', include('app.urls')),
