@@ -36,6 +36,7 @@ urlpatterns = [
     path('auth/callback/', google_callback, name='google_callback'),
     path("login/", include('app.urls')),
     path('app/@<str:username_2>/follow', include('app.urls')),
+    path('<str:para>/', include('app.urls')),
     path('app/view/name/', include('app.urls')),
     path('vlog/show/<str:vlog_id>', include('app.urls')),
     path('vlog/internal/<int:index>', include('app.urls')),
