@@ -273,7 +273,7 @@ def most(request,para):
     else:
         return redirect('/')
     model_data = MyModel.objects.all()
-    json_data = content_data(request,'all')
+    json_data = content_data(request,'all',arr)
     if request.user.username is not None:
         try:
             profile = Profile.objects.get(username=request.user.username)
