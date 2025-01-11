@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Blog Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #fafafa;
+            color: #262626;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background-color: white;
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 80px auto 0;
+            padding: 40px 20px;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #405DE6, #5B51D8, #833AB4);
+            color: white;
+            border-radius: 15px;
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .platform-stats {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 200px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .content-section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #262626;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .topic-tag {
+            background: #f0f2f5;
+            padding: 10px;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 60px 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin-top: 60px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #405DE6, #5B51D8);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-top: 20px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .hero-section {
+                padding: 40px 20px;
+            }
+
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+
+            .platform-stats {
+                gap: 20px;
+            }
+
+            .stat-card {
+                min-width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1 style="text-align: center;">Miniview</h1>
+    </nav>
+
+    <div class="container">
+        <section class="hero-section">
+            <h1>Share Your Stories Through Words</h1>
+            <p>A creative space for writers and readers to connect through meaningful content</p>
+            
+            <div class="platform-stats">
+                <div class="stat-card" hidden>
+                    <div class="stat-number" id="writer-count" hidden>50K+</div>
+                    <div>Writers</div>
+                </div>
+                <div class="stat-card" hidden>
+                    <div class="stat-number" id="article-count">500K+</div>
+                    <div>Articles</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="reader-count" hidden>5M+</div>
+                    <div>share articles</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Our Mission</h2>
+            <p>We're creating a space where writers can share their thoughts, stories, and expertise through engaging articles. Our platform empowers both established and emerging writers to reach a global audience while building meaningful connections with readers.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>Why Choose Our Platform</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">✍️</div>
+                    <h3>Easy Publishing</h3>
+                    <p>Write and publish articles with our user-friendly editor</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Analytics</h3>
+                    <p>Track your articles' performance and reader engagement</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>Community</h3>
+                    <p>Connect with readers through comments and discussions</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile Friendly</h3>
+                    <p>Perfect reading experience across all devices</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Popular Topics</h2>
+            <p>Our platform hosts diverse content across various categories</p>
+            <div class="topics-grid">
+                <div class="topic-tag">Technology</div>
+                <div class="topic-tag">Lifestyle</div>
+                <div class="topic-tag">Travel</div>
+                <div class="topic-tag">Food</div>
+                <div class="topic-tag">Health</div>
+                <div class="topic-tag">Business</div>
+                <div class="topic-tag">Art</div>
+                <div class="topic-tag">Science</div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Our Story</h2>
+            <p>Founded with the vision of making quality content accessible to everyone, we've grown into a thriving community of writers and readers. Our platform celebrates the power of written words and the connections they create.</p>
+            <p>Today, we're proud to host thousands of writers who share their knowledge, experiences, and creativity with readers worldwide.</p>
+        </section>
+
+        <div class="cta-section">
+            <h2>Ready to Start Writing?</h2>
+            <p>Join our community of writers and start sharing your stories today</p>
+            <button class="cta-button" onclick="joinPlatform()">Start Writing</button>
+        </div>
+    </div>
+
+    <script>
+        function joinPlatform() {
+            window.location.href = '/';
+        }
+
+        // Add scroll animations
+        window.addEventListener('scroll', function() {
+            const elements = document.querySelectorAll('.content-section, .feature-card');
+            elements.forEach(element => {
+                const position = element.getBoundingClientRect();
+                if(position.top < window.innerHeight) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
