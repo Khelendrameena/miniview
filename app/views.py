@@ -993,6 +993,8 @@ def media(request,index):
     
 def api(request,thumbnail,title,description,user,content_html):
     vlog_id = generate_unique_datetime_string()
+    thumbnail = thumbnail.replace('@','/')
+    content_html = content_html.replace('@','/')
     vlog_labels = extract_contextual_keyword(title,labels_list)[0]
     vlog_rate = extract_contextual_keyword(title,labels_list)[1]
     vlog = Vlog(vlog_id=vlog_id,thumbnail=thumbnail,title=title,description=description,user=user,content_html=content_html,vlog_labels=vlog_labels,vlog_rate=vlog_rate)
