@@ -248,13 +248,11 @@ def content_data(request,user_2,arr):
         json_data = {"articles": vlog_data}
         return json_data
 
-search_2 = []
 def home(request):
     model_data = MyModel.objects.all()
     json_data = content_data(request,'all',[0.3,0.2,0.6,0.4,10])
     if request.user.username is not None:
         try:
-            print("hay",request.user.username)
             profile = Profile.objects.get(username=request.user.username)
             json_data["name"] = profile.name
             json_data["image_url"] = profile.profile_picture
@@ -272,7 +270,7 @@ def home(request):
             arti["name"] = Profile.objects.get(username='justwatch').name
             arti["profile_url"] = "@justwatch"
             arti["profile_pic"] = Profile.objects.filter(username='justwatch').first().profile_picture
-        search_2.append(arti["title"])
+      
         if UserReaction.objects.filter(vlog_id=arti["publishedAt"]).exists():
             arti["like_status"] = UserReaction.objects.get(vlog_id=arti["publishedAt"]).like
         else:
@@ -351,7 +349,7 @@ def most(request,para):
             arti["name"] = Profile.objects.get(username='justwatch').name
             arti["profile_url"] = "@justwatch"
             arti["profile_pic"] = Profile.objects.filter(username='justwatch').first().profile_picture
-        search_2.append(arti["title"])
+     
         if UserReaction.objects.filter(vlog_id=arti["publishedAt"]).exists():
             arti["like_status"] = UserReaction.objects.get(vlog_id=arti["publishedAt"]).like
         else:
@@ -422,23 +420,27 @@ def fuzzy_search(query, index, vlogs, threshold=0.6):
     # Return the matched vlogs
     return [vlogs[i] for i in results]
 
-quary_2 = []
 def searchquary(request):
     if request.method == 'POST':
-        quary = quary_2[-1]
+        quary = request.session.get('last_quary', '')  # Retrieve the last query from the session
     else:
-        quary = request.GET.get('quary')
-        quary_2.append(quary)
-    json_data = content_data(request,'all',[0.3,0.2,0.6,0.4,10])
+        quary = request.GET.get('quary', '')  # Get the query from the request
+        request.session['last_quary'] = quary  # Save the query in the session
+
+    # Fetch content data
+    json_data = content_data(request, 'all', [0.3, 0.2, 0.6, 0.4, 10])
     model_data = MyModel.objects.all()
 
     # Convert the response to JSON
-    json_data = response.json()
-    json_data["articles"] = [article for article in json_data["articles"] if article["title"] != "[Removed]"]
-    json_data["articles"] = json_data["articles"]+content_data('all')["articles"]
-    if request.user.username is not None:
+    json_data["articles"] = [
+        article for article in json_data.get("articles", []) 
+        if article.get("title") != "[Removed]"
+    ]
+    json_data["articles"] += content_data('all')["articles"]
+
+    # Add user profile information if available
+    if request.user.is_authenticated:
         try:
-            print("hay")
             profile = Profile.objects.get(username=request.user.username)
             json_data["name"] = profile.name
             json_data["image_url"] = profile.profile_picture
@@ -449,64 +451,59 @@ def searchquary(request):
         json_data["name"] = 'none'
         json_data["image_url"] = 'none'
 
-    for arti in json_data["articles"]:
-        # Check if any matching id is found
+    # Process articles
+    for arti in json_data.get("articles", []):
         if "s" not in arti:
-            arti["date"] = arti["publishedAt"]
+            arti["date"] = arti.get("publishedAt", "")
             arti["name"] = Profile.objects.get(username='justwatch').name
             arti["profile_url"] = "@justwatch"
             arti["profile_pic"] = Profile.objects.filter(username='justwatch').first().profile_picture
 
-        if UserReaction.objects.filter(vlog_id=arti["publishedAt"]).exists():
-            arti["like_status"] = UserReaction.objects.get(vlog_id=arti["publishedAt"]).like
-        else:
-            arti["like_status"] = 0
-        
-        if UserReaction.objects.filter(username=request.user.username,follow_to=arti["profile_pic"].replace("@",'')).exists():
-           arti["follow_status"] = UserReaction.objects.filter(username=request.user.username,follow_to=arti["profile_pic"].replace("@",'')).first().follow
-        else:
-           arti["follow_status"] = -1
-        matching_model = model_data.filter(id=arti["publishedAt"])
-        if matching_model.exists():
-            # If it exists, safely fetch the 'views' and 'likes'
-            arti["views"] = matching_model.values('views')[0]['views']
-            arti["likes"] = matching_model.values('likes')[0]['likes']
-        else:
-            arti["views"] = 0
-            arti["likes"] = 0
-        if comentconfig.objects.all().exists():
-            # If it exists, safely fetch the 'views' and 'likes'
-            data = comentconfig.objects.all().filter(mainid=arti["publishedAt"])
-            serialized_data = serialize('json', data)
-            coment_data = json.loads(serialized_data)
-            arti["coment"] = len(coment_data)
+        arti["like_status"] = (
+            UserReaction.objects.filter(vlog_id=arti.get("publishedAt"))
+            .values_list('like', flat=True)
+            .first() or 0
+        )
+
+        arti["follow_status"] = (
+            UserReaction.objects.filter(
+                username=request.user.username,
+                follow_to=arti.get("profile_pic", "").replace("@", ""),
+            )
+            .values_list('follow', flat=True)
+            .first() or -1
+        )
+
+        matching_model = model_data.filter(id=arti.get("publishedAt"))
+        arti["views"] = matching_model.values_list('views', flat=True).first() or 0
+        arti["likes"] = matching_model.values_list('likes', flat=True).first() or 0
+
+        if comentconfig.objects.filter(mainid=arti.get("publishedAt")).exists():
+            data = comentconfig.objects.filter(mainid=arti["publishedAt"])
+            arti["coment"] = data.count()
         else:
             arti["coment"] = 0
-    # Pass the data as context to the template
+
+    # Perform fuzzy search on articles
     inverted_index = build_inverted_index(json_data["articles"])
-    json_data["articles"] = fuzzy_search(quary,inverted_index,json_data["articles"])
+    json_data["articles"] = fuzzy_search(quary, inverted_index, json_data["articles"])
     json_data["articles"][-1]["end"] = 1
     json_data["path"] = '/search/quary'
-    if request.method == 'POST':
-        # अगर सेशन में index उपलब्ध नहीं है तो इसे प्रारंभ करें
-        if 'index' not in request.session:
-            request.session['index'] = 6
 
-        # अगले 5 व्लॉग्स लाएं
-        start = request.session['index']
+    # Handle pagination
+    if request.method == 'POST':
+        start = request.session.get('index', 6)
         end = start + 5
         json_data_2 = json_data["articles"][start:end]
-        request.session['index'] = end  # सेशन में index को अपडेट करें
+        request.session['index'] = end
 
-        json_data["articles"] = json_data_2
-        html = render_to_string('vlog_html.html', json_data, request=request)
+        html = render_to_string('vlog_html.html', {'articles': json_data_2}, request=request)
         return JsonResponse({'html': html})
     else:
-        # पहला पेज लोड करने के लिए index को रीसेट करें
         request.session['index'] = 6
         json_data_4 = json_data["articles"][:6]
-        json_data["articles"] = json_data_4
-        return render(request, 'index.html', json_data)
+        return render(request, 'index.html', {'articles': json_data_4})
+
 
 def extract_contextual_keyword(text, labels):
     # Generate keywords from labels (basic assumption: labels as keywords)
@@ -613,7 +610,8 @@ def comentlikeadd(request):
          return HttpResponse("done")
 
 def search(request):
-   return render(request, 'search.html', {"search":search_2}) 
+   json_data = content_data(request,'all',[0.3,0.2,0.6,0.4,10])
+   return render(request, 'search.html', {"search":[vlog["title"] for vlog in json_data["articles"]}) 
 
 def about(request):
    return render(request, 'about.html') 
@@ -786,12 +784,11 @@ def login_view(request):
 
     return render(request, 'login.html')
 
-id_profile = []
 def profile(request, username):
     if Profile.objects.filter(username=username).exists():
         data = Profile.objects.filter(username=username).first()  # Get a single profile
         id = Profile.objects.filter(username=username).first().profile_id
-        id_profile.append(id)
+        request.session['profile_id'] = id
         model_data = MyModel.objects.all()
         # Convert the response to JSON
         json_data = content_data(request,f'@{username}',[])
@@ -880,44 +877,90 @@ def profilebin(request,username):
     else:
         return redirect('login')
 
-cont_4 = []
 def vlog(request, username):
     if username == request.user.username:
-        print(username,request.user.username)
         if request.method == "POST":
             title = request.POST.get('title')
             description = request.POST.get('description')
-            vlog_id = generate_unique_datetime_string()            
+            vlog_id = generate_unique_datetime_string()
+            thumbnail = None
+
             if 'thumbnail' in request.FILES:
                 uploaded_file = request.FILES['thumbnail']
-                static_path = os.path.join(settings.BASE_DIR, 'media')  # Path to static/
+                static_path = os.path.join(settings.BASE_DIR, 'media') 
                 
-                # Create the directory if it doesn't exist
                 if not os.path.exists(static_path):
                     os.makedirs(static_path)
 
-                # Generate a unique filename to prevent overwriting
                 file_name = f"thumbnail_{vlog_id}"
-                check_and_delete(file_name,'/media')
+                check_and_delete(file_name, '/media')
                 file_path = os.path.join(static_path, file_name)
 
-                # Save the file
                 with open(file_path, 'wb+') as destination:
                     for chunk in uploaded_file.chunks():
                         destination.write(chunk)
 
-                # Generate the URL for the uploaded file
                 thumbnail = f"/media/{file_name}"
-                cont_4.append(thumbnail)
             
-            cont_4.append(vlog_id)
-            cont_4.append(title)
-            cont_4.append(description)
+            # Save data in the database
+            DraftVlog.objects.create(
+                user=request.user,
+                vlog_id=vlog_id,
+                thumbnail=thumbnail,
+                title=title,
+                description=description,
+            )
+
             return render(request, 'vlog_des.html')
         else:
             return render(request, 'vlog.html')
     else:
-        return HttpResponse("something wrong")
+        return HttpResponse("Something went wrong")
+
+def vlogpost(request, username):
+    if username == request.user.username:
+        if request.method == "POST":
+            try:
+                draft_vlog = DraftVlog.objects.get(user=request.user)
+            except DraftVlog.DoesNotExist:
+                return HttpResponse("No draft found")
+
+            data = json.loads(request.body)
+            content_html = data.get('content')
+
+            directory_path = os.path.join(settings.MEDIA_ROOT, 'vlog/')
+            if not os.path.exists(directory_path):
+                os.makedirs(directory_path)
+
+            file_path = f'{directory_path}{draft_vlog.vlog_id}.html'
+            with open(file_path, 'w') as file:
+                file.write(content_html)
+
+            user = f'@{username}'
+            vlog_labels = extract_contextual_keyword(draft_vlog.title, labels_list)[0]
+            vlog_rate = extract_contextual_keyword(draft_vlog.title, labels_list)[1]
+
+            vlog = Vlog(
+                vlog_id=draft_vlog.vlog_id,
+                thumbnail=draft_vlog.thumbnail,
+                title=draft_vlog.title,
+                description=draft_vlog.description,
+                user=user,
+                content_html=content_html,
+                vlog_labels=vlog_labels,
+                vlog_rate=vlog_rate,
+            )
+            vlog.save()
+
+            # Delete the draft
+            draft_vlog.delete()
+
+            return HttpResponse("Published")
+        else:
+            return HttpResponse("Something went wrong")
+    else:
+        return HttpResponse("Something went wrong")
+
 
 def media(request,index):
     if request.method == 'POST' and request.FILES.get('file'):
@@ -948,40 +991,7 @@ def media(request,index):
         return JsonResponse({"thumbnail_url": thumbnail_url}, status=200)
 
     return JsonResponse({"error": "No file found"}, status=400)
-
     
-def vlogpost(request,username):
-    if username == request.user.username:
-       if request.method == "POST":
-           vlog_id = cont_4[1]
-           thumbnail = cont_4[0]
-           title = cont_4[2]
-           description = cont_4[3]
-           data = json.loads(request.body)
-           content_html = data.get('content')
-           directory_path = os.path.join(settings.MEDIA_ROOT, 'vlog/')
-           # Ensure the directory exists
-           if not os.path.exists(directory_path):
-               os.makedirs(directory_path)  # Create the directory if it doesn't exist
-           # File path
-           file_path = f'{directory_path}{vlog_id}.html'
-           # Write to the file
-           with open(file_path, 'w') as file:
-               file.write("Your content goes here")
-           user = f'@{username}'
-           vlog_labels = extract_contextual_keyword(title,labels_list)[0]
-           vlog_rate = extract_contextual_keyword(title,labels_list)[1]
-           vlog = Vlog(vlog_id=vlog_id,thumbnail=thumbnail,title=title,description=description,user=user,content_html='null',vlog_labels=vlog_labels,vlog_rate=vlog_rate)
-           vlog.save()
-           del cont_4[0]
-           del cont_4[1]
-           del cont_4[2]
-           del count_4[3]
-           return HttpResponse("Published")
-       else:
-           return HttpResponse("something wrong")
-    else:
-        return HttpResponse("something wrong")
 def api(request,thumbnail,title,description,user,content_html):
     vlog_id = generate_unique_datetime_string()
     vlog_labels = extract_contextual_keyword(title,labels_list)[0]
@@ -1114,7 +1124,7 @@ def follow(request,username_2):
         return HttpResponse("something wrong")
 
 def profiledit(request):
-    profile_id = id_profile[len(id_profile)-1]  # Retrieve the profile ID from the POST request
+    profile_id = request.session.get('profile_id')# Retrieve the profile ID from the POST request
     try:
         profile = Profile.objects.get(profile_id=profile_id)  # Fetch the profile object
 
