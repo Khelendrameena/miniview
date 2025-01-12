@@ -978,7 +978,10 @@ def vlogpost(request,username):
            return HttpResponse("something wrong")
     else:
         return HttpResponse("something wrong")
-def api(request,vlog_id,thumbnail,title,description,user,content_html,vlog_labels,vlog_rate):
+def api(request,thumbnail,title,description,user,content_html):
+    vlog_id = generate_unique_datetime_string()
+    vlog_labels = extract_contextual_keyword(title,labels_list)[0]
+    vlog_rate = extract_contextual_keyword(title,labels_list)[1]
     vlog = Vlog(vlog_id=vlog_id,thumbnail=thumbnail,title=title,description=description,user=user,content_html=content_html,vlog_labels=vlog_labels,vlog_rate=vlog_rate)
     vlog.save()
     return HttpResponse("post done")
