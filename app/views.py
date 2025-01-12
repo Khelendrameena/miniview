@@ -6,6 +6,7 @@ from app.models import Profile
 from app.models import Vlog
 from app.models import UserReaction
 from app.models import comentconfig
+from app.models import DraftVlog
 from django.contrib.auth import authenticate, login
 from django.template.loader import render_to_string
 from django.contrib.auth.models import User
