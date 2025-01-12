@@ -5,7 +5,7 @@ from app.models import comentconfig
 from app.models import Profile
 from app.models import Vlog
 from app.models import UserReaction
-from app.models import UserReaction
+from app.models import DraftVlog
 
 admin.site.register(MyModel)
 admin.site.register(DraftVlog)
