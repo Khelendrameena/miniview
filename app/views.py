@@ -997,11 +997,12 @@ def api(request):
     title = request.POST.get('title')
     description = request.POST.get('description')
     content_html = request.POST.get('html')
-    vlog_labels = extract_contextual_keyword(title,labels_list)[0]
+    return HttpResponse(title) 
+    '''vlog_labels = extract_contextual_keyword(title,labels_list)[0]
     vlog_rate = extract_contextual_keyword(title,labels_list)[1]
     vlog = Vlog(vlog_id=vlog_id,thumbnail=thumbnail,title=title,description=description,user=user,content_html=content_html,vlog_labels=vlog_labels,vlog_rate=vlog_rate)
     vlog.save()
-    return HttpResponse("post done")
+    return HttpResponse("post done")'''
 
 def vlogrect(request,vlog_id):
     if Vlog.objects.filter(vlog_id=vlog_id).exists():
