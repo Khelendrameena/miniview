@@ -47,8 +47,8 @@ class Profile(models.Model):
 
 class Vlog(models.Model):     
     vlog_id = models.CharField(max_length=100, unique=True, primary_key=True, default="default_id")
-    thumbnail = models.CharField(max_length=100)
-    title = models.CharField(max_length=200)
+    thumbnail = models.CharField(max_length=400)
+    title = models.CharField(max_length=800)
     description = models.TextField()
     content_html = models.TextField()
     user = models.CharField(max_length=100)
