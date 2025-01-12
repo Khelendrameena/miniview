@@ -218,7 +218,7 @@ def content_data(request,user_2,arr):
         vlog_data = [{
             "title": vlog.title,
             "description": vlog.description,
-            "url": f"vlog/show/{vlog.vlog_id}" if os.path.exists("path/to/file_or_dir") else str(vlog.objects.get(vlog_id=vlog_id).content_html),
+            "url": f"vlog/show/{vlog.vlog_id}" if os.path.exists(f"media/vlog/{vlog.vlog_id}.html") else str(vlog.content_html),
             "urlToImage": vlog.thumbnail,
             "publishedAt": vlog.vlog_id,
             "date": vlog.date_posted,
@@ -234,7 +234,7 @@ def content_data(request,user_2,arr):
         vlog_data = [{
             "title": vlog.title,
             "description": vlog.description,
-            "url": f"vlog/show/{vlog.vlog_id}" if os.path.exists("path/to/file_or_dir") else str(vlog.objects.get(vlog_id=vlog_id).content_html),
+            "url": f"vlog/show/{vlog.vlog_id}" if os.path.exists(f"media/vlog/{vlog.vlog_id}.html") else str(vlog.content_html),
             "urlToImage": vlog.thumbnail,
             "vlog_url": f"vlog/{vlog.vlog_id}",
             "publishedAt": vlog.vlog_id,
@@ -1008,7 +1008,7 @@ def vlogrect(request,vlog_id):
         vlog_data = [{
             "title": vlog.title,
             "description": vlog.description,
-            "url": f"vlog/show/{vlog.vlog_id}" if os.path.exists("path/to/file_or_dir") else str(vlog.objects.get(vlog_id=vlog_id).content_html),
+            "url": f"vlog/show/{vlog.vlog_id}" if os.path.exists(f"media/vlog/{vlog.vlog_id}.html") else str(vlog.content_html),
             "urlToImage": vlog.thumbnail,
             "vlog_url": f"show/{vlog.vlog_id}",
             "publishedAt": vlog.vlog_id,                                                                                  
