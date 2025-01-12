@@ -991,18 +991,21 @@ def media(request,index):
 
     return JsonResponse({"error": "No file found"}, status=400)
     
-def api(request):
-    vlog_id = generate_unique_datetime_string()
-    thumbnail = request.POST.get('image')
-    title = request.POST.get('title')
-    description = request.POST.get('description')
-    content_html = request.POST.get('html')
-    return HttpResponse(title) 
-    '''vlog_labels = extract_contextual_keyword(title,labels_list)[0]
-    vlog_rate = extract_contextual_keyword(title,labels_list)[1]
-    vlog = Vlog(vlog_id=vlog_id,thumbnail=thumbnail,title=title,description=description,user=user,content_html=content_html,vlog_labels=vlog_labels,vlog_rate=vlog_rate)
-    vlog.save()
-    return HttpResponse("post done")'''
+def api(request,quary,number):
+    url = f"https://newsapi.org/v2/everything?q={quary}&apiKey=a26e90658ca8499ca068782aa2179116"
+    response = requests.get(url)
+    data = response.json()
+    for articles in data["articles"][:number]:
+        vlog_id = generate_unique_datetime_string()
+        thumbnail = articles["urlToImage"]
+        title = articles["title"]
+        description = articles["description"]
+        content_html = articles["url"]
+        vlog_labels = extract_contextual_keyword(title,labels_list)[0]
+        vlog_rate = extract_contextual_keyword(title,labels_list)[1]
+        vlog = Vlog(vlog_id=vlog_id,thumbnail=thumbnail,title=title,description=description,user=user,content_html=content_html,vlog_labels=vlog_labels,vlog_rate=vlog_rate)
+        vlog.save()    
+    return HttpResponse("post done")
 
 def vlogrect(request,vlog_id):
     if Vlog.objects.filter(vlog_id=vlog_id).exists():
