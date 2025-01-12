@@ -181,10 +181,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // जब यूजर पेज के अंत तक पहुंचे
             try {
+                // Check if the current path is /search
+                const path = "{{ path }}";
+                const articlesContainer = document.getElementById('articles-container');
+
+                // Check if the last article has 'end' parameter set to 1
+                const lastArticle = articlesContainer.lastElementChild;
+                if (lastArticle && lastArticle.dataset.end === '1') {
+                    console.log('No more articles to load');
+                    return; // Don't send the request if the 'end' parameter is 1
+                }
+
                 // लोडर दिखाएं
                 showLoader();
-                // Check if the current path is /search
-             path = "{{ path }}"
+
                 const response = await fetch(path, {
                     method: 'POST',
                     headers: {
@@ -197,13 +207,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
 
                 if (data.html) {
-                    const articlesContainer = document.getElementById('articles-container');
                     articlesContainer.insertAdjacentHTML('beforeend', data.html);
                     if (window.innerWidth >= 480) {
-      document.querySelectorAll('.p-4.md\\:w-1\\/3').forEach((div_4) => {
-        div_4.className = 'lg:w-1/2 w-full mb-6 lg:mb-0';
-      })
-    }
+                        document.querySelectorAll('.p-4.md\\:w-1\\/3').forEach((div_4) => {
+                            div_4.className = 'lg:w-1/2 w-full mb-6 lg:mb-0';
+                        });
+                    }
+
                     // पेज नंबर बढ़ाएं
                     currentPage++;
 
@@ -252,6 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+
 </script>
 <script>
     const followButton = document.getElementById("follow_button_2");
@@ -267,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function data_8(id, follow) {
-      var xhr = new XMLHttpRequest();
+      var xhr = new XMLHttpReqst();
       var path = document.getElementById("name_profile").innerText;
       xhr.open('POST', `/app/${path}/follow`, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
