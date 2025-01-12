@@ -307,6 +307,8 @@ def home(request):
         # अगले 5 व्लॉग्स लाएं
         start = request.session['index']
         end = start + 5
+        if start >= len(json_data["articles"]):
+           return JsonResponse({'html': '', 'message': 'No more articles'})
         json_data_2 = json_data["articles"][start:end]
         request.session['index'] = end  # सेशन में index को अपडेट करें
 
@@ -383,6 +385,8 @@ def most(request,para):
             request.session['index'] = 6
         start = request.session['index']
         end = start + 5
+        if start >= len(json_data["articles"]):
+             return JsonResponse({'html': '', 'message': 'No more articles'})
         json_data_2 = json_data["articles"][start:end]
         request.session['index'] = end  
         json_data["articles"] = json_data_2
@@ -493,6 +497,8 @@ def searchquary(request):
     if request.method == 'POST':
         start = request.session.get('index', 6)
         end = start + 5
+        if start >= len(json_data["articles"]):
+             return JsonResponse({'html': '', 'message': 'No more articles'})
         json_data_2 = json_data["articles"][start:end]
         request.session['index'] = end
 
@@ -851,6 +857,8 @@ def profile(request, username):
         # अगले 5 व्लॉग्स लाएं
            start = request.session['index']
            end = start + 5
+           if start >= len(json_data["articles"]):
+               return JsonResponse({'html': '', 'message': 'No more articles'})
            json_data_2 = json_data["articles"][start:end]
            request.session['index'] = end  # सेशन में index को अपडेट करें
            json_data["articles"] = json_data_2
