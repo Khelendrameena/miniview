@@ -973,6 +973,10 @@ def vlogpost(request,username):
            vlog_rate = extract_contextual_keyword(title,labels_list)[1]
            vlog = Vlog(vlog_id=vlog_id,thumbnail=thumbnail,title=title,description=description,user=user,content_html='null',vlog_labels=vlog_labels,vlog_rate=vlog_rate)
            vlog.save()
+           del cont_4[0]
+           del cont_4[1]
+           del cont_4[2]
+           del count_4[3]
            return HttpResponse("Published")
        else:
            return HttpResponse("something wrong")
