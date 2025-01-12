@@ -62,6 +62,14 @@ class Vlog(models.Model):
     def __str__(self):
         return self.title
 
+class DraftVlog(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    vlog_id = models.CharField(max_length=255)
+    thumbnail = models.CharField(max_length=255, null=True)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
 class UserReaction(models.Model):
     vlog_id = models.CharField(max_length=255,unique=True)  # Unique identifier for the vlog
     username = models.CharField(max_length=100)
