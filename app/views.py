@@ -991,7 +991,7 @@ def media(request,index):
 
     return JsonResponse({"error": "No file found"}, status=400)
     
-def api(request,quary,number):
+def api(request,quary,number,user):
     url = f"https://newsapi.org/v2/everything?q={quary}&apiKey=a26e90658ca8499ca068782aa2179116"
     response = requests.get(url)
     data = response.json()
@@ -1001,6 +1001,7 @@ def api(request,quary,number):
         title = articles["title"]
         description = articles["description"]
         content_html = articles["url"]
+        user = user
         vlog_labels = extract_contextual_keyword(title,labels_list)[0]
         vlog_rate = extract_contextual_keyword(title,labels_list)[1]
         vlog = Vlog(vlog_id=vlog_id,thumbnail=thumbnail,title=title,description=description,user=user,content_html=content_html,vlog_labels=vlog_labels,vlog_rate=vlog_rate)
