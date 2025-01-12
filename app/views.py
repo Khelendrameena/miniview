@@ -31,8 +31,6 @@ from django.db.models import F, FloatField, ExpressionWrapper, Value, Case, When
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-main_id = []
-
 def robots_txt(request):
     content = """User-agent: *
 Disallow:
@@ -560,7 +558,7 @@ def view(request):
 def coment(request):
     if request.method == 'POST':
         id = request.POST.get("mainid")
-        main_id.append(id)
+        request.session['main_id'] = id
         data = comentconfig.objects.filter(mainid=id)
         # Serialize the queryset to JSON
         vlog = Vlog.objects.get(vlog_id=id)
@@ -576,7 +574,7 @@ def coment(request):
 def comentadd(request):
     if request.method == 'POST':
         try:
-            mainid = main_id[-1]  # Get the last element from main_id
+            mainid = request.session.get('main_id') # Get the last element from main_id
             data = json.loads(request.body)
             name = data.get('name')
             mess = data.get('mess')
@@ -584,7 +582,7 @@ def comentadd(request):
             id = uuid.uuid1()
             
             # Save the comment to the database
-            #user_reaction = UserReaction(vlog_id=main_id[-1],coment=1,username=request.user.username)
+            #user_reaction = UserReaction(vlog_id=request.session.get('main_id'),coment=1,username=request.user.username)
             coment = comentconfig(mainid=mainid, id=id, name=name, mess=mess, like=like)
             coment.save()
             #user_reaction.save()
@@ -611,7 +609,7 @@ def comentlikeadd(request):
 
 def search(request):
    json_data = content_data(request,'all',[0.3,0.2,0.6,0.4,10])
-   return render(request, 'search.html', {"search":[vlog["title"] for vlog in json_data["articles"]}) 
+   return render(request, 'search.html', {"search":[vlog["title"] for vlog in json_data["articles"]]}) 
 
 def about(request):
    return render(request, 'about.html') 
