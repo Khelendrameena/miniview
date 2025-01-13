@@ -220,7 +220,7 @@ def search_blog(request,quary,number):
             Q(title__icontains=query) | Q(description__icontains=query)
         ).order_by('-vlog_id')[:number]  # Search in title and description, limit to 10 results
     else:
-        results = Vlog.objects.none()  # Return an empty queryset if no query
+        results = "not found"  # Return an empty queryset if no query
     
     return results
     
@@ -228,6 +228,8 @@ def content_data(request,user_2,arr):
     if user_2 == 'all':
         if arr[0] == "search":
             vlogs = search_blog(request,arr[1],arr[2])
+            if vlogs == "not found":
+                return {"articles": []}       
         else:
             vlogs = get_top_vlogs(request,request.user.username,arr[0],arr[1],arr[2],arr[3],arr[4])
         vlog_data = [{
