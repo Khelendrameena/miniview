@@ -316,6 +316,7 @@ def home(request):
     # Pass the data as context to the template
     json_data["articles"][-1]["end"] = 1
     json_data["path"] = '/'
+    json_data["time"] = datetime.now().year
     if request.method == 'POST':
         # अगर सेशन में index उपलब्ध नहीं है तो इसे प्रारंभ करें
         if 'index' not in request.session:
@@ -397,6 +398,7 @@ def most(request,para):
     # Pass the data as context to the template
     json_data["articles"][-1]["end"] = 1
     json_data["path"] = '/'
+    json_data["time"] = datetime.now().year
     if request.method == 'POST':
         if 'index' not in request.session:
             request.session['index'] = 6
@@ -475,7 +477,7 @@ def searchquary(request):
     # Perform fuzzy search on articles
     json_data["articles"][-1]["end"] = 1
     json_data["path"] = '/search/quary'
-
+    json_data["time"] = datetime.now().year
     # Handle pagination
     if request.method == 'POST':
         start = request.session.get('index', 6)
@@ -832,6 +834,7 @@ def profile(request, username):
                arti["coment"] = 0
                
         json_data["path"] = f'/@{username}/'
+        json_data["time"] = datetime.now().year
         if request.method == 'POST':
         # अगर सेशन में index उपलब्ध नहीं है तो इसे प्रारंभ करें
            if 'index' not in request.session:
@@ -1020,6 +1023,7 @@ def vlogrect(request,vlog_id):
             "s":1
         } for vlog in vlogs]
         json_data = {"articles": vlog_data}
+        json_data["time"] = datetime.now().year
         if request.user.username is not None:
            try:
                 profile = Profile.objects.get(username=request.user.username)
