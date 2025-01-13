@@ -218,7 +218,7 @@ def search_blog(request,quary,number):
     if query:
         results = Vlog.objects.filter(
             Q(title__icontains=query) | Q(description__icontains=query)
-        ).order_by('-id')[:number]  # Search in title and description, limit to 10 results
+        ).order_by('-vlog_id')[:number]  # Search in title and description, limit to 10 results
     else:
         results = Vlog.objects.none()  # Return an empty queryset if no query
     
