@@ -986,7 +986,7 @@ def api(request,quary,number,user):
     url = f"https://newsapi.org/v2/everything?q={quary}&apiKey=a26e90658ca8499ca068782aa2179116"
     response = requests.get(url)
     data = response.json()
-    data["articles"] = [articles for articles in data["articles"] if articles["content"] != "[Removed]"]
+    data["articles"] = [articles for articles in data["articles"] if articles["content"] != "[Removed]" and articles["title"] != "[Removed]" and articles["description"] != "[Removed]" and articles["urlToImage"] != "[Removed]"]
     for articles in data["articles"][:number]:
         vlog_id = generate_unique_datetime_string()
         thumbnail = articles["urlToImage"]
