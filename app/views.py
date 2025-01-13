@@ -266,7 +266,7 @@ def content_data(request,user_2,arr):
 
 def home(request):
     model_data = MyModel.objects.all()
-    json_data = content_data(request,'all',[0.3,0.2,0.6,0.4,10])
+    json_data = content_data(request,'all',[0.3,0.2,0.6,0.4,100])
     if request.user.username is not None:
         try:
             profile = Profile.objects.get(username=request.user.username)
@@ -342,7 +342,7 @@ def home(request):
 
 def most(request,para):
     if para == "topblog":
-        arr = [0.4,0.3,0.7,0.3,10]
+        arr = [0.4,0.3,0.7,0.3,100]
     elif para == "trending":
         arr = [0.3,0.5,0.7,0.5,10]
     else:
@@ -425,7 +425,7 @@ def searchquary(request):
         request.session['last_quary'] = quary  # Save the query in the session
 
     # Fetch content data
-    json_data = content_data(request, 'all', ['search',quary,10])
+    json_data = content_data(request, 'all', ['search',quary,100])
     model_data = MyModel.objects.all()
     if len(json_data["articles"]) == 0:
         json_data_4 = json_data["articles"]
