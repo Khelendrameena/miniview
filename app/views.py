@@ -151,7 +151,15 @@ def average_labels(input_array):
     # Calculate average for each label and prepare the result
     result = [[label, round(data['total'] / data['count'], 2)] for label, data in label_data.items()]
     return result
-
+    
+def biased_random():
+    # Generate a random number between 0 and 99
+    num = random.randint(0, 99)
+    # Return 0 if the number is less than 70, else return 1
+    if num < 70:
+        return 0
+    else:
+        return 1
 def get_top_vlogs(request, username,LIKE_WEIGHT,VIEW_WEIGHT,COMMENT_WEIGHT,RECENCY_WEIGHT,num):
     # Step 1: Fetch user's interest labels and weights
     user_interest = []
@@ -235,7 +243,7 @@ def content_data(request,user_2,arr):
         vlog_data = [{
             "title": vlog.title,
             "description": vlog.description,
-            "url": f"vlog/show/{vlog.vlog_id}" if os.path.exists(f"media/vlog/{vlog.vlog_id}.html") else str(vlog.content_html),
+            "url": ("https://www.profitablecpmrate.com/apqcfa4f4?key=1d7cdf8d54d8b7ca669b7fa9df169e8d" if biased_random() == 1 else f"vlog/show/{vlog.vlog_id}") if os.path.exists(f"media/vlog/{vlog.vlog_id}.html") else ("https://www.profitablecpmrate.com/apqcfa4f4?key=1d7cdf8d54d8b7ca669b7fa9df169e8d", if biased_random() == 1 else str(vlog.content_html))
             "urlToImage": vlog.thumbnail,
             "publishedAt": vlog.vlog_id,
             "date": vlog.date_posted,
@@ -251,7 +259,7 @@ def content_data(request,user_2,arr):
         vlog_data = [{
             "title": vlog.title,
             "description": vlog.description,
-            "url": f"vlog/show/{vlog.vlog_id}" if os.path.exists(f"media/vlog/{vlog.vlog_id}.html") else str(vlog.content_html),
+            "url": ("https://www.profitablecpmrate.com/apqcfa4f4?key=1d7cdf8d54d8b7ca669b7fa9df169e8d" if biased_random() == 1 else f"vlog/show/{vlog.vlog_id}") if os.path.exists(f"media/vlog/{vlog.vlog_id}.html") else ("https://www.profitablecpmrate.com/apqcfa4f4?key=1d7cdf8d54d8b7ca669b7fa9df169e8d" if biased_random() == 1 else str(vlog.content_html)), 
             "urlToImage": vlog.thumbnail,
             "vlog_url": f"vlog/{vlog.vlog_id}",
             "publishedAt": vlog.vlog_id,
@@ -1014,7 +1022,7 @@ def vlogrect(request,vlog_id):
         vlog_data = [{
             "title": vlog.title,
             "description": vlog.description,
-            "url": f"vlog/show/{vlog.vlog_id}" if os.path.exists(f"media/vlog/{vlog.vlog_id}.html") else str(vlog.content_html),
+            "url": ("https://www.profitablecpmrate.com/apqcfa4f4?key=1d7cdf8d54d8b7ca669b7fa9df169e8d" if biased_random() == 1 else f"vlog/show/{vlog.vlog_id}") if os.path.exists(f"media/vlog/{vlog.vlog_id}.html") else ("https://www.profitablecpmrate.com/apqcfa4f4?key=1d7cdf8d54d8b7ca669b7fa9df169e8d" if biased_random() == 1 else str(vlog.content_html)), 
             "urlToImage": vlog.thumbnail,
             "vlog_url": f"show/{vlog.vlog_id}",
             "publishedAt": vlog.vlog_id,                                                                                  
