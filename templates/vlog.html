@@ -88,7 +88,7 @@
   <div class="vlog-container">
     <form action="/@{{ user.username }}/vlog" method="POST" enctype="multipart/form-data">
       {% csrf_token %}
-    <h1>Create a New Vlog</h1>
+    <h1>Create a New Blog</h1>
     <div class="form-group">
       <label for="title">Thumbnail</label>
       <textarea id="" placeholder="Upload your vlog thumbnail..." readonly></textarea>
@@ -102,7 +102,7 @@
       <label for="description">Description</label>
       <textarea id="description" placeholder="Write a detailed description..." name="description"></textarea>
     </div>
-    <button class="submit-btn">Post Vlog</button>
+    <button class="submit-btn">Post Blog</button>
    </form>
   </div>
 
