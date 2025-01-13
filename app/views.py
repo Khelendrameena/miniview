@@ -427,7 +427,9 @@ def searchquary(request):
     # Fetch content data
     json_data = content_data(request, 'all', ['search',quary,10])
     model_data = MyModel.objects.all()
-
+    if len(json_data["articles"]) == 0:
+        json_data_4 = json_data["articles"]
+        return render(request, 'index.html', {'articles': json_data_4})
     # Add user profile information if available
     if request.user.is_authenticated:
         try:
