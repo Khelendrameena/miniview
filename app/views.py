@@ -848,7 +848,7 @@ def profile(request, username):
            else:
                arti["coment"] = 0
                
-        json_data["path"] = f'/@{username}'
+        json_data["path"] = f'/@{username}/'
         if request.method == 'POST':
         # अगर सेशन में index उपलब्ध नहीं है तो इसे प्रारंभ करें
            if 'index' not in request.session:
