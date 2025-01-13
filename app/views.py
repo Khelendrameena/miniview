@@ -862,7 +862,7 @@ def profile(request, username):
            json_data_2 = json_data["articles"][start:end]
            request.session['index'] = end  # सेशन में index को अपडेट करें
            json_data["articles"] = json_data_2
-           html = render_to_string('vlog_html.html', json_data, request=request)
+           html = render_to_string('vlog_html_2.html', json_data, request=request)
            return JsonResponse({'html': html})
         else:
             # पहला पेज लोड करने के लिए index को रीसेट करें
