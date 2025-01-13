@@ -216,11 +216,11 @@ def get_top_vlogs(request, username,LIKE_WEIGHT,VIEW_WEIGHT,COMMENT_WEIGHT,RECEN
 def search_blog(request,quary,number):
     query = quary
     if query:
-        results = Blog.objects.filter(
+        results = Vlog.objects.filter(
             Q(title__icontains=query) | Q(description__icontains=query)
         ).order_by('-id')[:number]  # Search in title and description, limit to 10 results
     else:
-        results = Blog.objects.none()  # Return an empty queryset if no query
+        results = Vlog.objects.none()  # Return an empty queryset if no query
     
     return results
     
