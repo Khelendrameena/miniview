@@ -424,13 +424,6 @@ def searchquary(request):
     json_data = content_data(request, 'all', ['search',quary,10])
     model_data = MyModel.objects.all()
 
-    # Convert the response to JSON
-    json_data["articles"] = [
-        article for article in json_data.get("articles", []) 
-        if article.get("title") != "[Removed]"
-    ]
-    json_data["articles"] += content_data('all')["articles"]
-
     # Add user profile information if available
     if request.user.is_authenticated:
         try:
