@@ -17,6 +17,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.core.cache import cache
 import xml.etree.ElementTree as ET
+from django.db.models import Q
 from django.conf import settings
 from datetime import datetime
 from collections import defaultdict
@@ -211,10 +212,24 @@ def get_top_vlogs(request, username,LIKE_WEIGHT,VIEW_WEIGHT,COMMENT_WEIGHT,RECEN
         print(f"Base Score: {vlog.base_engagement_score}, Recency Score: {recency_score}, Final Score: {vlog.engagement_score}")
 
     return top_vlogs
-
+    
+def search_blog(request,quary,number):
+    query = quary
+    if query:
+        results = Blog.objects.filter(
+            Q(title__icontains=query) | Q(description__icontains=query)
+        ).order_by('-id')[:number]  # Search in title and description, limit to 10 results
+    else:
+        results = Blog.objects.none()  # Return an empty queryset if no query
+    
+    return results
+    
 def content_data(request,user_2,arr):
     if user_2 == 'all':
-        vlogs = get_top_vlogs(request,request.user.username,arr[0],arr[1],arr[2],arr[3],arr[4])
+        if arr[0] == "search":
+            vlogs = search_blog(request,arr[1],arr[2])
+        else:
+            vlogs = get_top_vlogs(request,request.user.username,arr[0],arr[1],arr[2],arr[3],arr[4])
         vlog_data = [{
             "title": vlog.title,
             "description": vlog.description,
@@ -398,31 +413,6 @@ def most(request,para):
         json_data["articles"] = json_data_4
         return render(request, 'index.html', json_data)
 
-# Step 1: Build the Inverted Index
-def build_inverted_index(vlogs):
-    index = defaultdict(list)
-    for i, vlog in enumerate(vlogs):
-        # Create tokens from title and country
-        for word in (vlog['title']).lower().split():
-            index[word].append(i)
-    return index
-
-# Step 2: Find Closest Matches Using Fuzzy Matching
-def fuzzy_search(query, index, vlogs, threshold=0.6):
-    results = set()
-    # Create a unique word list from the index
-    all_words = list(index.keys())
-    
-    # Find closest matches for each query word
-    for word in query.lower().split():
-        # Get words that are similar to the query word
-        matches = get_close_matches(word, all_words, n=5, cutoff=threshold)
-        for match in matches:
-            results.update(index[match])
-    
-    # Return the matched vlogs
-    return [vlogs[i] for i in results]
-
 def searchquary(request):
     if request.method == 'POST':
         quary = request.session.get('last_quary', '')  # Retrieve the last query from the session
@@ -431,7 +421,7 @@ def searchquary(request):
         request.session['last_quary'] = quary  # Save the query in the session
 
     # Fetch content data
-    json_data = content_data(request, 'all', [0.3, 0.2, 0.6, 0.4, 10])
+    json_data = content_data(request, 'all', ['search',quary,10])
     model_data = MyModel.objects.all()
 
     # Convert the response to JSON
@@ -488,8 +478,6 @@ def searchquary(request):
             arti["coment"] = 0
 
     # Perform fuzzy search on articles
-    inverted_index = build_inverted_index(json_data["articles"])
-    json_data["articles"] = fuzzy_search(quary, inverted_index, json_data["articles"])
     json_data["articles"][-1]["end"] = 1
     json_data["path"] = '/search/quary'
 
