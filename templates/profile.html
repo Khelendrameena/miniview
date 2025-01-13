@@ -335,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // lastDiv को observe करने का फंक्शन
     function observeLastDiv(observerInstance) {
-        const lastDiv = document.querySelectorAll('.coment');
+        const lastDiv = document.querySelectorAll('.post-more');
         const loadMoreTarget = lastDiv[lastDiv.length - 1]; // सबसे आखिरी डिव को observe करें
         if (loadMoreTarget) {
             observerInstance.observe(loadMoreTarget); // Observer को फिर से नए lastDiv पर लागू करें
