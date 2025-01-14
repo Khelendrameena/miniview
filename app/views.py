@@ -243,7 +243,7 @@ def content_data(request,user_2,arr):
         vlog_data = [{
             "title": vlog.title,
             "description": vlog.description,
-            "url": ("https://www.profitablecpmrate.com/apqcfa4f4?key=1d7cdf8d54d8b7ca669b7fa9df169e8d" if biased_random() == 1 else f"vlog/show/{vlog.vlog_id}") if os.path.exists(f"media/vlog/{vlog.vlog_id}.html") else ("https://www.profitablecpmrate.com/apqcfa4f4?key=1d7cdf8d54d8b7ca669b7fa9df169e8d", if biased_random() == 1 else str(vlog.content_html)), 
+            "url": ("https://www.profitablecpmrate.com/apqcfa4f4?key=1d7cdf8d54d8b7ca669b7fa9df169e8d" if biased_random() == 1 else str(vlog.content_html)), 
             "urlToImage": vlog.thumbnail,
             "publishedAt": vlog.vlog_id,
             "date": vlog.date_posted,
@@ -259,7 +259,7 @@ def content_data(request,user_2,arr):
         vlog_data = [{
             "title": vlog.title,
             "description": vlog.description,
-            "url": ("https://www.profitablecpmrate.com/apqcfa4f4?key=1d7cdf8d54d8b7ca669b7fa9df169e8d" if biased_random() == 1 else f"vlog/show/{vlog.vlog_id}") if os.path.exists(f"media/vlog/{vlog.vlog_id}.html") else ("https://www.profitablecpmrate.com/apqcfa4f4?key=1d7cdf8d54d8b7ca669b7fa9df169e8d" if biased_random() == 1 else str(vlog.content_html)), 
+            "url": ("https://www.profitablecpmrate.com/apqcfa4f4?key=1d7cdf8d54d8b7ca669b7fa9df169e8d" if biased_random() == 1 else str(vlog.content_html)),
             "urlToImage": vlog.thumbnail,
             "vlog_url": f"vlog/{vlog.vlog_id}",
             "publishedAt": vlog.vlog_id,
@@ -1022,7 +1022,7 @@ def vlogrect(request,vlog_id):
         vlog_data = [{
             "title": vlog.title,
             "description": vlog.description,
-            "url": ("https://www.profitablecpmrate.com/apqcfa4f4?key=1d7cdf8d54d8b7ca669b7fa9df169e8d" if biased_random() == 1 else f"vlog/show/{vlog.vlog_id}") if os.path.exists(f"media/vlog/{vlog.vlog_id}.html") else ("https://www.profitablecpmrate.com/apqcfa4f4?key=1d7cdf8d54d8b7ca669b7fa9df169e8d" if biased_random() == 1 else str(vlog.content_html)), 
+            "url": ("https://www.profitablecpmrate.com/apqcfa4f4?key=1d7cdf8d54d8b7ca669b7fa9df169e8d" if biased_random() == 1 else str(vlog.content_html)),
             "urlToImage": vlog.thumbnail,
             "vlog_url": f"show/{vlog.vlog_id}",
             "publishedAt": vlog.vlog_id,                                                                                  
