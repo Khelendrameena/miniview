@@ -916,7 +916,7 @@ def vlog(request, username):
                 try:
                     with Image.open(file_path) as img:
                         img = img.convert("RGB")  # Ensure the image is in RGB format
-                        img = img.resize((200, 200), Image.LANCZOS)  # Use LANCZOS instead of ANTIALIAS
+                        img = img.resize((720,400), Image.LANCZOS)  # Use LANCZOS instead of ANTIALIAS
                         img.save(file_path, "JPEG")  # Save as JPEG format
                 except IOError:
                     return HttpResponse("Uploaded file is not a valid image.")
