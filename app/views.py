@@ -18,6 +18,7 @@ from django.contrib.auth import login
 from django.core.cache import cache
 import xml.etree.ElementTree as ET
 from django.db.models import Q
+from PIL import Image
 from django.conf import settings
 from datetime import datetime
 from collections import defaultdict
@@ -151,6 +152,21 @@ def average_labels(input_array):
     # Calculate average for each label and prepare the result
     result = [[label, round(data['total'] / data['count'], 2)] for label, data in label_data.items()]
     return result
+    
+def resize_image(input_file, new_size):
+    try:
+        # Check if the file is an image
+        with Image.open(input_file) as img:
+            # Resize the image
+            img = img.resize(new_size)
+            # Save the resized image at the same input file path
+            img.save(input_file)
+            print(f"Image resized and saved at the same path: {input_file}")
+            return input_file
+    except IOError:
+        # Show error if the file is not an image
+        raise ValueError("The provided file is not a valid image.")
+
 
 def get_top_vlogs(request, username,LIKE_WEIGHT,VIEW_WEIGHT,COMMENT_WEIGHT,RECENCY_WEIGHT,num):
     # Step 1: Fetch user's interest labels and weights
@@ -883,17 +899,27 @@ def vlog(request, username):
             if 'thumbnail' in request.FILES:
                 uploaded_file = request.FILES['thumbnail']
                 static_path = os.path.join(settings.BASE_DIR, 'media') 
-                
+
                 if not os.path.exists(static_path):
                     os.makedirs(static_path)
 
-                file_name = f"thumbnail_{vlog_id}"
+                file_name = f"thumbnail_{vlog_id}.jpg"  # Ensure it has a valid image extension
                 check_and_delete(file_name, '/media')
                 file_path = os.path.join(static_path, file_name)
 
+                # Save the uploaded file temporarily
                 with open(file_path, 'wb+') as destination:
                     for chunk in uploaded_file.chunks():
                         destination.write(chunk)
+
+                # Resize the image to 200x200
+                try:
+                    with Image.open(file_path) as img:
+                        img = img.convert("RGB")  # Ensure the image is in RGB format
+                        img = img.resize((200, 200), Image.ANTIALIAS)
+                        img.save(file_path, "JPEG")  # Save as JPEG format
+                except IOError:
+                    return HttpResponse("Uploaded file is not a valid image.")
 
                 thumbnail = f"/media/{file_name}"
             
