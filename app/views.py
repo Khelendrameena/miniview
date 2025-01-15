@@ -916,7 +916,7 @@ def vlog(request, username):
                 try:
                     with Image.open(file_path) as img:
                         img = img.convert("RGB")  # Ensure the image is in RGB format
-                        img = img.resize((200, 200), Image.ANTIALIAS)
+                        img = img.resize((200, 200), Image.LANCZOS)  # Use LANCZOS instead of ANTIALIAS
                         img.save(file_path, "JPEG")  # Save as JPEG format
                 except IOError:
                     return HttpResponse("Uploaded file is not a valid image.")
@@ -937,6 +937,7 @@ def vlog(request, username):
             return render(request, 'vlog.html')
     else:
         return HttpResponse("Something went wrong")
+
 
 def vlogpost(request, username):
     if username == request.user.username:
