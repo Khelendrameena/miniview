@@ -1111,7 +1111,7 @@ def vlogshow(request, vlog_id):
        follow_status = userrection.follow
     else:
        follow_status = -1
-
+    json_data = content_data(request,'all',[0.3,0.2,0.6,0.4,4])
     if not vlog_content:  # Agar cache mein content na ho
         file_path = os.path.join(settings.MEDIA_ROOT, f"vlog/{vlog_id}.html")
         try:
@@ -1120,7 +1120,8 @@ def vlogshow(request, vlog_id):
                 cache.set(cache_key, vlog_content, timeout=300)  # Cache mein store karna (5 minutes timeout)
         except FileNotFoundError:
             vlog_content = "<h1>Content not found</h1>"
-    return render(request, 'vlog_content.html', {"vlog_content": vlog_content,"name":profile.name,"username":profile.username,"pic":profile.profile_picture,"title":Vlog.objects.get(vlog_id=vlog_id).title,"id":profile.profile_id,"follow":follow_status,"vlog_id":vlog_id})
+            
+    return render(request, 'vlog_content.html', {"vlog_content": vlog_content,"name":profile.name,"username":profile.username,"pic":profile.profile_picture,"title":Vlog.objects.get(vlog_id=vlog_id).title,"id":profile.profile_id,"follow":follow_status,"vlog_id":vlog_id, "json_data":json_data})
 def generate_unique_datetime_string():
     # Get current date and time in a specific format
     datetime_part = datetime.now().strftime("%Y%m%d%H%M%S%f")
