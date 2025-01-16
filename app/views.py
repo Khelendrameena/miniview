@@ -1112,6 +1112,7 @@ def vlogshow(request, vlog_id):
     else:
        follow_status = -1
     json_data = content_data(request,'all',[0.3,0.2,0.6,0.4,4])
+    json_data["time"] = datetime.now().year
     if not vlog_content:  # Agar cache mein content na ho
         file_path = os.path.join(settings.MEDIA_ROOT, f"vlog/{vlog_id}.html")
         try:
