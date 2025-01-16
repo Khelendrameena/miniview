@@ -192,8 +192,8 @@
   </div>
 </div>
   {{ vlog_content|safe }}
-  {% if json_data["articles"] %}
-{% for data in json_data["articles"] %}
+  {% if articles %}
+{% for data in articles %}
           <div class="post-card">
             <img src="{{ data.urlToImage }}" alt="Thumbnail" class="post-thumbnail">
             <a href="/{{ data.vlog_url }}">
@@ -206,7 +206,7 @@
           </div>
 {% if "end" in data %}
   <footer class="text-center p-4 text-gray-600">
-    &copy; {{ json_data.time }} Your Website. All Rights Reserved.
+    &copy; {{ time }} Your Website. All Rights Reserved.
   <footer>
 
   <!-- JavaScript -->
