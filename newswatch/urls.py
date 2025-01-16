@@ -20,9 +20,9 @@ from django.contrib.auth import views as auth_views
 from app.views import google_login, google_callback
 from django.conf.urls.static import static
 from django.conf import settings
-#from django.conf.urls import handler500
+from django.conf.urls import handler500
 
-#handler500 = 'app.views.custom_500_error'
+handler500 = 'app.views.custom_500_error'
 
 urlpatterns = [
     path('admin/6302a139-d03a-11ef-8903-5d0b6fd2483d', admin.site.urls),
