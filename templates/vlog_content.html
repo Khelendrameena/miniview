@@ -191,27 +191,22 @@
   </div>
 </div>
   {{ vlog_content|safe }}
+     <div class="flex flex-wrap -m-4">
   {% if articles %}
 {% for data in articles %}
-          <div class="post-card">
-            <img src="{{ data.urlToImage }}" alt="Thumbnail" class="post-thumbnail">
-            <a href="/{{ data.vlog_url }}">
-              <div class="post-card-content">
-                <h3 class="post-title">{{ data.title|default:'No Title' }}</h3>
-                <p class="post-description">{{ data.description|default:'No description available' }}</p>
-                <span class="post-more">Click here...</span>
-              </div>
-            </a>
-          </div>
-{% if "end" in data %}
+         <div class="xl:w-1/4 md:w-1/2 p-4">
+        <div class="bg-gray-100 p-6 rounded-lg">
+          <img class="h-40 rounded w-full object-cover object-center mb-6" src="https://dummyimage.com/720x400" alt="content">
+          <h3 class="tracking-widest text-indigo-500 text-xs font-medium title-font">SUBTITLE</h3>
+          <h2 class="text-lg text-gray-900 font-medium title-font mb-4">Chichen Itza</h2>
+          <p class="leading-relaxed text-base">Fingerstache flexitarian street art 8-bit waistcoat. Distillery hexagon disrupt edison bulbche.</p>
+        </div>
+  {% endif %} 
+{% endfor %}
+</div>
   <footer class="text-center p-4 text-gray-600">
     &copy; {{ time }} Your Website. All Rights Reserved.
-  <footer>
-
-  <!-- JavaScript -->
-{% endif %} 
-{% endfor %}
-{% endif %} 
+  </footer> 
 <script>
   if(window.innerWidth <= 500){
       document.getElementById("active_8").style.display = 'none';
