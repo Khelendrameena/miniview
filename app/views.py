@@ -165,8 +165,10 @@ def resize_image(input_file, new_size):
             return input_file
     except IOError:
         # Show error if the file is not an image
-        raise ValueError("The provided file is not a valid image.")
-
+        raise ValueError("The provided file is not a valid image.") 
+        
+def custom_500_error(request):
+    return render(request, '500.html', status=500)
 
 def get_top_vlogs(request, username,LIKE_WEIGHT,VIEW_WEIGHT,COMMENT_WEIGHT,RECENCY_WEIGHT,num):
     # Step 1: Fetch user's interest labels and weights
