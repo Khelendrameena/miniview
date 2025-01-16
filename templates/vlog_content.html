@@ -72,7 +72,7 @@
     <div class="content">
     </div>
   </div>
- <h1>{{ title|safe }}</h1>
+  <h1 style="font-size: 30px; color: #BE50DC; margin: 2%;">{{ title|safe }}</h1>
 <style>
   .author-profile {
     display: flex;
@@ -193,6 +193,12 @@
 </div>
   {{ vlog_content|safe }}
 <script>
+  if(window.innerWidth <= 500){
+      document.getElementById("active_8").style.display = 'none';
+  }
+  else{
+    document.getElementById("active_4").style.display = 'none';
+  }
 document.addEventListener("DOMContentLoaded", function() {
 
         const follow = document.getElementById("follow");
