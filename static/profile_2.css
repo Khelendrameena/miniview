@@ -1,0 +1,43 @@
+      /* Modal container styling */
+        #customAlert {
+            display: none; /* Hide by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Background overlay */
+            z-index: 1000; /* High priority */
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Modal content styling */
+        #customAlert .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Disable page scroll when modal is active */
+        body.modal-active {
+            overflow: hidden;
+        }
+
+        /* Cxlose button styling */
+        #customAlert .close-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #customAlert .close-btn:hover {
+            background-color: #0056b3;
+        }
