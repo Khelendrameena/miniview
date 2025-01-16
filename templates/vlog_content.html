@@ -192,6 +192,27 @@
   </div>
 </div>
   {{ vlog_content|safe }}
+  {% if json_data["articles"] %}
+{% for data in json_data["articles"] %}
+          <div class="post-card">
+            <img src="{{ data.urlToImage }}" alt="Thumbnail" class="post-thumbnail">
+            <a href="/{{ data.vlog_url }}">
+              <div class="post-card-content">
+                <h3 class="post-title">{{ data.title|default:'No Title' }}</h3>
+                <p class="post-description">{{ data.description|default:'No description available' }}</p>
+                <span class="post-more">Click here...</span>
+              </div>
+            </a>
+          </div>
+{% if "end" in data %}
+  <footer class="text-center p-4 text-gray-600">
+    &copy; {{ json_data.time }} Your Website. All Rights Reserved.
+  <footer>
+
+  <!-- JavaScript -->
+{% endif %} 
+{% endfor %}
+{% endif %} 
 <script>
   if(window.innerWidth <= 500){
       document.getElementById("active_8").style.display = 'none';
