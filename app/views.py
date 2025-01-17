@@ -970,7 +970,7 @@ def vlogpost(request, username):
                 title=draft_vlog.title,
                 description=draft_vlog.description,
                 user=user,
-                content_html=content_html,
+                content_html="not found",
                 vlog_labels=vlog_labels,
                 vlog_rate=vlog_rate,
             )
