@@ -114,9 +114,9 @@
               <div class="flex items-center flex-wrap">
 {% if request.user.is_authenticated %}
 {% if data.like_status == 1 %}
-                <img class="like" src="https://i.ibb.co/V3N06yK/icons8-heart-50-1.png" alt="">
+                <img class="like" src="https://i.ibb.co/V3N06yK/icons8-heart-50-1.png" alt="" onclick="like()">
 {% else %}
-                <img class="like" src="https://i.ibb.co/FK8njDD/icons8-heart-50.png" alt="">
+                <img class="like" src="https://i.ibb.co/FK8njDD/icons8-heart-50.png" alt="" onclick="like()>
 {% endif %}
 {% else %}
                <a href="/login">
@@ -363,8 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
         data(id, 1, 0, '/view')
     }
 
-    document.querySelectorAll('.like').forEach((like, index) => {
-      like.addEventListener('click', () => {
+        function like() {
         if (like.src == 'https://i.ibb.co/V3N06yK/icons8-heart-50-1.png') {
           
           like.src = 'https://i.ibb.co/FK8njDD/icons8-heart-50.png'
@@ -376,8 +375,8 @@ document.addEventListener('DOMContentLoaded', () => {
           data(`${document.querySelectorAll(".uid")[index].innerText}`, 0, 1, '/view')
          document.querySelectorAll(".like_2")[index].innerText++;
         }
-      })
-    })
+        }
+        
     if (window.innerWidth >= 480) {
       document.querySelectorAll('.p-4.md\\:w-1\\/3').forEach((div_4) => {
         div_4.className = 'lg:w-1/2 w-full mb-6 lg:mb-0';
@@ -387,4 +386,4 @@ document.addEventListener('DOMContentLoaded', () => {
   </script>
 </body>
 </html>
-
+ 
