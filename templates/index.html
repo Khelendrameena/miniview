@@ -164,6 +164,13 @@
   </section>
   {% endif %}
 <script>
+if(window.innerWidth <= 500){
+      document.getElementById("active_8").style.display = 'none';
+  }
+  else{
+    document.getElementById("active_4").style.display = 'none';
+  }
+  
 document.addEventListener('DOMContentLoaded', () => {
     let currentPage = 1; // शुरुआत में पेज 1 सेट करें
     let lastObservedDiv = null; // पहले से observe किए गए डिव को ट्रैक करें
@@ -319,13 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   </script>
   <script>
-if(window.innerWidth <= 500){
-      document.getElementById("active_8").style.display = 'none';
-  }
-  else{
-    document.getElementById("active_4").style.display = 'none';
-  }
-
+document.addEventListener('DOMContentLoaded', () => {
     function data(id, a, b, path) {
       var xhr = new XMLHttpRequest();
       xhr.open('POST', path, true);
@@ -382,6 +383,7 @@ if(window.innerWidth <= 500){
         div_4.className = 'lg:w-1/2 w-full mb-6 lg:mb-0';
       })
     }
+}) 
   </script>
 </body>
 </html>
