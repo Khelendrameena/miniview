@@ -30,7 +30,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['miniview-uzfa.onrender.com','miniview.com','localhost','127.0.0.1']
 
-
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1073741824  # 1GB
 # Application definition
 
 INSTALLED_APPS = [
