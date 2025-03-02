@@ -120,7 +120,7 @@
 {% endif %}
 {% else %}
                <a href="/login">
-               <img class="like" src="https://i.ibb.co/FK8njDD/icons8-heart-50.png" alt="" style="height: 2.5vh; margin-right: 2%;">
+               <img class="like" src="https://i.ibb.co/FK8njDD/icons8-heart-50.png" alt="" style="height: 1.5vh; margin-right: 2%;">
                </a>
 {% endif %}
                 <p class="like_2" style="margin-left: 1%;">
@@ -339,6 +339,9 @@ document.addEventListener('DOMContentLoaded', () => {
     xhr.send(JSON.stringify({ "id": id, "status": [a, b] }));
   }
 
+function main_1(id) {
+   data(id, 0, -1, '/view');
+}
   // Event delegation: Add single click listener to the container
   articlesContainer.addEventListener('click', (event) => {
     if (event.target.classList.contains('like')) {
@@ -348,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (like.src === 'https://i.ibb.co/V3N06yK/icons8-heart-50-1.png') {
         like.src = 'https://i.ibb.co/FK8njDD/icons8-heart-50.png';
-        data(`${articlesContainer.querySelectorAll(".uid")[index].innerText}`, 0, -1, '/view');
+        
         articlesContainer.querySelectorAll(".like_2")[index].innerText--;
       } else {
         like.src = 'https://i.ibb.co/V3N06yK/icons8-heart-50-1.png';
