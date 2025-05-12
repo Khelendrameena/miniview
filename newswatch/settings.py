@@ -68,7 +68,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 GOOGLE_CLIENT_ID = '778234252177-rbpto449o70e5217q87du31o1mqa0vl7.apps.googleusercontent.com'
 GOOGLE_CLIENT_SECRET = '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'
-GOOGLE_REDIRECT_URI = 'https://miniview-1ajl.onrender.com/auth/callback/'
+GOOGLE_REDIRECT_URI = 'https://miniview-uzfa.onrender.com/auth/callback/'
 
 
 
