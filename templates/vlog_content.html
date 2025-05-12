@@ -85,7 +85,7 @@
 
   @media (min-width: 720px) {
     #thum{
-      margin-left: 70px;
+      margin-left: 75px;
     }
   }
   .profile-pic {
@@ -187,7 +187,7 @@
     {% endif %}
 </div>
 
-    <button class="action-btn" title="Share">
+    <button class="action-btn" title="Share" id="share">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
         <polyline points="16 6 12 2 8 6"></polyline>
@@ -252,6 +252,23 @@ document.addEventListener("DOMContentLoaded", function() {
         follow.addEventListener("click", follow_8);
 
     });
+  document.getElementById('share').addEventListener('click', async () => {
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: 'Check this out!',
+        text: 'This is a great webpage!',
+        url: window.location.href
+      });
+      console.log('Page shared successfully!');
+    } catch (error) {
+      console.error('Error sharing:', error);
+    }
+  } else {
+    alert('Web Share API is not supported in your browser.');
+  }
+});
+
 </script>
 </body>
 </html>
