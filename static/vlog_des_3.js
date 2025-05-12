@@ -31,7 +31,7 @@
       if (file) {
         const reader = new FileReader();
         reader.onload = () => {
-          const img = `<img src="${reader.result}" alt="Image" style="max-width:100%;margin:10px 0;border-radius:8px;"/>`;
+          const img = `<div style="display: flex; justify-content: center;"><img src="${reader.result}" alt="Image" style="max-width:100%;margin:10px 0;border-radius:8px;"/></div>`;
           document.getElementById("editor").insertAdjacentHTML("beforeend", img);
         };
         reader.readAsDataURL(file);
