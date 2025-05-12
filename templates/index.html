@@ -351,8 +351,7 @@
     }
   </script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-if(window.innerWidth <= 500){
+    if(window.innerWidth <= 500){
       document.getElementById("active_8").style.display = 'none';
   }
   else{
@@ -366,6 +365,11 @@ if(window.innerWidth <= 500){
       xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
       xhr.send(JSON.stringify({ "id": id, "status": [a, b] }))
     }
+    function main_1(id) {
+        data(id, 1, 0, '/view')
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+
     document.querySelectorAll('.like').forEach((app) => {
       app.addEventListener('click', (event) => {
         event.stopPropagation();
@@ -391,9 +395,7 @@ if(window.innerWidth <= 500){
     })
 
 
-    function main_1(id) {
-        data(id, 1, 0, '/view')
-    }
+    
 
     document.querySelectorAll('.like').forEach((like, index) => {
       like.addEventListener('click', () => {
