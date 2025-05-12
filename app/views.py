@@ -1122,7 +1122,7 @@ def vlogshow(request, vlog_id):
         except FileNotFoundError:
             vlog_content = "<h1>Content not found</h1>"
             
-    return render(request, 'vlog_content.html', {"vlog_content": vlog_content,"name":profile.name,"username":profile.username,"pic":profile.profile_picture,"title":Vlog.objects.get(vlog_id=vlog_id).title,"id":profile.profile_id,"follow":follow_status,"vlog_id":vlog_id,"articles":json_data["articles"]}) 
+    return render(request, 'vlog_content.html', {"vlog_content": vlog_content,"name":profile.name,"username":profile.username,"pic":profile.profile_picture,"thumbnail":Vlog.objects.get(vlog_id=vlog_id).thumbnail,"description":Vlog.objects.get(vlog_id=vlog_id).description,"title":Vlog.objects.get(vlog_id=vlog_id).title,"id":profile.profile_id,"follow":follow_status,"vlog_id":vlog_id,"articles":json_data["articles"]}) 
 def generate_unique_datetime_string():
     # Get current date and time in a specific format
     datetime_part = datetime.now().strftime("%Y%m%d%H%M%S%f")
