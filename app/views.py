@@ -790,7 +790,7 @@ def login_view(request):
             else:
                 return render(request, 'login.html', {'error': "Invalid email or password."})
         except User.DoesNotExist:
-            return render(request, 'login.html', {'error': "Invalid email or password."})
+            return render(request, 'login.html', {'error': ""})
 
     return render(request, 'login.html')
 
