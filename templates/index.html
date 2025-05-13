@@ -128,25 +128,25 @@
                 <p class="leading-relaxed mb-3">{{ data.description|default:'No description available' }}</p>
             </a>
             {% if request.user.is_authenticated %}
-            <form action="/coment" class="coment_22" method="POST" id="coment_{{ data.publishedAt }}">
+            <form action="/coment" class="coment_22" method="POST">
               {% else %}
-              <form action="/login" class="coment_22" method="POST" id="coment_{{ data.publishedAt }}">
+              <form action="/login" class="coment_22" method="POST">
                 {% endif %}
                 {% csrf_token %}
                 <input type="text" name="mainid" class="uid_4" hidden value="{{ data.publishedAt }}">
-                <div class="flex items-center flex-wrap" onclick="coment_add()">
+                <div class="flex items-center flex-wrap">
                   {% if request.user.is_authenticated %}
                   {% if data.like_status == 1 %}
-                  <img class="like" src="https://i.ibb.co/V3N06yK/icons8-heart-50-1.png" alt="" onclick="like_add({{'data.publishedAt'}})">
+                  <img class="like" src="https://i.ibb.co/V3N06yK/icons8-heart-50-1.png" alt="">
                   {% else %}
-                  <img class="like" src="https://i.ibb.co/FK8njDD/icons8-heart-50.png" alt="" onclick="like_add({{'data.publishedAt'}})">
+                  <img class="like" src="https://i.ibb.co/FK8njDD/icons8-heart-50.png" alt="">
                   {% endif %}
                   {% else %}
                   <a href="/login">
-                    <img class="like" src="https://i.ibb.co/FK8njDD/icons8-heart-50.png" alt="" style="height: 2.2vh; margin-right: 2%;" onclick="like_add({{'data.publishedAt'}})">
+                    <img class="like" src="https://i.ibb.co/FK8njDD/icons8-heart-50.png" alt="" style="height: 2.2vh; margin-right: 2%;">
                   </a>
                   {% endif %}
-                  <p class="like_2" style="margin-left: 1%;" onclick="like_2_add({{'data.publishedAt'}})" id="nu_co_{{ data.publishedAt }}">
+                  <p class="like_2" style="margin-left: 1%;">
                     {{ data.likes }}
                   </p>
                   <div class="div">
@@ -192,105 +192,6 @@
     } else {
       document.getElementById("active_4").style.display = 'none';
     }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      let currentPage = 1; // शुरुआत में पेज 1 सेट करें
-      let lastObservedDiv = null; // पहले से observe किए गए डिव को ट्रैक करें
-
-      // Observer सेट करें
-      const observer = new IntersectionObserver(async (entries, observerInstance) => {
-        const lastEntry = entries[0];
-
-        if (lastEntry.isIntersecting) {
-          // पिछले div को unobserve करें
-          if (lastObservedDiv) {
-            observerInstance.unobserve(lastObservedDiv);
-          }
-
-          // जब यूजर पेज के अंत तक पहुंचे
-          try {
-            // Check if the current path is /search
-            const path = "{{ path }}";
-            const articlesContainer = document.getElementById('articles-container');
-
-            // Check if the last article has 'end' parameter set to 1
-            const lastArticle = articlesContainer.lastElementChild;
-            if (lastArticle && lastArticle.dataset.end === '1') {
-              console.log('No more articles to load');
-              return; // Don't send the request if the 'end' parameter is 1
-            }
-
-            // लोडर दिखाएं
-            showLoader();
-
-            const response = await fetch(path, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCSRFToken(),
-              },
-              body: JSON.stringify({
-                currentPage: currentPage
-              }),
-            });
-
-            const data = await response.json();
-
-            if (data.html) {
-              articlesContainer.insertAdjacentHTML('beforeend', data.html);
-              if (window.innerWidth >= 480) {
-                document.querySelectorAll('.p-4.md\\:w-1\\/3').forEach((div_4) => {
-                  div_4.className = 'lg:w-1/2 w-full mb-6 lg:mb-0';
-                });
-              }
-
-              // पेज नंबर बढ़ाएं
-              currentPage++;
-
-              // DOM में नए ब्लॉग्स लोड होने के बाद lastDiv को अपडेट करें
-              observeLastDiv(observerInstance);
-            } else {
-              console.error('No HTML data received');
-            }
-          } catch (error) {
-            console.error('Error loading articles:', error);
-          } finally {
-            // लोडर को छुपाएं
-            hideLoader();
-          }
-        }
-      });
-
-      // CSRF Token प्राप्त करने का फंक्शन
-      function getCSRFToken() {
-        return document.querySelector('[name=csrfmiddlewaretoken]').value;
-      }
-
-      // lastDiv को observe करने का फंक्शन
-      function observeLastDiv(observerInstance) {
-        const lastDiv = document.querySelectorAll('.coment');
-        const loadMoreTarget = lastDiv[lastDiv.length - 1]; // सबसे आखिरी डिव को observe करें
-        if (loadMoreTarget) {
-          observerInstance.observe(loadMoreTarget); // Observer को फिर से नए lastDiv पर लागू करें
-          lastObservedDiv = loadMoreTarget; // नए lastDiv को ट्रैक करें
-        } else {
-          console.error("Element with the required class not found.");
-        }
-      }
-
-      // पहली बार observer शुरू करने के लिए lastDiv को observe करें
-      observeLastDiv(observer);
-
-      // लोडर दिखाने का फंक्शन
-      function showLoader() {
-        document.getElementById('loader').style.display = 'block';
-      }
-
-      // लोडर छुपाने का फंक्शन
-      function hideLoader() {
-        document.getElementById('loader').style.display = 'none';
-      }
-    });
   </script>
   <script>
     const followButton = document.getElementById("follow_button_2");
@@ -359,42 +260,203 @@
     document.getElementById("active_4").style.display = 'none';
   }
 
-    function data(id, a, b, path) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', path, true);
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
-      xhr.send(JSON.stringify({ "id": id, "status": [a, b] }))
-    }
-    function main_1(id) {
-        data(id, 1, 0, '/view')
-    }
-    function like_add(id) {
-        event.stopPropagation();
-      if (like.src == 'https://i.ibb.co/V3N06yK/icons8-heart-50-1.png') {
-
-          like.src = 'https://i.ibb.co/FK8njDD/icons8-heart-50.png'
-          data(id, 0, -1, '/view')
-          document.getElementById(`nu_co_${id}`).innerText--;
-        else {
-          like.src = 'https://i.ibb.co/V3N06yK/icons8-heart-50-1.png'
-          data(id, 0, 1, '/view')
-         document.getElementById(`nu_co_${id}`).innerText++;
-        }
-      }
-    function like_2_add() {
-        event.stopPropagation();
-      }
-    function coment_add(id) {
-      document.getElementById(`coment_${id}`).submit();
-    }
     document.addEventListener('DOMContentLoaded', () => {
-        
+  let currentPage = 1;
+  let lastObservedDiv = null;
+
+  // Function to initialize event listeners for like buttons and comments
+  function initEventListeners() {
+    // Handle like button clicks
+    document.querySelectorAll('.like').forEach((like, index) => {
+      if (!like.hasAttribute('listener')) {
+        like.setAttribute('listener', 'true');
+        like.addEventListener('click', function() {
+          const uidElement = this.closest('.p-4').querySelector('.uid');
+          const likeCountElement = this.closest('.p-4').querySelector('.like_2');
+          
+          if (this.src.includes('icons8-heart-50-1.png')) {
+            this.src = 'https://i.ibb.co/FK8njDD/icons8-heart-50.png';
+            data(uidElement.innerText, 0, -1, '/view');
+            likeCountElement.innerText = parseInt(likeCountElement.innerText) - 1;
+          } else {
+            this.src = 'https://i.ibb.co/V3N06yK/icons8-heart-50-1.png';
+            data(uidElement.innerText, 0, 1, '/view');
+            likeCountElement.innerText = parseInt(likeCountElement.innerText) + 1;
+          }
+        });
+      }
+    });
+
+    // Prevent event propagation for likes
+    document.querySelectorAll('.like, .like_2').forEach((app) => {
+      if (!app.hasAttribute('propagation-listener')) {
+        app.setAttribute('propagation-listener', 'true');
+        app.addEventListener('click', (event) => {
+          event.stopPropagation();
+        });
+      }
+    });
+
+    // Handle comment form submissions
+    document.querySelectorAll('.coment_22').forEach((form) => {
+      if (!form.hasAttribute('submit-listener')) {
+        form.setAttribute('submit-listener', 'true');
+        form.addEventListener('click', () => {
+          form.submit();
+        });
+      }
+    });
+
+    // Adjust layout for desktop
     if (window.innerWidth >= 480) {
       document.querySelectorAll('.p-4.md\\:w-1\\/3').forEach((div_4) => {
         div_4.className = 'lg:w-1/2 w-full mb-6 lg:mb-0';
-      })
+      });
     }
+  }
+
+  // Function to send AJAX requests
+  function data(id, a, b, path) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', path, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('X-CSRFToken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+    xhr.send(JSON.stringify({ "id": id, "status": [a, b] }));
+  }
+
+  // Function to handle view counting
+  function main_1(id) {
+    data(id, 1, 0, '/view');
+  }
+
+  // Observer for infinite scrolling
+  const observer = new IntersectionObserver(async (entries, observerInstance) => {
+    const lastEntry = entries[0];
+
+    if (lastEntry.isIntersecting) {
+      // Unobserve previous div
+      if (lastObservedDiv) {
+        observerInstance.unobserve(lastObservedDiv);
+      }
+
+      try {
+        const path = "{{ path }}";
+        const articlesContainer = document.getElementById('articles-container');
+
+        // Check if the last article has 'end' parameter set to 1
+        const lastArticle = articlesContainer.lastElementChild;
+        if (lastArticle && lastArticle.dataset.end === '1') {
+          console.log('No more articles to load');
+          return; // Don't send the request if the 'end' parameter is 1
+        }
+
+        // Show loader
+        showLoader();
+
+        const response = await fetch(path, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken(),
+          },
+          body: JSON.stringify({
+            currentPage: currentPage
+          }),
+        });
+
+        const data = await response.json();
+
+        if (data.html) {
+          articlesContainer.insertAdjacentHTML('beforeend', data.html);
+          
+          // Increment page number
+          currentPage++;
+
+          // Initialize event listeners for new content
+          initEventListeners();
+
+          // Observe last div for infinite scrolling
+          observeLastDiv(observerInstance);
+        } else {
+          console.error('No HTML data received');
+        }
+      } catch (error) {
+        console.error('Error loading articles:', error);
+      } finally {
+        // Hide loader
+        hideLoader();
+      }
+    }
+  });
+
+  // Function to get CSRF token
+  function getCSRFToken() {
+    return document.querySelector('[name=csrfmiddlewaretoken]').value;
+  }
+
+  // Function to observe the last div
+  function observeLastDiv(observerInstance) {
+    const lastDiv = document.querySelectorAll('.coment');
+    const loadMoreTarget = lastDiv[lastDiv.length - 1]; // Observe the last div
+    if (loadMoreTarget) {
+      observerInstance.observe(loadMoreTarget);
+      lastObservedDiv = loadMoreTarget;
+    } else {
+      console.error("Element with the required class not found.");
+    }
+  }
+
+  // Function to show loader
+  function showLoader() {
+    document.getElementById('loader').style.display = 'block';
+  }
+
+  // Function to hide loader
+  function hideLoader() {
+    document.getElementById('loader').style.display = 'none';
+  }
+
+  // Initialize event listeners on page load
+  initEventListeners();
+
+  // Start observing for infinite scrolling
+  observeLastDiv(observer);
+
+  // Make these functions available globally
+  window.main_1 = main_1;
+  window.data = data;
+});
+
+// Alternative approach using event delegation
+// This approach listens for events at a higher level in the DOM
+// and handles them based on the target element
+document.addEventListener('DOMContentLoaded', () => {
+  const articlesContainer = document.getElementById('articles-container');
+  
+  // Event delegation for like buttons
+  articlesContainer.addEventListener('click', (event) => {
+    // Handle like button clicks
+    if (event.target.classList.contains('like')) {
+      const likeButton = event.target;
+      const articleDiv = likeButton.closest('.p-4');
+      const uidElement = articleDiv.querySelector('.uid');
+      const likeCountElement = articleDiv.querySelector('.like_2');
+      
+      if (likeButton.src.includes('icons8-heart-50-1.png')) {
+        likeButton.src = 'https://i.ibb.co/FK8njDD/icons8-heart-50.png';
+        data(uidElement.innerText, 0, -1, '/view');
+        likeCountElement.innerText = parseInt(likeCountElement.innerText) - 1;
+      } else {
+        likeButton.src = 'https://i.ibb.co/V3N06yK/icons8-heart-50-1.png';
+        data(uidElement.innerText, 0, 1, '/view');
+        likeCountElement.innerText = parseInt(likeCountElement.innerText) + 1;
+      }
+      
+      event.stopPropagation();
+    }
+    
+    // You can add more event handlers here for other elements
+  });
 });
   </script>
 </body>
