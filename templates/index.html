@@ -117,7 +117,7 @@
                   <button class="follow-btn" id="follow_button_2">Follow</button>
             </div>
             {% endif %}
-            <a class="views" href="{{ data.url|default:'#' }}" onclick="main_1('{{ data.publishedAt }}')">
+            <a class="views" href="/{{ data.url|default:'#' }}" onclick="main_1('{{ data.publishedAt }}')">
               <div class="p-6">
                 <div style="display: flex; gap: 12vh;">
                   <h2 class="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">TITLE</h2>
