@@ -166,8 +166,10 @@
   <img src="{{ pic|safe }}" alt="Author Profile Picture" class="profile-pic">
 
   <div class="author-info">
+    <a href="/@{{ user.username }}">
     <h3 class="author-name">{{ name|safe }}</h3>
     <p class="username">@{{ username|safe }}</p>
+    </a>
   </div>
 
 <div class="profile-actions">
