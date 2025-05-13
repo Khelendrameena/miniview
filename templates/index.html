@@ -117,7 +117,7 @@
                   <button class="follow-btn" id="follow_button_2">Follow</button>
             </div>
             {% endif %}
-            <a class="views" href="/{{ data.url|default:'#' }}" onclick="main_1('{{ data.publishedAt }}')">
+            <a class="views" href="{{ data.url|default:'#' }}" onclick="main_1('{{ data.publishedAt }}')">
               <div class="p-6">
                 <div style="display: flex; gap: 12vh;">
                   <h2 class="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">TITLE</h2>
@@ -143,7 +143,7 @@
                   {% endif %}
                   {% else %}
                   <a href="/login">
-                    <img class="like" src="https://i.ibb.co/FK8njDD/icons8-heart-50.png" alt="" style="height: 2.2vh; margin-right: 2%;">
+                    <img src="https://i.ibb.co/FK8njDD/icons8-heart-50.png" alt="" style="height: 2.2vh; margin-right: 2%;">
                   </a>
                   {% endif %}
                   <p class="like_2" style="margin-left: 1%;">
