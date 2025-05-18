@@ -18,6 +18,7 @@ from django.contrib.auth import login
 from django.core.cache import cache
 import xml.etree.ElementTree as ET
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
 from PIL import Image
 from django.conf import settings
 from datetime import datetime
@@ -1034,6 +1035,7 @@ def api(request,quary,number,user):
         vlog.save()    
     return HttpResponse("post done")
 
+@csrf_exempt
 def vlogapi(request, username):
         if request.method == "POST":
             title = request.POST.get('title')
