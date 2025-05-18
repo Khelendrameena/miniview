@@ -1034,6 +1034,71 @@ def api(request,quary,number,user):
         vlog.save()    
     return HttpResponse("post done")
 
+def vlogapi(request, username):
+        if request.method == "POST":
+            title = request.POST.get('title')
+            description = request.POST.get('description')
+            vlog_id = generate_unique_datetime_string()
+            thumbnail = None
+
+            if 'thumbnail' in request.FILES:
+                uploaded_file = request.FILES['thumbnail']
+                static_path = os.path.join(settings.BASE_DIR, 'media') 
+
+                if not os.path.exists(static_path):
+                    os.makedirs(static_path)
+
+                file_name = f"thumbnail_{vlog_id}.jpg"  # Ensure it has a valid image extension
+                check_and_delete(file_name, '/media')
+                file_path = os.path.join(static_path, file_name)
+
+                # Save the uploaded file temporarily
+                with open(file_path, 'wb+') as destination:
+                    for chunk in uploaded_file.chunks():
+                        destination.write(chunk)
+
+                # Resize the image to 200x200
+                try:
+                    with Image.open(file_path) as img:
+                        img = img.convert("RGB")  # Ensure the image is in RGB format
+                        img = img.resize((720,400), Image.LANCZOS)  # Use LANCZOS instead of ANTIALIAS
+                        img.save(file_path, "JPEG")  # Save as JPEG format
+                except IOError:
+                    return HttpResponse("Uploaded file is not a valid image.")
+
+                thumbnail = f"/media/{file_name}"
+            
+            content_html = request.POST.get('content_html')
+
+            directory_path = os.path.join(settings.MEDIA_ROOT, 'vlog/')
+            if not os.path.exists(directory_path):
+                os.makedirs(directory_path)
+
+            file_path = f'{directory_path}{draft_vlog.vlog_id}.html'
+            with open(file_path, 'w') as file:
+                file.write(content_html)
+
+            user = f'@{username}'
+            vlog_labels = extract_contextual_keyword(draft_vlog.title, labels_list)[0]
+            vlog_rate = extract_contextual_keyword(draft_vlog.title, labels_list)[1]
+
+            vlog = Vlog(
+                vlog_id=vlog_id,
+                thumbnail=thumbnail,
+                title=title,
+                description=description,
+                user=user,
+                content_html="not found",
+                vlog_labels=vlog_labels,
+                vlog_rate=vlog_rate,
+            )
+            vlog.save()
+            
+
+            return HttpResponse("Published")
+        else:
+            return render(request, 'vlog.html')
+
 def vlogrect(request,vlog_id):
     if Vlog.objects.filter(vlog_id=vlog_id).exists():
         model_data = MyModel.objects.all()
