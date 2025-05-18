@@ -1018,7 +1018,8 @@ def media(request,index):
     return JsonResponse({"error": "No file found"}, status=400)
     
 def api(request,quary,number,user):
-    url = f"https://newsapi.org/v2/everything?q={quary}&apiKey=a26e90658ca8499ca068782aa2179116"
+    today_date = datetime.today().strftime('%Y-%m-%d')
+    url = f"https://newsapi.org/v2/everything?q=tesla&from={today_date}&sortBy=publishedAt&apiKey=API_KEY=a26e90658ca8499ca068782aa2179116"
     response = requests.get(url)
     data = response.json()
     data["articles"] = [articles for articles in data["articles"] if articles["content"] != "[Removed]" and articles["title"] != "[Removed]" and articles["description"] != "[Removed]" and articles["urlToImage"] != "[Removed]" "title" and "description" and "url" and "urlToImage" in articles and articles["title"] != "" and articles["description"] != "" and articles["url"] != "" and articles["urlToImage"] != ""]
