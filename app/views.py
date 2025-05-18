@@ -1076,13 +1076,13 @@ def vlogapi(request, username):
             if not os.path.exists(directory_path):
                 os.makedirs(directory_path)
 
-            file_path = f'{directory_path}{draft_vlog.vlog_id}.html'
+            file_path = f'{directory_path}{vlog_id}.html'
             with open(file_path, 'w') as file:
                 file.write(content_html)
 
             user = f'@{username}'
-            vlog_labels = extract_contextual_keyword(draft_vlog.title, labels_list)[0]
-            vlog_rate = extract_contextual_keyword(draft_vlog.title, labels_list)[1]
+            vlog_labels = extract_contextual_keyword(title, labels_list)[0]
+            vlog_rate = extract_contextual_keyword(title, labels_list)[1]
 
             vlog = Vlog(
                 vlog_id=vlog_id,
