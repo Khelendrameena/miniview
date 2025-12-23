@@ -124,18 +124,20 @@
       font-weight: 600;
     }
 
+
+    .div {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: -10;
+}
+
     @media screen and (min-width: 768px) {
       .like {
-        height: 1.5vh;
+        height: 3vh;
         margin-left: 2%;
 
-      }
-
-      .div {
-        position: relative;
-        top: 0px;
-        left: 500px;
-        z-index: -1;
       }
 
       .view {
@@ -146,20 +148,71 @@
         margin-left: 40%;
       }
     }
-
-    @media screen and (max-width: 768px) {
+    
+     @media screen and (max-width: 768px) {
       .like {
         height: 3vh;
         margin-right: 2%;
       }
-
-      .div {
-        position: relative;
-        top: 0px;
-        left: 150px;
-        z-index: -1;
-      }
     }
+    @media screen and (min-width: 768px) {
+      .user-profile_3 {
+    position: absolute;
+    top: 6.5%;
+  left: 86%;
+  transform: translate(-50%, -50%);
+  
+      /* Adjust as needed */
+      display: flex;
+      align-items: center;
+      
+      /* Spacing between image and username */
+      background-color: rgba(255, 255, 255, 0.8);
+      /* Optional: Background for better visibility */
+      padding: 5px 10px;
+      border-radius: 25px;
+      /* Optional: Rounded corners for the container */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      /* Optional: Subtle shadow */
+    }
+  }
+    @media screen and (max-width: 768px) {
+    
+       .user-profile_3 {
+      display: none;
+     
+    }
+  }
+    
+@media screen and (min-width: 768px) {
+     .user-profile_2 {
+      display: none;
+    }
+  }
+    @media screen and (max-width: 768px) {
+    
+      .user-profile_2 {
+      position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+      /* Adjust as needed */
+      margin-right: 10%;
+      /* Adjust as needed */
+      display: flex;
+      align-items: center;
+      
+      /* Spacing between image and username */
+      background-color: rgba(255, 255, 255, 0.8);
+      /* Optional: Background for better visibility */
+      padding: 5px 10px;
+      border-radius: 25px;
+      /* Optional: Rounded corners for the container */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      /* Optional: Subtle shadow */
+    }
+  }
+    
 
     .user-profile {
       position: absolute;
@@ -169,7 +222,7 @@
       /* Adjust as needed */
       display: flex;
       align-items: center;
-      gap: 10px;
+       gap: 10px; 
       /* Spacing between image and username */
       background-color: rgba(255, 255, 255, 0.8);
       /* Optional: Background for better visibility */
@@ -213,6 +266,8 @@
       /* Optional: Subtle shadow */
     }
 
+    
+
     .user-profile_4 img {
       width: 50px;
       height: 50px;
@@ -246,8 +301,7 @@
       background-color: #0056b3;
       /* Darker shade on hover */
     }
-  </style>
-<style>
+  
 /* Loader styles */
 #loader {
     position: fixed;
@@ -264,6 +318,9 @@
     width: 40px;
     height: 40px;
     animation: spin 2s linear infinite;
+}
+.article-card {
+  flex: 1 1 320px;
 }
 
 @keyframes spin {

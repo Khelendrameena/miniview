@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-ofougw3*&wg)j4g=90j&-++(y++a159i7$y!8rolz$u+(047wy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['miniview-uzfa.onrender.com','miniview.com','localhost','127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1','.vercel.app']
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 1073741824  # 1GB
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'app',
     'allauth',
     'allauth.account',
     'allauth.socialaccount'
