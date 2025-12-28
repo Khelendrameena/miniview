@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-ofougw3*&wg)j4g=90j&-++(y++a159i7$y!8rolz$u+(047wy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','.vercel.app']
+ALLOWED_HOSTS = ['*']
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 1073741824  # 1GB
 # Application definition
