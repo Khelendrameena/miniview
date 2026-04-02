@@ -283,6 +283,7 @@ def content_data(request,user_2,arr):
         json_data = {"articles": vlog_data}
         return json_data
 
+@csrf_exempt
 def home(request):
     model_data = MyModel.objects.all()
     json_data = content_data(request,'all',[0.3,0.2,0.6,0.4,100])
@@ -358,7 +359,8 @@ def home(request):
         json_data_4 = json_data["articles"][:6]
         json_data["articles"] = json_data_4
         return render(request, 'index.html', json_data)
-
+        
+@csrf_exempt
 def most(request,para):
     if para == "topblog":
         arr = [0.4,0.3,0.7,0.3,100]
@@ -435,7 +437,8 @@ def most(request,para):
         json_data_4 = json_data["articles"][:6]
         json_data["articles"] = json_data_4
         return render(request, 'index.html', json_data)
-
+        
+@csrf_exempt
 def searchquary(request):
     if request.method == 'POST':
         quary = request.session.get('last_quary', '')  # Retrieve the last query from the session
@@ -515,7 +518,6 @@ def searchquary(request):
         json_data_4 = json_data["articles"][:6]
         return render(request, 'index.html', {'articles': json_data_4})
 
-
 def extract_contextual_keyword(text, labels):
     # Generate keywords from labels (basic assumption: labels as keywords)
     label_keywords = {label: [label] for label in labels}
@@ -540,6 +542,7 @@ def extract_contextual_keyword(text, labels):
     
     return [most_related_label, highest_similarity_score]
     
+@csrf_exempt  
 def view(request):
     data = json.loads(request.body)
     id = data.get('id')
