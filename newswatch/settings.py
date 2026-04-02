@@ -67,9 +67,9 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-GOOGLE_CLIENT_ID = '778234252177-rbpto449o70e5217q87du31o1mqa0vl7.apps.googleusercontent.com'
-GOOGLE_CLIENT_SECRET = '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'
-GOOGLE_REDIRECT_URI = 'https://miniview-uzfa.onrender.com/auth/callback/'
+GOOGLE_CLIENT_ID = '778234252177-sba3pt7hl9rfsldco3q5ibe5gvgjia52.apps.googleusercontent.com'
+GOOGLE_CLIENT_SECRET = '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'
+GOOGLE_REDIRECT_URI = 'https://miniview.me/auth/callback/'
 
 
 
