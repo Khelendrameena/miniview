@@ -33,6 +33,8 @@ def logout_view(request):
     return redirect('login')  # ya 'home_page'
 
 def home(request):
+    if not request.user.is_authenticated:
+        return redirect('login')  # login URL name
     return render(request, 'index.html')
 
 def custom_500_error(request):
