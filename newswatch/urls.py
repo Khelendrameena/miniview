@@ -23,21 +23,12 @@ from django.conf import settings
 from django.conf.urls import handler500
 
 handler500 = 'app.views.custom_500_error'
-
 urlpatterns = [
     path('admin/6302a139-d03a-11ef-8903-5d0b6fd2483d', admin.site.urls),
-    path('', include('app.urls')),
-    path('@<str:username>/', include('app.urls')),
+
+    path('', include('app.urls')),  # ✅ ONLY THIS
+
     path('auth/login/', google_login, name='google_login'),
     path('auth/callback/', google_callback, name='google_callback'),
-    path("login/", include('app.urls')),
-    path('app/@<str:username_2>/follow', include('app.urls')),
-    path('login/auth', include('app.urls')),
-    path('signup', include('app.urls')),
-    path('signup/auth', include('app.urls')),
-    path('otp/verify', include('app.urls')),
-    path('@<str:username>/edit', include('app.urls')),
-    path('profile/edited', include('app.urls')),
-    path('otp', include('app.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
