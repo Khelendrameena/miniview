@@ -1,0 +1,164 @@
+# MiniView 🚀
+
+MiniView ek Django-based web application hai jisme user authentication, profile system, follow feature, aur email OTP verification implemented hai.
+
+---
+
+## 🔧 Features
+
+* User Signup / Login
+* Email OTP Verification (SMTP based)
+* User Profile System
+* Follow / Unfollow Users
+* Username Edit
+* Static & Media File Handling
+* Production Ready (Render Deployment)
+
+---
+
+## 🛠️ Tech Stack
+
+* Backend: Django 5
+* Database: SQLite (default)
+* Authentication: Django Auth
+* Email: SMTP (Gmail App Password)
+* Deployment: Render
+* Server: Gunicorn
+* Static Files: WhiteNoise
+
+---
+
+## 📁 Project Structure
+
+```
+miniview/
+│
+├── app/                # Main Django app
+├── miniview/           # Project settings
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│
+├── templates/
+├── static/
+├── media/
+├── manage.py
+├── requirements.txt
+```
+
+---
+
+## ⚙️ Setup Instructions (Local)
+
+### 1. Clone repo
+
+```
+git clone <your-repo-url>
+cd miniview
+```
+
+### 2. Create virtual environment
+
+```
+python -m venv myenv
+myenv\Scripts\activate
+```
+
+### 3. Install dependencies
+
+```
+python -m pip install -r requirements.txt
+```
+
+### 4. Run migrations
+
+```
+python manage.py migrate
+```
+
+### 5. Run server
+
+```
+python manage.py runserver
+```
+
+---
+
+## 🔐 Environment Variables (IMPORTANT)
+
+Never store secrets in code.
+
+### Required variables:
+
+```
+EMAIL_HOST_USER=your@gmail.com
+EMAIL_HOST_PASSWORD=your_app_password
+```
+
+---
+
+## 📧 Gmail SMTP Setup
+
+* Enable 2-Step Verification
+* Generate App Password from Google Account
+* Use that password in environment variable
+
+---
+
+## 🚀 Deployment (Render)
+
+### Build Command:
+
+```
+pip install -r requirements.txt
+python manage.py migrate
+```
+
+### Start Command:
+
+```
+gunicorn miniview.wsgi:application
+```
+
+### Environment Variables (Render Dashboard):
+
+```
+EMAIL_HOST_USER=your@gmail.com
+EMAIL_HOST_PASSWORD=your_app_password
+```
+
+---
+
+## ⚠️ Security Notes
+
+* Never push `.env` file to GitHub
+* Always use environment variables
+* Rotate credentials if exposed
+
+---
+
+## 📌 Common Issues
+
+### ❌ SMTP Authentication Error
+
+✔ Use Gmail App Password (not normal password)
+
+### ❌ Gunicorn Error (`app:app`)
+
+✔ Use:
+
+```
+gunicorn miniview.wsgi:application
+```
+
+---
+
+## 👨‍💻 Author
+
+Developed by [Your Name]
+
+---
+
+## ⭐ License
+
+This project is for learning and personal use.
