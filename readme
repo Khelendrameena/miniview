@@ -1,6 +1,6 @@
 # MiniView 🚀
 
-MiniView ek Django-based web application hai jisme user authentication, profile system, follow feature, aur email OTP verification implemented hai.
+MiniView ek Django-based web application hai jisme user authentication, aur email OTP verification implemented hai.
 
 ---
 
@@ -9,10 +9,6 @@ MiniView ek Django-based web application hai jisme user authentication, profile 
 * User Signup / Login
 * Email OTP Verification (SMTP based)
 * User Profile System
-* Follow / Unfollow Users
-* Username Edit
-* Static & Media File Handling
-* Production Ready (Render Deployment)
 
 ---
 
